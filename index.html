@@ -49,17 +49,14 @@
         body.dark-theme .skill-card,
         body.dark-theme .project-content,
         body.dark-theme .about-text,
-        body.dark-theme .event-card,
-        body.dark-theme .login-form,
-        body.dark-theme .profile-card {
+        body.dark-theme .event-card {
             background-color: #1e1e1e;
             color: #e0e0e0;
         }
         
         body.dark-theme .projects,
         body.dark-theme .contact,
-        body.dark-theme .events,
-        body.dark-theme .login-section {
+        body.dark-theme .events {
             background-color: #1a1a1a;
         }
         
@@ -152,53 +149,6 @@
         
         .nav-links a:hover {
             color: #0066cc;
-            transform: translateY(-2px);
-        }
-        
-        /* 用户状态样式 */
-        .user-status {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .user-avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background-color: #0066cc;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-        
-        .user-avatar:hover {
-            transform: scale(1.1);
-        }
-        
-        .user-name {
-            font-size: 14px;
-            font-weight: 500;
-        }
-        
-        .login-btn {
-            background: #0066cc;
-            color: white;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            border: none;
-            cursor: pointer;
-        }
-        
-        .login-btn:hover {
-            background: #0077dd;
             transform: translateY(-2px);
         }
         
@@ -429,268 +379,6 @@
         
         body.dark-theme .reset-btn:hover {
             background-color: #444;
-        }
-        
-        /* 登录系统样式 */
-        .login-section {
-            padding: 100px 0;
-            background-color: #f5f7fa;
-            min-height: 100vh;
-            transition: background-color 0.4s;
-        }
-        
-        .login-container {
-            max-width: 400px;
-            margin: 0 auto;
-            padding: 40px;
-            background-color: white;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            transition: transform 0.4s ease, box-shadow 0.4s;
-        }
-        
-        .login-container:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
-        }
-        
-        .login-title {
-            text-align: center;
-            font-size: 32px;
-            font-weight: 700;
-            margin-bottom: 30px;
-            color: #1d1d1f;
-            transition: color 0.3s;
-        }
-        
-        body.dark-theme .login-title {
-            color: #e0e0e0;
-        }
-        
-        .login-form {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-        
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-        
-        .form-label {
-            font-weight: 500;
-            color: #1d1d1f;
-            transition: color 0.3s;
-        }
-        
-        body.dark-theme .form-label {
-            color: #e0e0e0;
-        }
-        
-        .form-input {
-            padding: 12px 16px;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 16px;
-            transition: border-color 0.3s, background-color 0.3s;
-        }
-        
-        body.dark-theme .form-input {
-            background-color: #2d2d2d;
-            border-color: #444;
-            color: #e0e0e0;
-        }
-        
-        .form-input:focus {
-            outline: none;
-            border-color: #0066cc;
-        }
-        
-        .login-submit {
-            background: #0066cc;
-            color: white;
-            padding: 14px;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .login-submit:hover {
-            background: #0077dd;
-            transform: translateY(-2px);
-        }
-        
-        .login-footer {
-            text-align: center;
-            margin-top: 20px;
-            color: #86868b;
-            transition: color 0.3s;
-        }
-        
-        body.dark-theme .login-footer {
-            color: #a0a0a0;
-        }
-        
-        .profile-section {
-            padding: 100px 0;
-            background-color: #f5f7fa;
-            min-height: 100vh;
-            transition: background-color 0.4s;
-        }
-        
-        .profile-card {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 40px;
-            background-color: white;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            transition: transform 0.4s ease, box-shadow 0.4s;
-        }
-        
-        .profile-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
-        }
-        
-        .profile-header {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-        
-        .profile-avatar {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background-color: #0066cc;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 32px;
-            font-weight: bold;
-        }
-        
-        .profile-info h2 {
-            font-size: 24px;
-            margin-bottom: 5px;
-        }
-        
-        .profile-info p {
-            color: #86868b;
-            transition: color 0.3s;
-        }
-        
-        body.dark-theme .profile-info p {
-            color: #a0a0a0;
-        }
-        
-        .profile-stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-        
-        .stat-item {
-            text-align: center;
-            padding: 20px;
-            background-color: #f5f7fa;
-            border-radius: 12px;
-            transition: background-color 0.3s;
-        }
-        
-        body.dark-theme .stat-item {
-            background-color: #2d2d2d;
-        }
-        
-        .stat-value {
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 5px;
-        }
-        
-        .stat-label {
-            font-size: 14px;
-            color: #86868b;
-            transition: color 0.3s;
-        }
-        
-        body.dark-theme .stat-label {
-            color: #a0a0a0;
-        }
-        
-        .profile-actions {
-            display: flex;
-            gap: 10px;
-        }
-        
-        .profile-btn {
-            flex: 1;
-            padding: 12px;
-            border: none;
-            border-radius: 8px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .profile-btn.primary {
-            background: #0066cc;
-            color: white;
-        }
-        
-        .profile-btn.primary:hover {
-            background: #0077dd;
-            transform: translateY(-2px);
-        }
-        
-        .profile-btn.secondary {
-            background: #f0f0f0;
-            color: #1d1d1f;
-        }
-        
-        body.dark-theme .profile-btn.secondary {
-            background: #2d2d2d;
-            color: #e0e0e0;
-        }
-        
-        .profile-btn.secondary:hover {
-            background: #e0e0e0;
-            transform: translateY(-2px);
-        }
-        
-        body.dark-theme .profile-btn.secondary:hover {
-            background: #3d3d3d;
-        }
-        
-        /* 翻译同步按钮 */
-        .sync-translation-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: #28a745;
-            color: white;
-            padding: 10px 16px;
-            border: none;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 20px;
-        }
-        
-        .sync-translation-btn:hover {
-            background: #34ce57;
-            transform: translateY(-2px);
         }
         
         /* 英雄区域样式 */
@@ -1129,10 +817,6 @@
             .settings-panel {
                 width: 300px;
             }
-            
-            .profile-stats {
-                grid-template-columns: 1fr;
-            }
         }
         
         @media (max-width: 768px) {
@@ -1164,15 +848,6 @@
             
             .events-grid {
                 grid-template-columns: 1fr;
-            }
-            
-            .profile-header {
-                flex-direction: column;
-                text-align: center;
-            }
-            
-            .profile-actions {
-                flex-direction: column;
             }
         }
         
@@ -1208,13 +883,6 @@
                 <a href="#projects" class="nav-link">项目经验</a>
                 <a href="#about" class="nav-link">关于我</a>
                 <a href="#contact" class="nav-link">联系方式</a>
-                
-                <!-- 用户状态 -->
-                <div class="user-status" id="userStatus">
-                    <div class="user-avatar" id="userAvatar" style="display: none;"></div>
-                    <span class="user-name" id="userName" style="display: none;"></span>
-                    <button class="login-btn" id="loginBtn">登录</button>
-                </div>
                 
                 <!-- 语言切换器 -->
                 <div class="language-switcher" id="languageSwitcher">
@@ -1349,7 +1017,7 @@
                         <a href="#contact" class="cta-button" data-i18n="learnMore">了解更多</a>
                     </div>
                     <div class="about-image">
-                        <img src="https://via.placeholder.com/600x500" alt="666不给看！">
+                        <img src="https://via.placeholder.com/600x500" alt="工程状态无图片">
                     </div>
                 </div>
             </div>
@@ -1367,7 +1035,7 @@
                     <a href="https://linkedin.com" class="contact-button">
                         <i class="fab fa-linkedin"></i> LinkedIn
                     </a>
-                    <a href="https://github.com" class="contact-button">
+                    <a href="https://github.com/Allen-ux-dev" class="contact-button">
                         <i class="fab fa-github"></i> GitHub
                     </a>
                 </div>
@@ -1385,8 +1053,8 @@
                         <img src="https://via.placeholder.com/400x200" alt="事件1" class="event-image">
                         <div class="event-content">
                             <span class="event-date">2023-10-15</span>
-                            <h3 class="event-title" data-i18n="event1Title">网页设计工作坊</h3>
-                            <p class="event-desc" data-i18n="event1Desc">学习现代网页设计技巧和最佳实践，包括响应式设计和用户体验原则。</p>
+                            <h3 class="event-title" data-i18n="event1Title">没想好写啥</h3>
+                            <p class="event-desc" data-i18n="event1Desc">没想好写啥</p>
                             <a href="#" class="cta-button" data-i18n="learnMore">了解更多</a>
                         </div>
                     </div>
@@ -1395,8 +1063,8 @@
                         <img src="https://via.placeholder.com/400x200" alt="事件2" class="event-image">
                         <div class="event-content">
                             <span class="event-date">2023-11-05</span>
-                            <h3 class="event-title" data-i18n="event2Title">前端开发研讨会</h3>
-                            <p class="event-desc" data-i18n="event2Desc">探索最新的前端框架和技术，分享开发经验和最佳实践。</p>
+                            <h3 class="event-title" data-i18n="event2Title">没想好写啥</h3>
+                            <p class="event-desc" data-i18n="event2Desc">没想好写啥。</p>
                             <a href="#" class="cta-button" data-i18n="learnMore">了解更多</a>
                         </div>
                     </div>
@@ -1405,78 +1073,10 @@
                         <img src="https://via.placeholder.com/400x200" alt="事件3" class="event-image">
                         <div class="event-content">
                             <span class="event-date">2023-12-12</span>
-                            <h3 class="event-title" data-i18n="event3Title">创意设计展示</h3>
-                            <p class="event-desc" data-i18n="event3Desc">展示最新的设计作品和创新想法，与同行交流设计理念。</p>
+                            <h3 class="event-title" data-i18n="event3Title">没想好写啥</h3>
+                            <p class="event-desc" data-i18n="event3Desc">没想好写啥。</p>
                             <a href="#" class="cta-button" data-i18n="learnMore">了解更多</a>
                         </div>
-                    </div>
-                </div>
-                
-                <!-- 翻译同步按钮 -->
-                <div style="text-align: center; margin-top: 40px;">
-                    <button class="sync-translation-btn" id="syncTranslationBtn">
-                        <i class="fas fa-sync-alt"></i>
-                        <span data-i18n="syncTranslation">同步翻译内容</span>
-                    </button>
-                </div>
-            </div>
-        </section>
-    </div>
-
-    <!-- 登录页面 -->
-    <div id="login" class="page">
-        <section class="login-section">
-            <div class="container">
-                <div class="login-container">
-                    <h2 class="login-title" data-i18n="login">登录</h2>
-                    <form class="login-form" id="loginForm">
-                        <div class="form-group">
-                            <label class="form-label" data-i18n="username">用户名</label>
-                            <input type="text" class="form-input" id="username" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" data-i18n="password">密码</label>
-                            <input type="password" class="form-input" id="password" required>
-                        </div>
-                        <button type="submit" class="login-submit" data-i18n="login">登录</button>
-                    </form>
-                    <div class="login-footer">
-                        <p data-i18n="noAccount">没有账户？<a href="#" id="registerLink">立即注册</a></p>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </div>
-
-    <!-- 个人资料页面 -->
-    <div id="profile" class="page">
-        <section class="profile-section">
-            <div class="container">
-                <div class="profile-card">
-                    <div class="profile-header">
-                        <div class="profile-avatar" id="profileAvatar">W</div>
-                        <div class="profile-info">
-                            <h2 id="profileName">用户名</h2>
-                            <p id="profileEmail">user@example.com</p>
-                        </div>
-                    </div>
-                    <div class="profile-stats">
-                        <div class="stat-item">
-                            <div class="stat-value">12</div>
-                            <div class="stat-label" data-i18n="projects">项目</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-value">24</div>
-                            <div class="stat-label" data-i18n="events">事件</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-value">36</div>
-                            <div class="stat-label" data-i18n="skills">技能</div>
-                        </div>
-                    </div>
-                    <div class="profile-actions">
-                        <button class="profile-btn primary" data-i18n="editProfile">编辑资料</button>
-                        <button class="profile-btn secondary" id="logoutBtn" data-i18n="logout">退出登录</button>
                     </div>
                 </div>
             </div>
@@ -1549,12 +1149,12 @@
                 contactDesc: "如果您有项目想法或合作机会，请随时与我联系。我期待与您讨论如何将您的愿景变为现实。(666还有机会吗？不会以为我还在社团吧)",
                 sendEmail: "发送邮件",
                 events: "事件",
-                event1Title: "网页设计工作坊",
-                event1Desc: "学习现代网页设计技巧和最佳实践，包括响应式设计和用户体验原则。",
-                event2Title: "前端开发研讨会",
-                event2Desc: "探索最新的前端框架和技术，分享开发经验和最佳实践。",
-                event3Title: "创意设计展示",
-                event3Desc: "展示最新的设计作品和创新想法，与同行交流设计理念。",
+                event1Title: "没想好写啥",
+                event1Desc: "没想好写啥。",
+                event2Title: "没想好写啥",
+                event2Desc: "没想好写啥。",
+                event3Title: "没想好写啥",
+                event3Desc: "没想好写啥。",
                 settings: "网站设置",
                 theme: "主题",
                 light: "浅色",
@@ -1565,15 +1165,7 @@
                 large: "大",
                 reset: "重置为默认设置",
                 rights: "保留所有权利。",
-                socialMedia: "社交媒体",
-                login: "登录",
-                username: "用户名",
-                password: "密码",
-                noAccount: "没有账户？",
-                register: "注册",
-                editProfile: "编辑资料",
-                logout: "退出登录",
-                syncTranslation: "同步翻译内容"
+                socialMedia: "社交媒体"
             },
             en: {
                 welcome: "Welcome to My Personal Website",
@@ -1616,15 +1208,7 @@
                 large: "Large",
                 reset: "Reset to Default Settings",
                 rights: "All rights reserved.",
-                socialMedia: "Social Media",
-                login: "Login",
-                username: "Username",
-                password: "Password",
-                noAccount: "No account?",
-                register: "Register",
-                editProfile: "Edit Profile",
-                logout: "Logout",
-                syncTranslation: "Sync Translation Content"
+                socialMedia: "Social Media"
             },
             fr: {
                 welcome: "Bienvenue sur mon site Web personnel",
@@ -1667,15 +1251,7 @@
                 large: "Grand",
                 reset: "Réinitialiser les paramètres par défaut",
                 rights: "Tous droits réservés.",
-                socialMedia: "Médias sociaux",
-                login: "Connexion",
-                username: "Nom d'utilisateur",
-                password: "Mot de passe",
-                noAccount: "Pas de compte?",
-                register: "S'inscrire",
-                editProfile: "Modifier le profil",
-                logout: "Se déconnecter",
-                syncTranslation: "Synchroniser le contenu de traduction"
+                socialMedia: "Médias sociaux"
             }
         };
 
@@ -1746,116 +1322,6 @@
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                 }
             });
-        });
-
-        // 登录系统功能
-        const loginBtn = document.getElementById('loginBtn');
-        const userAvatar = document.getElementById('userAvatar');
-        const userName = document.getElementById('userName');
-        const loginForm = document.getElementById('loginForm');
-        const logoutBtn = document.getElementById('logoutBtn');
-        const registerLink = document.getElementById('registerLink');
-        
-        // 检查用户是否已登录
-        function checkLoginStatus() {
-            const user = JSON.parse(localStorage.getItem('currentUser'));
-            if (user) {
-                // 用户已登录
-                loginBtn.style.display = 'none';
-                userAvatar.style.display = 'flex';
-                userName.style.display = 'block';
-                userAvatar.textContent = user.name.charAt(0).toUpperCase();
-                userName.textContent = user.name;
-                
-                // 更新个人资料页面
-                document.getElementById('profileName').textContent = user.name;
-                document.getElementById('profileEmail').textContent = user.email;
-                document.getElementById('profileAvatar').textContent = user.name.charAt(0).toUpperCase();
-            } else {
-                // 用户未登录
-                loginBtn.style.display = 'block';
-                userAvatar.style.display = 'none';
-                userName.style.display = 'none';
-            }
-        }
-        
-        // 初始化登录状态
-        checkLoginStatus();
-        
-        // 登录按钮点击事件
-        loginBtn.addEventListener('click', () => {
-            // 切换到登录页面
-            document.querySelectorAll('.page').forEach(page => {
-                page.classList.remove('active');
-            });
-            document.getElementById('login').classList.add('active');
-        });
-        
-        // 用户头像点击事件
-        userAvatar.addEventListener('click', () => {
-            // 切换到个人资料页面
-            document.querySelectorAll('.page').forEach(page => {
-                page.classList.remove('active');
-            });
-            document.getElementById('profile').classList.add('active');
-        });
-        
-        // 登录表单提交事件
-        loginForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            
-            // 简单验证
-            if (username && password) {
-                // 模拟登录成功
-                const user = {
-                    name: username,
-                    email: `${username}@example.com`
-                };
-                
-                // 保存用户信息到本地存储
-                localStorage.setItem('currentUser', JSON.stringify(user));
-                
-                // 更新UI
-                checkLoginStatus();
-                
-                // 切换到首页
-                document.querySelectorAll('.page').forEach(page => {
-                    page.classList.remove('active');
-                });
-                document.getElementById('home').classList.add('active');
-                
-                // 显示成功消息
-                alert('登录成功！');
-            } else {
-                alert('请输入用户名和密码！');
-            }
-        });
-        
-        // 退出登录事件
-        logoutBtn.addEventListener('click', () => {
-            // 清除用户信息
-            localStorage.removeItem('currentUser');
-            
-            // 更新UI
-            checkLoginStatus();
-            
-            // 切换到首页
-            document.querySelectorAll('.page').forEach(page => {
-                page.classList.remove('active');
-            });
-            document.getElementById('home').classList.add('active');
-            
-            // 显示成功消息
-            alert('已退出登录！');
-        });
-        
-        // 注册链接点击事件
-        registerLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            alert('注册功能暂未开放，请直接使用任意用户名和密码登录！');
         });
 
         // 设置面板功能
@@ -1962,37 +1428,6 @@
             applyTheme('light');
             applyFontSize('medium');
             applyLanguage('zh');
-        });
-        
-        // 翻译同步功能
-        const syncTranslationBtn = document.getElementById('syncTranslationBtn');
-        
-        syncTranslationBtn.addEventListener('click', () => {
-            // 获取当前中文内容
-            const event1Title = document.querySelector('[data-i18n="event1Title"]').textContent;
-            const event1Desc = document.querySelector('[data-i18n="event1Desc"]').textContent;
-            const event2Title = document.querySelector('[data-i18n="event2Title"]').textContent;
-            const event2Desc = document.querySelector('[data-i18n="event2Desc"]').textContent;
-            const event3Title = document.querySelector('[data-i18n="event3Title"]').textContent;
-            const event3Desc = document.querySelector('[data-i18n="event3Desc"]').textContent;
-            
-            // 更新其他语言的翻译
-            translations.en.event1Title = event1Title;
-            translations.en.event1Desc = event1Desc;
-            translations.en.event2Title = event2Title;
-            translations.en.event2Desc = event2Desc;
-            translations.en.event3Title = event3Title;
-            translations.en.event3Desc = event3Desc;
-            
-            translations.fr.event1Title = event1Title;
-            translations.fr.event1Desc = event1Desc;
-            translations.fr.event2Title = event2Title;
-            translations.fr.event2Desc = event2Desc;
-            translations.fr.event3Title = event3Title;
-            translations.fr.event3Desc = event3Desc;
-            
-            // 显示成功消息
-            alert('翻译内容已同步！');
         });
     </script>
 </body>
