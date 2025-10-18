@@ -31,7 +31,7 @@
             display: none;
             opacity: 0;
             transform: translateY(20px);
-            transition: opacity 0.6s ease, transform 0.6s ease;
+            transition: opacity 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
         
         .page.active {
@@ -85,6 +85,53 @@
         
         body.large-font {
             font-size: 18px;
+        }
+        
+        /* 动画开关 */
+        body.no-animation * {
+            transition: none !important;
+            animation: none !important;
+        }
+        
+        /* 悬停效果开关 */
+        body.no-hover .skill-card:hover,
+        body.no-hover .project-image:hover,
+        body.no-hover .about-image:hover,
+        body.no-hover .event-card:hover,
+        body.no-hover .cta-button:hover,
+        body.no-hover .contact-button:hover {
+            transform: none !important;
+            box-shadow: none !important;
+        }
+        
+        body.no-hover .skill-card:hover .skill-icon,
+        body.no-hover .project-image:hover img,
+        body.no-hover .event-card:hover .event-image {
+            transform: none !important;
+        }
+        
+        /* 设置按钮不受悬停效果影响，确保始终可点击 */
+        .settings-btn,
+        .mobile-menu-btn,
+        .close-settings,
+        .mobile-menu-close,
+        .language-switcher,
+        .reset-btn,
+        .theme-option,
+        .font-option {
+            transition: all 0.3s ease !important;
+        }
+        
+        body.no-hover .settings-btn:hover,
+        body.no-hover .mobile-menu-btn:hover,
+        body.no-hover .close-settings:hover,
+        body.no-hover .mobile-menu-close:hover,
+        body.no-hover .language-switcher:hover,
+        body.no-hover .reset-btn:hover,
+        body.no-hover .theme-option:hover,
+        body.no-hover .font-option:hover {
+            transform: none !important;
+            background-color: initial !important;
         }
         
         a {
@@ -150,6 +197,111 @@
         .nav-links a:hover {
             color: #0066cc;
             transform: translateY(-2px);
+        }
+        
+        /* 移动端菜单按钮 */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #1d1d1f;
+            transition: transform 0.3s ease;
+        }
+        
+        body.dark-theme .mobile-menu-btn {
+            color: #e0e0e0;
+        }
+        
+        .mobile-menu-btn:hover {
+            transform: rotate(90deg);
+        }
+        
+        /* 移动端菜单 */
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            left: -100%;
+            width: 80%;
+            max-width: 300px;
+            height: 100vh;
+            background-color: #ffffff;
+            z-index: 2001;
+            padding: 80px 30px 30px;
+            transition: left 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            overflow-y: auto;
+            box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        body.dark-theme .mobile-menu {
+            background-color: #1e1e1e;
+        }
+        
+        .mobile-menu.active {
+            left: 0;
+        }
+        
+        .mobile-menu-links {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .mobile-menu-links a {
+            color: #1d1d1f;
+            font-size: 18px;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            transition: color 0.3s ease;
+        }
+        
+        body.dark-theme .mobile-menu-links a {
+            color: #e0e0e0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .mobile-menu-links a:hover {
+            color: #0066cc;
+        }
+        
+        .mobile-menu-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #1d1d1f;
+            transition: transform 0.3s ease;
+        }
+        
+        body.dark-theme .mobile-menu-close {
+            color: #e0e0e0;
+        }
+        
+        .mobile-menu-close:hover {
+            transform: rotate(90deg);
+        }
+        
+        /* 移动端菜单遮罩 */
+        .mobile-menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease, visibility 0.4s;
+        }
+        
+        .mobile-menu-overlay.active {
+            opacity: 1;
+            visibility: visible;
         }
         
         /* 语言切换器样式 */
@@ -353,6 +505,73 @@
         .font-option.active {
             border-color: #0066cc;
             background-color: rgba(0, 102, 204, 0.1);
+        }
+        
+        /* 新设置选项样式 */
+        .setting-option {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        body.dark-theme .setting-option {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .setting-option:last-child {
+            border-bottom: none;
+        }
+        
+        .setting-option-label {
+            font-weight: 500;
+        }
+        
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+        
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .toggle-slider {
+            background-color: #0066cc;
+        }
+        
+        input:checked + .toggle-slider:before {
+            transform: translateX(26px);
         }
         
         .reset-btn {
@@ -685,12 +904,15 @@
             font-weight: 600;
             margin-bottom: 15px;
             transition: color 0.3s;
+            line-height: 1.3;
         }
         
         .event-desc {
             color: #86868b;
             margin-bottom: 20px;
             transition: color 0.3s;
+            line-height: 1.5;
+            font-size: 16px;
         }
         
         body.dark-theme .event-desc {
@@ -817,11 +1039,19 @@
             .settings-panel {
                 width: 300px;
             }
+            
+            .nav-links {
+                gap: 20px;
+            }
         }
         
         @media (max-width: 768px) {
             .nav-links {
                 display: none;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
             }
             
             .hero h1 {
@@ -848,6 +1078,59 @@
             
             .events-grid {
                 grid-template-columns: 1fr;
+            }
+            
+            .event-card {
+                margin-bottom: 20px;
+            }
+            
+            .event-title {
+                font-size: 20px;
+            }
+            
+            .event-desc {
+                font-size: 15px;
+            }
+            
+            /* 为移动端添加安全区域 */
+            .hero {
+                padding-top: 100px;
+                padding-bottom: env(safe-area-inset-bottom);
+            }
+            
+            nav {
+                padding-top: calc(16px + env(safe-area-inset-top));
+                padding-bottom: 16px;
+            }
+            
+            .mobile-menu {
+                padding-top: calc(80px + env(safe-area-inset-top));
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 28px;
+            }
+            
+            .hero p {
+                font-size: 16px;
+            }
+            
+            .section-title {
+                font-size: 28px;
+            }
+            
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .event-title {
+                font-size: 18px;
+            }
+            
+            .event-desc {
+                font-size: 14px;
             }
         }
         
@@ -900,8 +1183,45 @@
                     <i class="fas fa-cog"></i>
                 </button>
             </div>
+            
+            <!-- 移动端菜单按钮 -->
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
         </div>
     </nav>
+
+    <!-- 移动端菜单 -->
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+    <div class="mobile-menu" id="mobileMenu">
+        <button class="mobile-menu-close" id="mobileMenuClose">
+            <i class="fas fa-times"></i>
+        </button>
+        <div class="mobile-menu-links">
+            <a href="#" class="nav-link" data-page="home">首页</a>
+            <a href="#" class="nav-link" data-page="events">事件</a>
+            <a href="#skills" class="nav-link">专业技能</a>
+            <a href="#projects" class="nav-link">项目经验</a>
+            <a href="#about" class="nav-link">关于我</a>
+            <a href="#contact" class="nav-link">联系方式</a>
+            
+            <!-- 移动端语言切换器 -->
+            <div class="language-switcher" id="mobileLanguageSwitcher">
+                <span id="mobileCurrentLanguage">中文</span>
+                <i class="fas fa-chevron-down"></i>
+                <div class="language-options" id="mobileLanguageOptions">
+                    <div class="language-option" data-lang="zh">中文</div>
+                    <div class="language-option" data-lang="en">English</div>
+                    <div class="language-option" data-lang="fr">Français</div>
+                </div>
+            </div>
+            
+            <!-- 移动端设置按钮 -->
+            <a href="#" id="mobileSettingsBtn">
+                <i class="fas fa-cog"></i> 网站设置
+            </a>
+        </div>
+    </div>
 
     <!-- 设置面板 -->
     <div class="settings-overlay" id="settingsOverlay"></div>
@@ -928,6 +1248,31 @@
                 <div class="font-option active" data-font="medium" data-i18n="medium">中</div>
                 <div class="font-option" data-font="large" data-i18n="large">大</div>
             </div>
+        </div>
+        
+        <!-- 新增设置选项 -->
+        <div class="setting-option">
+            <span class="setting-option-label" data-i18n="animations">动画效果</span>
+            <label class="toggle-switch">
+                <input type="checkbox" id="animationsToggle" checked>
+                <span class="toggle-slider"></span>
+            </label>
+        </div>
+        
+        <div class="setting-option">
+            <span class="setting-option-label" data-i18n="smoothScroll">平滑滚动</span>
+            <label class="toggle-switch">
+                <input type="checkbox" id="smoothScrollToggle" checked>
+                <span class="toggle-slider"></span>
+            </label>
+        </div>
+        
+        <div class="setting-option">
+            <span class="setting-option-label" data-i18n="hoverEffects">悬停效果</span>
+            <label class="toggle-switch">
+                <input type="checkbox" id="hoverEffectsToggle" checked>
+                <span class="toggle-slider"></span>
+            </label>
         </div>
         
         <div class="setting-group">
@@ -1048,9 +1393,12 @@
         <section class="events">
             <div class="container">
                 <h2 class="section-title" data-i18n="events">事件</h2>
+                   <div style="text-align: center;">
+                  <p class="section-desc">事件页面仅作为宣传</p>
+                  </div>
                 <div class="events-grid">
                     <div class="event-card">
-                        <img src="https://via.placeholder.com/400x200" alt="事件1" class="event-image">
+                      <img src="https://via.placeholder.com/400x200" alt="事件1" class="event-image">
                         <div class="event-content">
                             <span class="event-date">2023-10-15</span>
                             <h3 class="event-title" data-i18n="event1Title">没想好写啥</h3>
@@ -1165,7 +1513,10 @@
                 large: "大",
                 reset: "重置为默认设置",
                 rights: "保留所有权利。",
-                socialMedia: "社交媒体"
+                socialMedia: "社交媒体",
+                animations: "动画效果",
+                smoothScroll: "平滑滚动",
+                hoverEffects: "悬停效果"
             },
             en: {
                 welcome: "Welcome to My Personal Website",
@@ -1208,7 +1559,10 @@
                 large: "Large",
                 reset: "Reset to Default Settings",
                 rights: "All rights reserved.",
-                socialMedia: "Social Media"
+                socialMedia: "Social Media",
+                animations: "Animations",
+                smoothScroll: "Smooth Scroll",
+                hoverEffects: "Hover Effects"
             },
             fr: {
                 welcome: "Bienvenue sur mon site Web personnel",
@@ -1251,7 +1605,10 @@
                 large: "Grand",
                 reset: "Réinitialiser les paramètres par défaut",
                 rights: "Tous droits réservés.",
-                socialMedia: "Médias sociaux"
+                socialMedia: "Médias sociaux",
+                animations: "Animations",
+                smoothScroll: "Défilement fluide",
+                hoverEffects: "Effets de survol"
             }
         };
 
@@ -1272,6 +1629,9 @@
             document.getElementById('currentLanguage').textContent = 
                 lang === 'zh' ? '中文' : lang === 'en' ? 'English' : 'Français';
             
+            document.getElementById('mobileCurrentLanguage').textContent = 
+                lang === 'zh' ? '中文' : lang === 'en' ? 'English' : 'Français';
+            
             // 保存到本地存储
             localStorage.setItem('language', lang);
             currentLanguage = lang;
@@ -1283,10 +1643,17 @@
         // 语言切换功能
         const languageSwitcher = document.getElementById('languageSwitcher');
         const languageOptions = document.getElementById('languageOptions');
+        const mobileLanguageSwitcher = document.getElementById('mobileLanguageSwitcher');
+        const mobileLanguageOptions = document.getElementById('mobileLanguageOptions');
         
         languageSwitcher.addEventListener('click', (e) => {
             e.stopPropagation();
             languageOptions.classList.toggle('active');
+        });
+        
+        mobileLanguageSwitcher.addEventListener('click', (e) => {
+            e.stopPropagation();
+            mobileLanguageOptions.classList.toggle('active');
         });
         
         document.querySelectorAll('.language-option').forEach(option => {
@@ -1295,12 +1662,14 @@
                 const lang = option.getAttribute('data-lang');
                 applyLanguage(lang);
                 languageOptions.classList.remove('active');
+                mobileLanguageOptions.classList.remove('active');
             });
         });
         
         // 点击页面其他地方关闭语言选项
         document.addEventListener('click', () => {
             languageOptions.classList.remove('active');
+            mobileLanguageOptions.classList.remove('active');
         });
 
         // 页面切换功能
@@ -1321,7 +1690,40 @@
                 if (targetPage === 'home') {
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                 }
+                
+                // 关闭移动端菜单
+                closeMobileMenu();
             });
+        });
+
+        // 移动端菜单功能
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenuClose = document.getElementById('mobileMenuClose');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+        const mobileSettingsBtn = document.getElementById('mobileSettingsBtn');
+        
+        // 打开移动端菜单
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.add('active');
+            mobileMenuOverlay.classList.add('active');
+        });
+        
+        // 关闭移动端菜单
+        function closeMobileMenu() {
+            mobileMenu.classList.remove('active');
+            mobileMenuOverlay.classList.remove('active');
+        }
+        
+        mobileMenuClose.addEventListener('click', closeMobileMenu);
+        mobileMenuOverlay.addEventListener('click', closeMobileMenu);
+        
+        // 移动端设置按钮
+        mobileSettingsBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            closeMobileMenu();
+            settingsPanel.classList.add('active');
+            settingsOverlay.classList.add('active');
         });
 
         // 设置面板功能
@@ -1423,11 +1825,95 @@
             });
         });
         
+        // 动画开关功能
+        const animationsToggle = document.getElementById('animationsToggle');
+        let animationsEnabled = localStorage.getItem('animations') !== 'false';
+        
+        // 应用动画设置
+        function applyAnimations(enabled) {
+            if (enabled) {
+                document.body.classList.remove('no-animation');
+            } else {
+                document.body.classList.add('no-animation');
+            }
+            
+            // 更新开关状态
+            animationsToggle.checked = enabled;
+            
+            // 保存到本地存储
+            localStorage.setItem('animations', enabled);
+        }
+        
+        // 初始化动画设置
+        applyAnimations(animationsEnabled);
+        
+        // 动画开关事件
+        animationsToggle.addEventListener('change', (e) => {
+            applyAnimations(e.target.checked);
+        });
+        
+        // 平滑滚动开关功能
+        const smoothScrollToggle = document.getElementById('smoothScrollToggle');
+        let smoothScrollEnabled = localStorage.getItem('smoothScroll') !== 'false';
+        
+        // 应用平滑滚动设置
+        function applySmoothScroll(enabled) {
+            if (enabled) {
+                document.documentElement.style.scrollBehavior = 'smooth';
+            } else {
+                document.documentElement.style.scrollBehavior = 'auto';
+            }
+            
+            // 更新开关状态
+            smoothScrollToggle.checked = enabled;
+            
+            // 保存到本地存储
+            localStorage.setItem('smoothScroll', enabled);
+        }
+        
+        // 初始化平滑滚动设置
+        applySmoothScroll(smoothScrollEnabled);
+        
+        // 平滑滚动开关事件
+        smoothScrollToggle.addEventListener('change', (e) => {
+            applySmoothScroll(e.target.checked);
+        });
+        
+        // 悬停效果开关功能
+        const hoverEffectsToggle = document.getElementById('hoverEffectsToggle');
+        let hoverEffectsEnabled = localStorage.getItem('hoverEffects') !== 'false';
+        
+        // 应用悬停效果设置
+        function applyHoverEffects(enabled) {
+            if (enabled) {
+                document.body.classList.remove('no-hover');
+            } else {
+                document.body.classList.add('no-hover');
+            }
+            
+            // 更新开关状态
+            hoverEffectsToggle.checked = enabled;
+            
+            // 保存到本地存储
+            localStorage.setItem('hoverEffects', enabled);
+        }
+        
+        // 初始化悬停效果设置
+        applyHoverEffects(hoverEffectsEnabled);
+        
+        // 悬停效果开关事件
+        hoverEffectsToggle.addEventListener('change', (e) => {
+            applyHoverEffects(e.target.checked);
+        });
+        
         // 重置设置
         resetSettingsBtn.addEventListener('click', () => {
             applyTheme('light');
             applyFontSize('medium');
             applyLanguage('zh');
+            applyAnimations(true);
+            applySmoothScroll(true);
+            applyHoverEffects(true);
         });
     </script>
 </body>
