@@ -20,10 +20,68 @@
         
         body {
             color: #1d1d1f;
-            background-color: #ffffff;
             line-height: 1.5;
             overflow-x: hidden;
             transition: background-color 0.4s, color 0.4s;
+            background: transparent; /* 移除白色背景 */
+        }
+        
+        /* GradientBlinds背景容器 */
+        .gradient-blinds-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: #000;
+        }
+        
+        /* GradientBlinds效果样式 */
+        .gradient-blinds {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            display: flex;
+        }
+        
+        .blind {
+            flex: 1;
+            height: 100%;
+            position: relative;
+            transition: transform 0.3s ease, filter 0.3s ease;
+        }
+        
+        .blind::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(0deg, #FF9FFC, #5227FF);
+            opacity: 0.8;
+            transition: all 0.3s ease;
+        }
+        
+        .blind:hover::before {
+            opacity: 1;
+            filter: brightness(1.2);
+        }
+        
+        /* 确保内容在背景之上 */
+        .page, nav, footer {
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* 确保英雄区域内容可见 */
+        .hero-content {
+            position: relative;
+            z-index: 2;
         }
         
         /* 页面切换动画 */
@@ -42,7 +100,6 @@
         
         /* 深色主题样式 */
         body.dark-theme {
-            background-color: #121212;
             color: #e0e0e0;
         }
         
@@ -53,7 +110,7 @@
         body.dark-theme .login-form,
         body.dark-theme .profile-card,
         body.dark-theme .admin-panel {
-            background-color: #1e1e1e;
+            background-color: rgba(30, 30, 30, 0.85);
             color: #e0e0e0;
         }
         
@@ -61,7 +118,7 @@
         body.dark-theme .contact,
         body.dark-theme .events,
         body.dark-theme .login-section {
-            background-color: #1a1a1a;
+            background-color: rgba(26, 26, 26, 0.85);
         }
         
         body.dark-theme nav {
@@ -75,11 +132,11 @@
         }
         
         body.dark-theme .hero {
-            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            background: transparent;
         }
         
         body.dark-theme footer {
-            background-color: #0d0d0d;
+            background-color: rgba(13, 13, 13, 0.9);
         }
         
         /* 字体大小调整 */
@@ -115,7 +172,7 @@
         }
         
         /* 设置按钮不受悬停效果影响，确保始终可点击 */
-        .settings-btn,
+        .bubble-menu-toggle,
         .mobile-menu-btn,
         .close-settings,
         .mobile-menu-close,
@@ -124,20 +181,21 @@
         .theme-option,
         .font-option,
         .login-btn,
-        .user-avatar {
+        .user-avatar,
+        .settings-btn {
             transition: all 0.3s ease !important;
         }
         
-        body.no-hover .settings-btn:hover,
+        body.no-hover .bubble-menu-toggle:hover,
         body.no-hover .mobile-menu-btn:hover,
-        body.no-hover .close-settings:hover,
         body.no-hover .mobile-menu-close:hover,
         body.no-hover .language-switcher:hover,
         body.no-hover .reset-btn:hover,
         body.no-hover .theme-option:hover,
         body.no-hover .font-option:hover,
         body.no-hover .login-btn:hover,
-        body.no-hover .user-avatar:hover {
+        body.no-hover .user-avatar:hover,
+        body.no-hover .settings-btn:hover {
             transform: none !important;
             background-color: initial !important;
         }
@@ -235,6 +293,12 @@
         .user-name {
             font-size: 14px;
             font-weight: 500;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        
+        .user-name:hover {
+            color: #0066cc;
         }
         
         .login-btn {
@@ -445,6 +509,162 @@
             background-color: rgba(255, 255, 255, 0.1);
         }
         
+        /* 气泡菜单样式 */
+        .bubble-menu {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 2000;
+        }
+        
+        .bubble-menu-toggle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: #0066cc;
+            color: white;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+        
+        .bubble-menu-toggle:hover {
+            background-color: #0077dd;
+            transform: scale(1.1);
+        }
+        
+        .bubble-menu-items {
+            position: absolute;
+            bottom: 70px;
+            right: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 15px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .bubble-menu.active .bubble-menu-items {
+            pointer-events: auto;
+            opacity: 1;
+        }
+        
+        .bubble-menu-item {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: white;
+            color: #1d1d1f;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            transform: translateY(20px) scale(0.8);
+            opacity: 0;
+            position: relative;
+        }
+        
+        .bubble-menu.active .bubble-menu-item {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+        }
+        
+        /* 为每个气泡设置不同的旋转角度 */
+        .bubble-menu-item:nth-child(1) { transform: translateY(20px) rotate(-8deg) scale(0.8); }
+        .bubble-menu-item:nth-child(2) { transform: translateY(20px) rotate(8deg) scale(0.8); }
+        .bubble-menu-item:nth-child(3) { transform: translateY(20px) rotate(8deg) scale(0.8); }
+        .bubble-menu-item:nth-child(4) { transform: translateY(20px) rotate(8deg) scale(0.8); }
+        .bubble-menu-item:nth-child(5) { transform: translateY(20px) rotate(-8deg) scale(0.8); }
+        .bubble-menu-item:nth-child(6) { transform: translateY(20px) rotate(8deg) scale(0.8); }
+        .bubble-menu-item:nth-child(7) { transform: translateY(20px) rotate(-8deg) scale(0.8); }
+        
+        .bubble-menu.active .bubble-menu-item:nth-child(1) { 
+            transform: translateY(0) rotate(-8deg) scale(1); 
+            transition-delay: 0.1s;
+        }
+        .bubble-menu.active .bubble-menu-item:nth-child(2) { 
+            transform: translateY(0) rotate(8deg) scale(1); 
+            transition-delay: 0.2s;
+        }
+        .bubble-menu.active .bubble-menu-item:nth-child(3) { 
+            transform: translateY(0) rotate(8deg) scale(1); 
+            transition-delay: 0.3s;
+        }
+        .bubble-menu.active .bubble-menu-item:nth-child(4) { 
+            transform: translateY(0) rotate(8deg) scale(1); 
+            transition-delay: 0.4s;
+        }
+        .bubble-menu.active .bubble-menu-item:nth-child(5) { 
+            transform: translateY(0) rotate(-8deg) scale(1); 
+            transition-delay: 0.5s;
+        }
+        .bubble-menu.active .bubble-menu-item:nth-child(6) { 
+            transform: translateY(0) rotate(8deg) scale(1); 
+            transition-delay: 0.6s;
+        }
+        .bubble-menu.active .bubble-menu-item:nth-child(7) { 
+            transform: translateY(0) rotate(-8deg) scale(1); 
+            transition-delay: 0.7s;
+        }
+        
+        .bubble-menu-item:hover {
+            transform: scale(1.1) !important;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* 为每个气泡设置不同的悬停颜色 */
+        .bubble-menu-item[data-action="theme"]:hover { background-color: #3b82f6; color: white; }
+        .bubble-menu-item[data-action="font-size"]:hover { background-color: #10b981; color: white; }
+        .bubble-menu-item[data-action="animations"]:hover { background-color: #f59e0b; color: white; }
+        .bubble-menu-item[data-action="smooth-scroll"]:hover { background-color: #ef4444; color: white; }
+        .bubble-menu-item[data-action="hover-effects"]:hover { background-color: #8b5cf6; color: white; }
+        .bubble-menu-item[data-action="click-spark"]:hover { background-color: #ec4899; color: white; }
+        .bubble-menu-item[data-action="reset"]:hover { background-color: #6b7280; color: white; }
+        
+        /* 气泡提示文字 */
+        .bubble-tooltip {
+            position: absolute;
+            right: 60px;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        
+        .bubble-menu-item:hover .bubble-tooltip {
+            opacity: 1;
+        }
+        
+        body.dark-theme .bubble-menu-item {
+            background-color: #2d2d2d;
+            color: #e0e0e0;
+        }
+        
+        body.dark-theme .bubble-menu-toggle {
+            background-color: #0066cc;
+        }
+        
+        body.dark-theme .bubble-menu-toggle:hover {
+            background-color: #0077dd;
+        }
+        
         /* 设置面板样式 */
         .settings-panel {
             position: fixed;
@@ -629,6 +849,51 @@
             transform: translateX(26px);
         }
         
+        /* 设置面板遮罩 */
+        .settings-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1999;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease, visibility 0.4s;
+        }
+        
+        .settings-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .reset-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: #f0f0f0;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        body.dark-theme .reset-btn {
+            background-color: #333;
+            color: #e0e0e0;
+        }
+        
+        .reset-btn:hover {
+            background-color: #e0e0e0;
+            transform: translateY(-2px);
+        }
+        
+        body.dark-theme .reset-btn:hover {
+            background-color: #444;
+        }
+        
         /* 管理员面板样式 */
         .admin-panel {
             background-color: #f8f9fa;
@@ -747,7 +1012,7 @@
         /* 登录系统样式 */
         .login-section {
             padding: 100px 0;
-            background-color: #f5f7fa;
+            background-color: rgba(245, 247, 250, 0.9);
             min-height: 100vh;
             transition: background-color 0.4s;
         }
@@ -851,7 +1116,7 @@
         
         .profile-section {
             padding: 100px 0;
-            background-color: #f5f7fa;
+            background-color: rgba(245, 247, 250, 0.9);
             min-height: 100vh;
             transition: background-color 0.4s;
         }
@@ -1015,8 +1280,10 @@
             align-items: center;
             text-align: center;
             padding-top: 80px;
-            background: linear-gradient(135deg, #f5f7fa 0%, #e4ecfb 100%);
+            background: transparent;
             transition: background 0.4s;
+            position: relative;
+            overflow: hidden;
         }
         
         .hero h1 {
@@ -1027,6 +1294,8 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             transition: transform 0.5s ease;
+            position: relative;
+            z-index: 3;
         }
         
         .hero h1:hover {
@@ -1035,14 +1304,17 @@
         
         .hero p {
             font-size: 28px;
-            color: #86868b;
+            color: #ffffff;
             max-width: 700px;
             margin-bottom: 32px;
             transition: color 0.3s, transform 0.3s ease;
+            position: relative;
+            z-index: 3;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
         }
         
         body.dark-theme .hero p {
-            color: #a0a0a0;
+            color: #e0e0e0;
         }
         
         .cta-button {
@@ -1053,6 +1325,8 @@
             font-size: 18px;
             font-weight: 500;
             transition: all 0.3s ease;
+            position: relative;
+            z-index: 3;
         }
         
         .cta-button:hover {
@@ -1061,10 +1335,79 @@
             box-shadow: 0 10px 20px rgba(0, 102, 204, 0.3);
         }
         
+        /* 激光动效样式 */
+        .laser-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        
+        .laser-beam {
+            position: absolute;
+            background: linear-gradient(90deg, rgba(255, 0, 128, 0.7), rgba(0, 128, 255, 0.7));
+            filter: blur(10px);
+            border-radius: 10px;
+            animation: laserMove 8s linear infinite;
+            opacity: 0.6;
+        }
+        
+        .laser-beam:nth-child(1) {
+            width: 300px;
+            height: 4px;
+            top: 20%;
+            left: -300px;
+            animation-delay: 0s;
+        }
+        
+        .laser-beam:nth-child(2) {
+            width: 200px;
+            height: 3px;
+            top: 40%;
+            right: -200px;
+            animation-delay: 2s;
+            animation-direction: reverse;
+        }
+        
+        .laser-beam:nth-child(3) {
+            width: 250px;
+            height: 2px;
+            bottom: 30%;
+            left: -250px;
+            animation-delay: 4s;
+        }
+        
+        .laser-beam:nth-child(4) {
+            width: 180px;
+            height: 3px;
+            bottom: 20%;
+            right: -180px;
+            animation-delay: 6s;
+            animation-direction: reverse;
+        }
+        
+        @keyframes laserMove {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(calc(100vw + 300px));
+            }
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+        
         /* 技能部分样式 */
         .skills {
             padding: 100px 0;
-            background-color: #fff;
+            background-color: rgba(255, 255, 255, 0.85);
             transition: background-color 0.4s;
         }
         
@@ -1088,7 +1431,7 @@
         }
         
         .skill-card {
-            background: #fff;
+            background: rgba(255, 255, 255, 0.9);
             border-radius: 20px;
             padding: 30px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
@@ -1131,7 +1474,7 @@
         /* 项目部分样式 */
         .projects {
             padding: 100px 0;
-            background-color: #f5f7fa;
+            background-color: rgba(245, 247, 250, 0.85);
             transition: background-color 0.4s;
         }
         
@@ -1177,6 +1520,9 @@
         
         .project-content {
             flex: 1;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            padding: 30px;
             transition: background-color 0.4s, color 0.4s;
         }
         
@@ -1201,7 +1547,7 @@
         /* 关于我部分样式 */
         .about {
             padding: 100px 0;
-            background-color: #fff;
+            background-color: rgba(255, 255, 255, 0.85);
             transition: background-color 0.4s;
         }
         
@@ -1213,6 +1559,9 @@
         
         .about-text {
             flex: 1;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            padding: 30px;
             transition: background-color 0.4s, color 0.4s;
         }
         
@@ -1256,7 +1605,7 @@
         /* 事件页面样式 */
         .events {
             padding: 100px 0;
-            background-color: #f5f7fa;
+            background-color: rgba(245, 247, 250, 0.85);
             min-height: 100vh;
             transition: background-color 0.4s;
         }
@@ -1268,7 +1617,7 @@
         }
         
         .event-card {
-            background: white;
+            background: rgba(255, 255, 255, 0.9);
             border-radius: 20px;
             overflow: hidden;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
@@ -1328,7 +1677,7 @@
         /* 联系部分样式 */
         .contact {
             padding: 100px 0;
-            background-color: #f5f7fa;
+            background-color: rgba(245, 247, 250, 0.85);
             text-align: center;
             transition: background-color 0.4s;
         }
@@ -1373,10 +1722,11 @@
         
         /* 页脚样式 */
         footer {
-            background-color: #1d1d1f;
+            background-color: rgba(29, 29, 31, 0.9);
             color: #fff;
             padding: 60px 0 30px;
             transition: background-color 0.4s;
+            position: relative;
         }
         
         .footer-content {
@@ -1422,6 +1772,64 @@
             padding-top: 30px;
             border-top: 1px solid #333;
             font-size: 14px;
+        }
+        
+        /* 渐变模糊效果样式 */
+        .gradual-blur-container {
+            position: relative;
+            height: 500px;
+            overflow: hidden;
+        }
+        
+        .gradual-blur-content {
+            height: 100%;
+            overflow-y: auto;
+            padding: 6rem 2rem;
+        }
+        
+        .gradual-blur-effect {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 6rem;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .gradual-blur-layer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            backdrop-filter: blur(calc(var(--strength, 1) * 2px));
+            -webkit-backdrop-filter: blur(calc(var(--strength, 1) * 2px));
+            mask-image: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+            -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
+            opacity: var(--opacity, 1);
+        }
+        
+        /* 点击火花效果样式 */
+        .click-spark-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+        
+        .spark {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #fff;
+            pointer-events: none;
+            opacity: 0;
+            transform: translate(-50%, -50%);
         }
         
         /* 自定义弹窗样式 */
@@ -1541,51 +1949,6 @@
             background: #3d3d3d;
         }
         
-        .reset-btn {
-            display: block;
-            width: 100%;
-            padding: 12px;
-            background-color: #f0f0f0;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-        
-        body.dark-theme .reset-btn {
-            background-color: #333;
-            color: #e0e0e0;
-        }
-        
-        .reset-btn:hover {
-            background-color: #e0e0e0;
-            transform: translateY(-2px);
-        }
-        
-        body.dark-theme .reset-btn:hover {
-            background-color: #444;
-        }
-        
-        /* 设置面板遮罩 */
-        .settings-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1999;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.4s ease, visibility 0.4s;
-        }
-        
-        .settings-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-        
         /* 响应式设计 */
         @media (max-width: 968px) {
             .hero h1 {
@@ -1683,6 +2046,29 @@
             .language-switcher {
                 padding: 5px 8px;
             }
+            
+            /* 移动端气泡菜单调整 */
+            .bubble-menu {
+                bottom: 20px;
+                right: 20px;
+            }
+            
+            .bubble-menu-toggle {
+                width: 50px;
+                height: 50px;
+                font-size: 18px;
+            }
+            
+            .bubble-menu-item {
+                width: 45px;
+                height: 45px;
+                font-size: 16px;
+            }
+            
+            .bubble-tooltip {
+                font-size: 10px;
+                padding: 4px 8px;
+            }
         }
         
         @media (max-width: 480px) {
@@ -1725,6 +2111,12 @@
     </style>
 </head>
 <body>
+    <!-- GradientBlinds背景容器 -->
+    <div class="gradient-blinds-container" id="gradientBlindsBg"></div>
+    
+    <!-- 点击火花效果容器 -->
+    <div class="click-spark-container" id="clickSparkContainer"></div>
+
     <!-- 导航栏 -->
     <nav>
         <div class="container nav-container">
@@ -1859,6 +2251,14 @@
             </label>
         </div>
         
+        <div class="setting-option">
+            <span class="setting-option-label">点击火花效果</span>
+            <label class="toggle-switch">
+                <input type="checkbox" id="clickSparkToggle" checked>
+                <span class="toggle-slider"></span>
+            </label>
+        </div>
+        
         <!-- 管理员面板 -->
         <div class="admin-panel" id="adminPanel" style="display: none;">
             <div class="admin-section">
@@ -1892,6 +2292,43 @@
         </div>
     </div>
 
+    <!-- 气泡菜单 -->
+    <div class="bubble-menu" id="bubbleMenu">
+        <button class="bubble-menu-toggle" id="bubbleMenuToggle">
+            <i class="fas fa-cog"></i>
+        </button>
+        <div class="bubble-menu-items">
+            <button class="bubble-menu-item" data-action="theme">
+                <i class="fas fa-palette"></i>
+                <span class="bubble-tooltip">主题切换</span>
+            </button>
+            <button class="bubble-menu-item" data-action="font-size">
+                <i class="fas fa-text-height"></i>
+                <span class="bubble-tooltip">字体大小</span>
+            </button>
+            <button class="bubble-menu-item" data-action="animations">
+                <i class="fas fa-film"></i>
+                <span class="bubble-tooltip">动画效果</span>
+            </button>
+            <button class="bubble-menu-item" data-action="smooth-scroll">
+                <i class="fas fa-mouse-pointer"></i>
+                <span class="bubble-tooltip">平滑滚动</span>
+            </button>
+            <button class="bubble-menu-item" data-action="hover-effects">
+                <i class="fas fa-hand-pointer"></i>
+                <span class="bubble-tooltip">悬停效果</span>
+            </button>
+            <button class="bubble-menu-item" data-action="click-spark">
+                <i class="fas fa-sparkles"></i>
+                <span class="bubble-tooltip">火花效果</span>
+            </button>
+            <button class="bubble-menu-item" data-action="reset">
+                <i class="fas fa-redo"></i>
+                <span class="bubble-tooltip">重置设置</span>
+            </button>
+        </div>
+    </div>
+
     <!-- 管理员登录提示弹窗 -->
     <div class="custom-modal" id="adminModal">
         <div class="modal-content">
@@ -1919,9 +2356,19 @@
     <div id="home" class="page active">
         <!-- 英雄区域 -->
         <section class="hero">
-            <h1 data-i18n="welcome">欢迎来到我的个人网页</h1>
-            <p data-i18n="tagline">Think different-非同凡想(此网页处于工程状态非成品)</p>
-            <a href="#contact" class="cta-button" data-i18n="contactMe">联系我 <i class="fas fa-arrow-right"></i></a>
+            <!-- 激光动效背景 -->
+            <div class="laser-bg">
+                <div class="laser-beam"></div>
+                <div class="laser-beam"></div>
+                <div class="laser-beam"></div>
+                <div class="laser-beam"></div>
+            </div>
+            
+            <div class="hero-content">
+                <h1 data-i18n="welcome">欢迎来到我的个人网页</h1>
+                <p data-i18n="tagline">Think different-非同凡想(此网页处于工程状态非成品)</p>
+                <a href="#contact" class="cta-button" data-i18n="contactMe">联系我 <i class="fas fa-arrow-right"></i></a>
+            </div>
         </section>
 
         <!-- 技能部分 -->
@@ -2171,11 +2618,25 @@
                 <p>&copy; power by WTX. <span data-i18n="rights">保留所有权利。</span></p>
             </div>
         </div>
+        
+        <!-- 渐变模糊效果 -->
+        <div class="gradual-blur-effect">
+            <div class="gradual-blur-layer" style="--strength: 2; --opacity: 1;"></div>
+        </div>
     </footer>
 
     <script>
         // 修复的核心功能代码
         document.addEventListener('DOMContentLoaded', function() {
+            // 初始化设置
+            initializeSettings();
+            
+            // 初始化点击火花效果
+            initializeClickSpark();
+            
+            // 初始化GradientBlinds背景特效
+            initializeGradientBlindsBackground();
+            
             // 修复设置面板打开功能
             const settingsBtn = document.getElementById('settingsBtn');
             const closeSettings = document.getElementById('closeSettings');
@@ -2196,6 +2657,184 @@
                 settingsPanel.classList.remove('active');
                 settingsOverlay.classList.remove('active');
             });
+            
+            // 气泡菜单功能
+            const bubbleMenu = document.getElementById('bubbleMenu');
+            const bubbleMenuToggle = document.getElementById('bubbleMenuToggle');
+            
+            bubbleMenuToggle.addEventListener('click', function() {
+                bubbleMenu.classList.toggle('active');
+            });
+            
+            // 点击气泡菜单项的处理
+            document.querySelectorAll('.bubble-menu-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const action = this.getAttribute('data-action');
+                    handleBubbleMenuAction(action);
+                    
+                    // 关闭气泡菜单
+                    bubbleMenu.classList.remove('active');
+                });
+            });
+            
+            // 处理气泡菜单项点击
+            function handleBubbleMenuAction(action) {
+                switch(action) {
+                    case 'theme':
+                        toggleTheme();
+                        break;
+                    case 'font-size':
+                        toggleFontSize();
+                        break;
+                    case 'animations':
+                        toggleAnimations();
+                        break;
+                    case 'smooth-scroll':
+                        toggleSmoothScroll();
+                        break;
+                    case 'hover-effects':
+                        toggleHoverEffects();
+                        break;
+                    case 'click-spark':
+                        toggleClickSpark();
+                        break;
+                    case 'reset':
+                        resetSettings();
+                        break;
+                }
+            }
+            
+            // 主题切换
+            function toggleTheme() {
+                const currentTheme = localStorage.getItem('theme') || 'light';
+                const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+                applyTheme(newTheme);
+                localStorage.setItem('theme', newTheme);
+                
+                // 显示提示
+                showNotification(`已切换到${newTheme === 'light' ? '浅色' : '深色'}主题`);
+            }
+            
+            // 字体大小切换
+            function toggleFontSize() {
+                const currentSize = localStorage.getItem('fontSize') || 'medium';
+                let newSize;
+                
+                if (currentSize === 'small') newSize = 'medium';
+                else if (currentSize === 'medium') newSize = 'large';
+                else newSize = 'small';
+                
+                applyFontSize(newSize);
+                localStorage.setItem('fontSize', newSize);
+                
+                // 显示提示
+                showNotification(`字体大小已设置为${newSize === 'small' ? '小' : newSize === 'medium' ? '中' : '大'}`);
+            }
+            
+            // 动画开关
+            function toggleAnimations() {
+                const animationsEnabled = document.body.classList.toggle('no-animation');
+                localStorage.setItem('animationsEnabled', !animationsEnabled);
+                
+                // 显示提示
+                showNotification(animationsEnabled ? '动画效果已关闭' : '动画效果已开启');
+            }
+            
+            // 平滑滚动开关
+            function toggleSmoothScroll() {
+                const smoothScrollEnabled = document.documentElement.style.scrollBehavior === 'smooth';
+                document.documentElement.style.scrollBehavior = smoothScrollEnabled ? 'auto' : 'smooth';
+                localStorage.setItem('smoothScrollEnabled', !smoothScrollEnabled);
+                
+                // 显示提示
+                showNotification(smoothScrollEnabled ? '平滑滚动已关闭' : '平滑滚动已开启');
+            }
+            
+            // 悬停效果开关
+            function toggleHoverEffects() {
+                const hoverEffectsEnabled = document.body.classList.toggle('no-hover');
+                localStorage.setItem('hoverEffectsEnabled', !hoverEffectsEnabled);
+                
+                // 显示提示
+                showNotification(hoverEffectsEnabled ? '悬停效果已关闭' : '悬停效果已开启');
+            }
+            
+            // 点击火花效果开关
+            function toggleClickSpark() {
+                const clickSparkToggle = document.getElementById('clickSparkToggle');
+                if (clickSparkToggle) {
+                    clickSparkToggle.checked = !clickSparkToggle.checked;
+                    clickSparkToggle.dispatchEvent(new Event('change'));
+                }
+                
+                // 显示提示
+                const clickSparkEnabled = localStorage.getItem('clickSparkEnabled') !== 'false';
+                showNotification(clickSparkEnabled ? '点击火花效果已开启' : '点击火花效果已关闭');
+            }
+            
+            // 重置设置
+            function resetSettings() {
+                localStorage.removeItem('theme');
+                localStorage.removeItem('fontSize');
+                localStorage.removeItem('animationsEnabled');
+                localStorage.removeItem('smoothScrollEnabled');
+                localStorage.removeItem('hoverEffectsEnabled');
+                localStorage.removeItem('clickSparkEnabled');
+                
+                applyTheme('light');
+                applyFontSize('medium');
+                document.body.classList.remove('no-animation', 'no-hover');
+                document.documentElement.style.scrollBehavior = 'smooth';
+                
+                // 重置点击火花设置
+                const clickSparkToggle = document.getElementById('clickSparkToggle');
+                if (clickSparkToggle) {
+                    clickSparkToggle.checked = true;
+                }
+                
+                // 显示提示
+                showNotification('所有设置已重置为默认值');
+            }
+            
+            // 显示通知
+            function showNotification(message) {
+                // 创建通知元素
+                const notification = document.createElement('div');
+                notification.textContent = message;
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background-color: #0066cc;
+                    color: white;
+                    padding: 12px 20px;
+                    border-radius: 8px;
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                    z-index: 3000;
+                    font-size: 14px;
+                    transition: all 0.3s ease;
+                    opacity: 0;
+                    transform: translateY(-20px);
+                `;
+                
+                document.body.appendChild(notification);
+                
+                // 显示动画
+                setTimeout(() => {
+                    notification.style.opacity = '1';
+                    notification.style.transform = 'translateY(0)';
+                }, 10);
+                
+                // 自动隐藏
+                setTimeout(() => {
+                    notification.style.opacity = '0';
+                    notification.style.transform = 'translateY(-20px)';
+                    
+                    setTimeout(() => {
+                        document.body.removeChild(notification);
+                    }, 300);
+                }, 3000);
+            }
             
             // 修复登录/注册页面切换
             const loginBtn = document.getElementById('loginBtn');
@@ -2243,28 +2882,174 @@
                 });
             });
             
+            // GradientBlinds背景特效实现
+            function initializeGradientBlindsBackground() {
+                const container = document.getElementById('gradientBlindsBg');
+                if (!container) return;
+                
+                const blindsContainer = document.createElement('div');
+                blindsContainer.className = 'gradient-blinds';
+                container.appendChild(blindsContainer);
+                
+                // 创建百叶窗
+                const blindCount = 12;
+                for (let i = 0; i < blindCount; i++) {
+                    const blind = document.createElement('div');
+                    blind.className = 'blind';
+                    blindsContainer.appendChild(blind);
+                }
+                
+                // 鼠标移动效果
+                document.addEventListener('mousemove', function(e) {
+                    const blinds = document.querySelectorAll('.blind');
+                    const mouseX = e.clientX / window.innerWidth;
+                    const mouseY = e.clientY / window.innerHeight;
+                    
+                    blinds.forEach((blind, index) => {
+                        // 计算每个百叶窗的偏移量
+                        const offset = (index / blinds.length - 0.5) * 2;
+                        const transformX = (mouseX - 0.5) * 20 * offset;
+                        const transformY = (mouseY - 0.5) * 20 * offset;
+                        
+                        blind.style.transform = `translate(${transformX}px, ${transformY}px)`;
+                        
+                        // 添加噪声效果
+                        const noise = Math.random() * 0.3;
+                        blind.style.filter = `brightness(${1 + noise})`;
+                    });
+                });
+                
+                // 鼠标离开时重置
+                document.addEventListener('mouseleave', function() {
+                    const blinds = document.querySelectorAll('.blind');
+                    blinds.forEach(blind => {
+                        blind.style.transform = 'translate(0, 0)';
+                        blind.style.filter = 'brightness(1)';
+                    });
+                });
+            }
+            
             // 初始化用户状态
             function checkLoginStatus() {
                 const user = JSON.parse(localStorage.getItem('currentUser'));
                 const userAvatar = document.getElementById('userAvatar');
                 const userName = document.getElementById('userName');
                 const loginBtn = document.getElementById('loginBtn');
+                const profileName = document.getElementById('profileName');
+                const profileEmail = document.getElementById('profileEmail');
+                const profileAvatar = document.getElementById('profileAvatar');
+                
+                // 移动端元素
+                const mobileUserAvatar = document.getElementById('mobileUserAvatar');
+                const mobileUserName = document.getElementById('mobileUserName');
+                const mobileLoginBtn = document.getElementById('mobileLoginBtn');
                 
                 if (user) {
+                    // 桌面端用户状态
                     loginBtn.style.display = 'none';
                     userAvatar.style.display = 'flex';
                     userName.style.display = 'block';
                     userAvatar.textContent = user.username.charAt(0).toUpperCase();
                     userName.textContent = user.username;
                     
+                    // 移动端用户状态
+                    if (mobileUserAvatar && mobileUserName && mobileLoginBtn) {
+                        mobileLoginBtn.style.display = 'none';
+                        mobileUserAvatar.style.display = 'flex';
+                        mobileUserName.style.display = 'block';
+                        mobileUserAvatar.textContent = user.username.charAt(0).toUpperCase();
+                        mobileUserName.textContent = user.username;
+                    }
+                    
+                    // 更新个人资料页面
+                    profileName.textContent = user.username;
+                    profileEmail.textContent = user.email || `${user.username}@example.com`;
+                    profileAvatar.textContent = user.username.charAt(0).toUpperCase();
+                    
                     // 如果是管理员，显示管理员面板
                     if (user.role === 'admin') {
                         document.getElementById('adminPanel').style.display = 'block';
                     }
+                    
+                    // 添加头像点击事件
+                    setupAvatarClickEvents();
                 } else {
+                    // 桌面端用户状态
                     loginBtn.style.display = 'block';
                     userAvatar.style.display = 'none';
                     userName.style.display = 'none';
+                    
+                    // 移动端用户状态
+                    if (mobileUserAvatar && mobileUserName && mobileLoginBtn) {
+                        mobileLoginBtn.style.display = 'block';
+                        mobileUserAvatar.style.display = 'none';
+                        mobileUserName.style.display = 'none';
+                    }
+                    
+                    document.getElementById('adminPanel').style.display = 'none';
+                }
+            }
+            
+            // 设置头像点击事件
+            function setupAvatarClickEvents() {
+                // 桌面端头像点击事件
+                const userAvatar = document.getElementById('userAvatar');
+                const userName = document.getElementById('userName');
+                
+                if (userAvatar) {
+                    userAvatar.addEventListener('click', function() {
+                        document.querySelectorAll('.page').forEach(page => {
+                            page.classList.remove('active');
+                        });
+                        document.getElementById('profile').classList.add('active');
+                    });
+                }
+                
+                if (userName) {
+                    userName.addEventListener('click', function() {
+                        document.querySelectorAll('.page').forEach(page => {
+                            page.classList.remove('active');
+                        });
+                        document.getElementById('profile').classList.add('active');
+                    });
+                }
+                
+                // 移动端头像点击事件
+                const mobileUserAvatar = document.getElementById('mobileUserAvatar');
+                const mobileUserName = document.getElementById('mobileUserName');
+                
+                if (mobileUserAvatar) {
+                    mobileUserAvatar.addEventListener('click', function() {
+                        document.querySelectorAll('.page').forEach(page => {
+                            page.classList.remove('active');
+                        });
+                        document.getElementById('profile').classList.add('active');
+                        
+                        // 关闭移动端菜单
+                        const mobileMenu = document.getElementById('mobileMenu');
+                        const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+                        if (mobileMenu && mobileMenuOverlay) {
+                            mobileMenu.classList.remove('active');
+                            mobileMenuOverlay.classList.remove('active');
+                        }
+                    });
+                }
+                
+                if (mobileUserName) {
+                    mobileUserName.addEventListener('click', function() {
+                        document.querySelectorAll('.page').forEach(page => {
+                            page.classList.remove('active');
+                        });
+                        document.getElementById('profile').classList.add('active');
+                        
+                        // 关闭移动端菜单
+                        const mobileMenu = document.getElementById('mobileMenu');
+                        const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+                        if (mobileMenu && mobileMenuOverlay) {
+                            mobileMenu.classList.remove('active');
+                            mobileMenuOverlay.classList.remove('active');
+                        }
+                    });
                 }
             }
             
@@ -2416,12 +3201,283 @@
                 document.getElementById('login').classList.add('active');
             });
             
+            // 点击火花效果初始化
+            function initializeClickSpark() {
+                const clickSparkToggle = document.getElementById('clickSparkToggle');
+                const clickSparkContainer = document.getElementById('clickSparkContainer');
+                let clickSparkEnabled = localStorage.getItem('clickSparkEnabled') !== 'false';
+                
+                // 设置初始状态
+                if (clickSparkToggle) {
+                    clickSparkToggle.checked = clickSparkEnabled;
+                }
+                updateClickSparkState(clickSparkEnabled);
+                
+                // 监听切换事件
+                if (clickSparkToggle) {
+                    clickSparkToggle.addEventListener('change', function() {
+                        clickSparkEnabled = this.checked;
+                        localStorage.setItem('clickSparkEnabled', clickSparkEnabled);
+                        updateClickSparkState(clickSparkEnabled);
+                    });
+                }
+                
+                function updateClickSparkState(enabled) {
+                    if (enabled) {
+                        document.addEventListener('click', createClickSpark);
+                    } else {
+                        document.removeEventListener('click', createClickSpark);
+                    }
+                }
+                
+                function createClickSpark(e) {
+                    // 如果动画被禁用，则不创建火花
+                    if (document.body.classList.contains('no-animation')) {
+                        return;
+                    }
+                    
+                    const sparkCount = 8;
+                    const sparkRadius = 15;
+                    const duration = 400;
+                    
+                    for (let i = 0; i < sparkCount; i++) {
+                        const spark = document.createElement('div');
+                        spark.className = 'spark';
+                        
+                        // 设置火花位置
+                        spark.style.left = `${e.clientX}px`;
+                        spark.style.top = `${e.clientY}px`;
+                        
+                        // 随机角度
+                        const angle = (i / sparkCount) * Math.PI * 2;
+                        const distance = Math.random() * sparkRadius + 5;
+                        
+                        // 计算最终位置
+                        const endX = e.clientX + Math.cos(angle) * distance;
+                        const endY = e.clientY + Math.sin(angle) * distance;
+                        
+                        // 添加到容器
+                        clickSparkContainer.appendChild(spark);
+                        
+                        // 火花动画
+                        const animation = spark.animate([
+                            {
+                                transform: 'translate(-50%, -50%) scale(1)',
+                                opacity: 1
+                            },
+                            {
+                                transform: `translate(calc(-50% + ${endX - e.clientX}px), calc(-50% + ${endY - e.clientY}px)) scale(0)`,
+                                opacity: 0
+                            }
+                        ], {
+                            duration: duration,
+                            easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+                            fill: 'forwards'
+                        });
+                        
+                        // 动画结束后移除元素
+                        animation.onfinish = () => {
+                            spark.remove();
+                        };
+                    }
+                }
+            }
+            
+            // 深色模式切换功能
+            function initializeSettings() {
+                // 从本地存储加载设置
+                const savedTheme = localStorage.getItem('theme') || 'light';
+                const savedFontSize = localStorage.getItem('fontSize') || 'medium';
+                const savedAnimations = localStorage.getItem('animationsEnabled') !== 'false';
+                const savedSmoothScroll = localStorage.getItem('smoothScrollEnabled') !== 'false';
+                const savedHoverEffects = localStorage.getItem('hoverEffectsEnabled') !== 'false';
+                const savedClickSpark = localStorage.getItem('clickSparkEnabled') !== 'false';
+                
+                // 应用保存的设置
+                applyTheme(savedTheme);
+                applyFontSize(savedFontSize);
+                
+                if (!savedAnimations) document.body.classList.add('no-animation');
+                if (!savedHoverEffects) document.body.classList.add('no-hover');
+                if (!savedSmoothScroll) document.documentElement.style.scrollBehavior = 'auto';
+                
+                // 设置面板中的选项状态
+                document.querySelectorAll('.theme-option').forEach(option => {
+                    if (option.getAttribute('data-theme') === savedTheme) {
+                        option.classList.add('active');
+                    } else {
+                        option.classList.remove('active');
+                    }
+                });
+                
+                document.querySelectorAll('.font-option').forEach(option => {
+                    if (option.getAttribute('data-font') === savedFontSize) {
+                        option.classList.add('active');
+                    } else {
+                        option.classList.remove('active');
+                    }
+                });
+                
+                // 设置开关状态
+                document.getElementById('animationsToggle').checked = savedAnimations;
+                document.getElementById('smoothScrollToggle').checked = savedSmoothScroll;
+                document.getElementById('hoverEffectsToggle').checked = savedHoverEffects;
+                document.getElementById('clickSparkToggle').checked = savedClickSpark;
+                
+                // 主题切换事件
+                document.querySelectorAll('.theme-option').forEach(option => {
+                    option.addEventListener('click', function() {
+                        const theme = this.getAttribute('data-theme');
+                        
+                        // 更新活动状态
+                        document.querySelectorAll('.theme-option').forEach(opt => {
+                            opt.classList.remove('active');
+                        });
+                        this.classList.add('active');
+                        
+                        // 应用主题
+                        applyTheme(theme);
+                        localStorage.setItem('theme', theme);
+                    });
+                });
+                
+                // 字体大小切换事件
+                document.querySelectorAll('.font-option').forEach(option => {
+                    option.addEventListener('click', function() {
+                        const fontSize = this.getAttribute('data-font');
+                        
+                        // 更新活动状态
+                        document.querySelectorAll('.font-option').forEach(opt => {
+                            opt.classList.remove('active');
+                        });
+                        this.classList.add('active');
+                        
+                        // 应用字体大小
+                        applyFontSize(fontSize);
+                        localStorage.setItem('fontSize', fontSize);
+                    });
+                });
+                
+                // 开关事件
+                document.getElementById('animationsToggle').addEventListener('change', function() {
+                    document.body.classList.toggle('no-animation', !this.checked);
+                    localStorage.setItem('animationsEnabled', this.checked);
+                });
+                
+                document.getElementById('smoothScrollToggle').addEventListener('change', function() {
+                    document.documentElement.style.scrollBehavior = this.checked ? 'smooth' : 'auto';
+                    localStorage.setItem('smoothScrollEnabled', this.checked);
+                });
+                
+                document.getElementById('hoverEffectsToggle').addEventListener('change', function() {
+                    document.body.classList.toggle('no-hover', !this.checked);
+                    localStorage.setItem('hoverEffectsEnabled', this.checked);
+                });
+                
+                document.getElementById('clickSparkToggle').addEventListener('change', function() {
+                    localStorage.setItem('clickSparkEnabled', this.checked);
+                    updateClickSparkState(this.checked);
+                });
+                
+                // 重置设置
+                document.getElementById('resetSettings').addEventListener('click', function() {
+                    localStorage.removeItem('theme');
+                    localStorage.removeItem('fontSize');
+                    localStorage.removeItem('animationsEnabled');
+                    localStorage.removeItem('smoothScrollEnabled');
+                    localStorage.removeItem('hoverEffectsEnabled');
+                    localStorage.removeItem('clickSparkEnabled');
+                    
+                    applyTheme('light');
+                    applyFontSize('medium');
+                    document.body.classList.remove('no-animation', 'no-hover');
+                    document.documentElement.style.scrollBehavior = 'smooth';
+                    
+                    // 更新设置面板中的选项状态
+                    document.querySelectorAll('.theme-option').forEach(option => {
+                        if (option.getAttribute('data-theme') === 'light') {
+                            option.classList.add('active');
+                        } else {
+                            option.classList.remove('active');
+                        }
+                    });
+                    
+                    document.querySelectorAll('.font-option').forEach(option => {
+                        if (option.getAttribute('data-font') === 'medium') {
+                            option.classList.add('active');
+                        } else {
+                            option.classList.remove('active');
+                        }
+                    });
+                    
+                    // 重置开关状态
+                    document.getElementById('animationsToggle').checked = true;
+                    document.getElementById('smoothScrollToggle').checked = true;
+                    document.getElementById('hoverEffectsToggle').checked = true;
+                    document.getElementById('clickSparkToggle').checked = true;
+                    
+                    // 重置点击火花设置
+                    updateClickSparkState(true);
+                    
+                    alert('设置已重置为默认值！');
+                });
+                
+                // 初始化点击火花效果
+                initializeClickSpark();
+            }
+            
+            function applyTheme(theme) {
+                if (theme === 'dark') {
+                    document.body.classList.add('dark-theme');
+                } else {
+                    document.body.classList.remove('dark-theme');
+                }
+            }
+            
+            function applyFontSize(fontSize) {
+                document.body.classList.remove('small-font', 'large-font');
+                if (fontSize === 'small') {
+                    document.body.classList.add('small-font');
+                } else if (fontSize === 'large') {
+                    document.body.classList.add('large-font');
+                }
+            }
+            
             // 初始化
             initializeUsers();
             checkLoginStatus();
             
+            // 激光动效交互
+            const hero = document.querySelector('.hero');
+            const laserBg = document.querySelector('.laser-bg');
+            
+            if (hero && laserBg) {
+                hero.addEventListener('mousemove', (e) => {
+                    const rect = hero.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    
+                    // 移动激光背景位置
+                    laserBg.style.transform = `translate(${x * 0.02}px, ${y * 0.02}px)`;
+                    
+                    // 更新激光束的颜色和位置
+                    const beams = document.querySelectorAll('.laser-beam');
+                    beams.forEach((beam, index) => {
+                        const intensity = 0.5 + (Math.sin(Date.now() * 0.001 + index) * 0.3);
+                        beam.style.opacity = intensity;
+                        beam.style.background = `linear-gradient(90deg, 
+                            rgba(255, ${50 + index * 50}, ${150 + index * 30}, ${intensity}), 
+                            rgba(${100 + index * 40}, 0, 255, ${intensity}))`;
+                    });
+                });
+                
+                hero.addEventListener('mouseleave', () => {
+                    laserBg.style.transform = 'translate(0, 0)';
+                });
+            }
+            
             // 其他功能保持不变...
-            // 语言切换、主题切换、事件管理等原有功能代码...
+            // 语言切换、事件管理等原有功能代码...
         });
     </script>
 </body>
