@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -23,7 +24,7 @@
             line-height: 1.5;
             overflow-x: hidden;
             transition: background-color 0.4s, color 0.4s;
-            background: transparent; /* 移除白色背景 */
+            background: transparent;
         }
         
         /* GradientBlinds背景容器 */
@@ -33,7 +34,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -1;
+            z-index: -1; /* 确保背景在内容后面 */
             background: #000;
         }
         
@@ -1059,16 +1060,16 @@
             background: #e74c3c;
         }
         
-        /* 事件管理表单样式 */
-        .event-form {
+        /* 历史事件管理表单样式 */
+        .history-form {
             display: flex;
             flex-direction: column;
             gap: 15px;
             margin-bottom: 20px;
         }
         
-        .event-form input,
-        .event-form textarea {
+        .history-form input,
+        .history-form textarea {
             padding: 10px;
             border: 1px solid #e0e0e0;
             border-radius: 6px;
@@ -1076,20 +1077,20 @@
             transition: border-color 0.3s, background-color 0.3s;
         }
         
-        body.dark-theme .event-form input,
-        body.dark-theme .event-form textarea {
+        body.dark-theme .history-form input,
+        body.dark-theme .history-form textarea {
             background-color: #2d2d2d;
             border-color: #444;
             color: #e0e0e0;
         }
         
-        .event-form input:focus,
-        .event-form textarea:focus {
+        .history-form input:focus,
+        .history-form textarea:focus {
             outline: none;
             border-color: #0066cc;
         }
         
-        .event-form textarea {
+        .history-form textarea {
             resize: vertical;
             min-height: 100px;
         }
@@ -2063,6 +2064,189 @@
             background: #3d3d3d;
         }
         
+        /* 历史页面样式 */
+        .history-section {
+            padding: 100px 0;
+            background-color: rgba(245, 247, 250, 0.85);
+            min-height: 100vh;
+            transition: background-color 0.4s;
+        }
+        
+        .history-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .history-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.4s ease, box-shadow 0.4s, background-color 0.4s;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .history-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .history-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(132, 0, 255, 0.05) 0%, rgba(0, 102, 204, 0.05) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1;
+        }
+        
+        .history-card:hover::before {
+            opacity: 1;
+        }
+        
+        .history-card-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .history-date {
+            display: inline-block;
+            background: #0066cc;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+        
+        .history-title {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            transition: color 0.3s;
+            line-height: 1.3;
+        }
+        
+        .history-desc {
+            color: #86868b;
+            margin-bottom: 20px;
+            transition: color 0.3s;
+            line-height: 1.5;
+            font-size: 16px;
+        }
+        
+        body.dark-theme .history-desc {
+            color: #a0a0a0;
+        }
+        
+        /* MagicBento风格的卡片效果 */
+        .bento-card {
+            position: relative;
+            background: #060010;
+            border-radius: 16px;
+            padding: 25px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(132, 0, 255, 0.2);
+        }
+        
+        .bento-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(132, 0, 255, 0.2);
+        }
+        
+        .bento-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(132, 0, 255, 0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .bento-card:hover::before {
+            opacity: 1;
+        }
+        
+        .bento-card-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .bento-label {
+            display: inline-block;
+            background: linear-gradient(135deg, #8400ff, #0066cc);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+        
+        .bento-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: white;
+        }
+        
+        .bento-description {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        /* 新增图片上传样式 */
+        .image-upload-container {
+            margin-bottom: 15px;
+        }
+        
+        .image-upload-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .image-upload-input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        
+        .image-preview {
+            margin-top: 10px;
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 8px;
+            display: none;
+        }
+        
+        .image-preview.active {
+            display: block;
+        }
+        
+        /* 事件和历史卡片中的图片样式 */
+        .history-image, .event-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        
         /* 响应式设计 */
         @media (max-width: 968px) {
             .hero h1 {
@@ -2147,6 +2331,10 @@
             
             .event-desc {
                 font-size: 15px;
+            }
+            
+            .history-grid {
+                grid-template-columns: 1fr;
             }
             
             /* 为移动端添加安全区域 */
@@ -2246,7 +2434,7 @@
                 padding: 20px;
             }
             
-            .skill-card, .event-card {
+            .skill-card, .event-card, .history-card {
                 padding: 20px;
             }
         }
@@ -2265,6 +2453,7 @@
             <a href="#" class="logo">WTX</a>
             <div class="nav-links">
                 <a href="#" class="nav-link" data-page="home">首页</a>
+                <a href="#" class="nav-link" data-page="history">历史</a>
                 <a href="#" class="nav-link" data-page="events">事件</a>
                 <a href="#skills" class="nav-link">专业技能</a>
                 <a href="#projects" class="nav-link">项目经验</a>
@@ -2310,6 +2499,7 @@
         </button>
         <div class="mobile-menu-links">
             <a href="#" class="nav-link" data-page="home">首页</a>
+            <a href="#" class="nav-link" data-page="history">历史</a>
             <a href="#" class="nav-link" data-page="events">事件</a>
             <a href="#skills" class="nav-link">专业技能</a>
             <a href="#projects" class="nav-link">项目经验</a>
@@ -2406,10 +2596,14 @@
         <div class="admin-panel" id="adminPanel" style="display: none;">
             <div class="admin-section">
                 <h3 class="admin-section-title">事件管理</h3>
-                <form class="event-form" id="eventForm">
+                <form class="history-form" id="eventForm">
                     <input type="text" id="eventTitle" placeholder="事件标题" required>
                     <textarea id="eventDescription" placeholder="事件描述" required></textarea>
-                    <input type="text" id="eventImage" placeholder="图片URL">
+                    <div class="image-upload-container">
+                        <label class="image-upload-label">事件图片URL</label>
+                        <input type="text" id="eventImage" placeholder="图片URL" class="image-upload-input">
+                        <img id="eventImagePreview" class="image-preview" src="" alt="事件图片预览">
+                    </div>
                     <input type="date" id="eventDate" required>
                     <button type="submit" class="admin-btn">添加事件</button>
                 </form>
@@ -2418,6 +2612,28 @@
                     <h4>现有事件</h4>
                     <div id="existingEvents">
                         <!-- 现有事件将在这里动态生成 -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="admin-section">
+                <h3 class="admin-section-title">历史事件管理</h3>
+                <form class="history-form" id="historyForm">
+                    <input type="text" id="historyTitle" placeholder="历史标题" required>
+                    <textarea id="historyDescription" placeholder="历史描述" required></textarea>
+                    <div class="image-upload-container">
+                        <label class="image-upload-label">历史图片URL</label>
+                        <input type="text" id="historyImage" placeholder="图片URL" class="image-upload-input">
+                        <img id="historyImagePreview" class="image-preview" src="" alt="历史图片预览">
+                    </div>
+                    <input type="date" id="historyDate" required>
+                    <button type="submit" class="admin-btn">添加历史事件</button>
+                </form>
+                
+                <div class="admin-section">
+                    <h4>现有历史事件</h4>
+                    <div id="existingHistories">
+                        <!-- 现有历史事件将在这里动态生成 -->
                     </div>
                 </div>
             </div>
@@ -2602,7 +2818,7 @@
                 <h2 class="section-title" data-i18n="contact">与我联系</h2>
                 <p class="contact-desc" data-i18n="contactDesc">如果您有项目想法或合作机会，请随时与我联系。我期待与您讨论如何将您的愿景变为现实。(666还有机会吗？不会以为我还在社团吧)</p>
                 <div class="contact-buttons">
-                    <a href="mailto:13522567881@163.com(请备注来意)" class="contact-button">
+                    <a href="mailto:13522567881@163.com" class="contact-button">
                         <i class="fas fa-envelope"></i> <span data-i18n="sendEmail">发送邮件</span>
                     </a>
                     <a href="https://linkedin.com" class="contact-button">
@@ -2611,6 +2827,21 @@
                     <a href="https://github.com/Allen-ux-dev" class="contact-button">
                         <i class="fab fa-github"></i> GitHub
                     </a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- 历史页面 -->
+    <div id="history" class="page">
+        <section class="history-section">
+            <div class="container">
+                <h2 class="section-title">网站历史</h2>
+                <div style="text-align: center; margin-bottom: 40px;">
+                    <p class="section-desc">记录网站从创建到现在的重大事件和里程碑</p>
+                </div>
+                <div class="history-grid" id="historyGrid">
+                    <!-- 历史卡片将在这里动态生成 -->
                 </div>
             </div>
         </section>
@@ -2744,7 +2975,7 @@
                 <div class="footer-column">
                     <h3 data-i18n="contact">联系方式</h3>
                     <ul>
-                        <li><a href="mailto:13522567881@163.com">13522567881@163.com(请备注来意)</a></li>
+                        <li><a href="mailto:13522567881@163.com">13522567881@163.com</a></li>
                         <li><a href="tel:+////">+1 (///) ///</a></li>
                         <li><a href="#">////</a></li>
                         <li><a href="#">抖音号WTXStudio</a></li>
@@ -2785,6 +3016,12 @@
             
             // 初始化3D方块效果
             initialize3DCubes();
+            
+            // 初始化历史数据
+            initializeHistoryData();
+            
+            // 初始化事件数据
+            initializeEventData();
             
             // 修复设置面板打开功能
             const settingsBtn = document.getElementById('settingsBtn');
@@ -3033,6 +3270,16 @@
                     if (targetPage === 'home') {
                         window.scrollTo({ top: 0, behavior: 'smooth' });
                     }
+                    
+                    // 如果是历史页面，重新加载历史数据
+                    if (targetPage === 'history') {
+                        loadHistoryData();
+                    }
+                    
+                    // 如果是事件页面，重新加载事件数据
+                    if (targetPage === 'events') {
+                        loadEventData();
+                    }
                 });
             });
             
@@ -3198,6 +3445,130 @@
                 animate();
             }
             
+            // 初始化历史数据
+            function initializeHistoryData() {
+                if (!localStorage.getItem('historyEvents')) {
+                    const defaultHistory = [
+                        {
+                            id: 1,
+                            date: '2025-10-13',
+                            title: '域名创建成功',
+                            description: '此域名于2025年10月13日成功创建，标志着网站项目的正式启动。',
+                            type: 'milestone',
+                            image: 'https://via.placeholder.com/600x400'
+                        },
+                        {
+                            id: 2,
+                            date: '2025-10-15',
+                            title: '网站创建成功',
+                            description: '经过两天的开发，网站于2025年10月15日成功上线，实现了基本功能。',
+                            type: 'milestone',
+                            image: 'https://via.placeholder.com/600x400'
+                        },
+                        {
+                            id: 3,
+                            date: '2025-10-16',
+                            title: '页面美观与功能完善',
+                            description: '网站页面大美观基础功能已完善部分，用户体验得到显著提升。',
+                            type: 'improvement',
+                            image: 'https://via.placeholder.com/600x400'
+                        }
+                    ];
+                    localStorage.setItem('historyEvents', JSON.stringify(defaultHistory));
+                }
+                
+                // 加载历史数据
+                loadHistoryData();
+            }
+            
+            // 加载历史数据到页面
+            function loadHistoryData() {
+                const historyGrid = document.getElementById('historyGrid');
+                if (!historyGrid) return;
+                
+                const historyEvents = JSON.parse(localStorage.getItem('historyEvents')) || [];
+                
+                historyGrid.innerHTML = '';
+                
+                historyEvents.forEach(event => {
+                    const historyCard = document.createElement('div');
+                    historyCard.className = 'bento-card';
+                    
+                    const formattedDate = formatDate(event.date);
+                    
+                    historyCard.innerHTML = `
+                        <div class="bento-card-content">
+                            <div class="bento-label">${formattedDate}</div>
+                            ${event.image ? `<img src="${event.image}" alt="${event.title}" class="history-image">` : ''}
+                            <h3 class="bento-title">${event.title}</h3>
+                            <p class="bento-description">${event.description}</p>
+                        </div>
+                    `;
+                    
+                    historyGrid.appendChild(historyCard);
+                });
+            }
+            
+            // 初始化事件数据
+            function initializeEventData() {
+                if (!localStorage.getItem('events')) {
+                    const defaultEvents = [
+                        {
+                            id: 1,
+                            date: '2025-10-20',
+                            title: '网站正式上线',
+                            description: '经过多轮测试，网站正式上线，欢迎访问！',
+                            image: 'https://via.placeholder.com/600x400'
+                        },
+                        {
+                            id: 2,
+                            date: '2025-10-25',
+                            title: '新增多语言支持',
+                            description: '网站新增了中文、英文和法文多语言支持，提升国际化体验。',
+                            image: 'https://via.placeholder.com/600x400'
+                        }
+                    ];
+                    localStorage.setItem('events', JSON.stringify(defaultEvents));
+                }
+                
+                // 加载事件数据
+                loadEventData();
+            }
+            
+            // 加载事件数据到页面
+            function loadEventData() {
+                const eventsGrid = document.getElementById('eventsGrid');
+                if (!eventsGrid) return;
+                
+                const events = JSON.parse(localStorage.getItem('events')) || [];
+                
+                eventsGrid.innerHTML = '';
+                
+                events.forEach(event => {
+                    const eventCard = document.createElement('div');
+                    eventCard.className = 'event-card';
+                    
+                    const formattedDate = formatDate(event.date);
+                    
+                    eventCard.innerHTML = `
+                        ${event.image ? `<img src="${event.image}" alt="${event.title}" class="event-image">` : ''}
+                        <div class="event-content">
+                            <div class="event-date">${formattedDate}</div>
+                            <h3 class="event-title">${event.title}</h3>
+                            <p class="event-desc">${event.description}</p>
+                        </div>
+                    `;
+                    
+                    eventsGrid.appendChild(eventCard);
+                });
+            }
+            
+            // 格式化日期
+            function formatDate(dateString) {
+                const date = new Date(dateString);
+                return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`;
+            }
+            
             // 初始化用户状态
             function checkLoginStatus() {
                 const user = JSON.parse(localStorage.getItem('currentUser'));
@@ -3238,6 +3609,11 @@
                     // 如果是管理员，显示管理员面板
                     if (user.role === 'admin') {
                         document.getElementById('adminPanel').style.display = 'block';
+                        
+                        // 初始化事件管理
+                        initializeEventManagement();
+                        // 初始化历史事件管理
+                        initializeHistoryManagement();
                     }
                     
                     // 添加头像点击事件
@@ -3257,6 +3633,233 @@
                     
                     document.getElementById('adminPanel').style.display = 'none';
                 }
+            }
+            
+            // 初始化事件管理
+            function initializeEventManagement() {
+                const eventForm = document.getElementById('eventForm');
+                const existingEvents = document.getElementById('existingEvents');
+                
+                if (!eventForm || !existingEvents) return;
+                
+                // 加载现有事件
+                loadExistingEvents();
+                
+                // 处理事件表单提交
+                eventForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const title = document.getElementById('eventTitle').value;
+                    const description = document.getElementById('eventDescription').value;
+                    const image = document.getElementById('eventImage').value;
+                    const date = document.getElementById('eventDate').value;
+                    
+                    if (!title || !description || !date) {
+                        alert('请填写所有必填字段');
+                        return;
+                    }
+                    
+                    const events = JSON.parse(localStorage.getItem('events')) || [];
+                    const newId = events.length > 0 ? Math.max(...events.map(e => e.id)) + 1 : 1;
+                    
+                    const newEvent = {
+                        id: newId,
+                        date: date,
+                        title: title,
+                        description: description,
+                        image: image || 'https://via.placeholder.com/600x400'
+                    };
+                    
+                    events.push(newEvent);
+                    localStorage.setItem('events', JSON.stringify(events));
+                    
+                    // 重新加载事件数据
+                    loadEventData();
+                    loadExistingEvents();
+                    
+                    // 重置表单
+                    eventForm.reset();
+                    
+                    alert('事件添加成功！');
+                });
+                
+                // 图片预览功能
+                const eventImageInput = document.getElementById('eventImage');
+                const eventImagePreview = document.getElementById('eventImagePreview');
+                
+                if (eventImageInput && eventImagePreview) {
+                    eventImageInput.addEventListener('input', function() {
+                        if (this.value) {
+                            eventImagePreview.src = this.value;
+                            eventImagePreview.classList.add('active');
+                        } else {
+                            eventImagePreview.classList.remove('active');
+                        }
+                    });
+                }
+            }
+            
+            // 加载现有事件到管理面板
+            function loadExistingEvents() {
+                const existingEvents = document.getElementById('existingEvents');
+                if (!existingEvents) return;
+                
+                const events = JSON.parse(localStorage.getItem('events')) || [];
+                
+                existingEvents.innerHTML = '';
+                
+                events.forEach(event => {
+                    const eventItem = document.createElement('div');
+                    eventItem.className = 'user-item';
+                    eventItem.innerHTML = `
+                        <div>
+                            <strong>${event.title}</strong> - ${formatDate(event.date)}
+                            <p style="margin: 5px 0 0; font-size: 12px; color: #666;">${event.description}</p>
+                        </div>
+                        <div>
+                            <button class="admin-btn delete" data-id="${event.id}">删除</button>
+                        </div>
+                    `;
+                    
+                    existingEvents.appendChild(eventItem);
+                });
+                
+                // 添加删除事件监听
+                document.querySelectorAll('#existingEvents .admin-btn.delete').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const id = parseInt(this.getAttribute('data-id'));
+                        deleteEvent(id);
+                    });
+                });
+            }
+            
+            // 删除事件
+            function deleteEvent(id) {
+                if (!confirm('确定要删除这个事件吗？')) return;
+                
+                let events = JSON.parse(localStorage.getItem('events')) || [];
+                events = events.filter(event => event.id !== id);
+                localStorage.setItem('events', JSON.stringify(events));
+                
+                // 重新加载事件数据
+                loadEventData();
+                loadExistingEvents();
+                
+                alert('事件已删除！');
+            }
+            
+            // 初始化历史事件管理
+            function initializeHistoryManagement() {
+                const historyForm = document.getElementById('historyForm');
+                const existingHistories = document.getElementById('existingHistories');
+                
+                if (!historyForm || !existingHistories) return;
+                
+                // 加载现有历史事件
+                loadExistingHistories();
+                
+                // 处理历史事件表单提交
+                historyForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const title = document.getElementById('historyTitle').value;
+                    const description = document.getElementById('historyDescription').value;
+                    const image = document.getElementById('historyImage').value;
+                    const date = document.getElementById('historyDate').value;
+                    
+                    if (!title || !description || !date) {
+                        alert('请填写所有必填字段');
+                        return;
+                    }
+                    
+                    const historyEvents = JSON.parse(localStorage.getItem('historyEvents')) || [];
+                    const newId = historyEvents.length > 0 ? Math.max(...historyEvents.map(e => e.id)) + 1 : 1;
+                    
+                    const newHistory = {
+                        id: newId,
+                        date: date,
+                        title: title,
+                        description: description,
+                        image: image || 'https://via.placeholder.com/600x400',
+                        type: 'milestone'
+                    };
+                    
+                    historyEvents.push(newHistory);
+                    localStorage.setItem('historyEvents', JSON.stringify(historyEvents));
+                    
+                    // 重新加载历史数据
+                    loadHistoryData();
+                    loadExistingHistories();
+                    
+                    // 重置表单
+                    historyForm.reset();
+                    
+                    alert('历史事件添加成功！');
+                });
+                
+                // 图片预览功能
+                const historyImageInput = document.getElementById('historyImage');
+                const historyImagePreview = document.getElementById('historyImagePreview');
+                
+                if (historyImageInput && historyImagePreview) {
+                    historyImageInput.addEventListener('input', function() {
+                        if (this.value) {
+                            historyImagePreview.src = this.value;
+                            historyImagePreview.classList.add('active');
+                        } else {
+                            historyImagePreview.classList.remove('active');
+                        }
+                    });
+                }
+            }
+            
+            // 加载现有历史事件到管理面板
+            function loadExistingHistories() {
+                const existingHistories = document.getElementById('existingHistories');
+                if (!existingHistories) return;
+                
+                const historyEvents = JSON.parse(localStorage.getItem('historyEvents')) || [];
+                
+                existingHistories.innerHTML = '';
+                
+                historyEvents.forEach(event => {
+                    const historyItem = document.createElement('div');
+                    historyItem.className = 'user-item';
+                    historyItem.innerHTML = `
+                        <div>
+                            <strong>${event.title}</strong> - ${formatDate(event.date)}
+                            <p style="margin: 5px 0 0; font-size: 12px; color: #666;">${event.description}</p>
+                        </div>
+                        <div>
+                            <button class="admin-btn delete" data-id="${event.id}">删除</button>
+                        </div>
+                    `;
+                    
+                    existingHistories.appendChild(historyItem);
+                });
+                
+                // 添加删除事件监听
+                document.querySelectorAll('#existingHistories .admin-btn.delete').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const id = parseInt(this.getAttribute('data-id'));
+                        deleteHistoryEvent(id);
+                    });
+                });
+            }
+            
+            // 删除历史事件
+            function deleteHistoryEvent(id) {
+                if (!confirm('确定要删除这个历史事件吗？')) return;
+                
+                let historyEvents = JSON.parse(localStorage.getItem('historyEvents')) || [];
+                historyEvents = historyEvents.filter(event => event.id !== id);
+                localStorage.setItem('historyEvents', JSON.stringify(historyEvents));
+                
+                // 重新加载历史数据
+                loadHistoryData();
+                loadExistingHistories();
+                
+                alert('历史事件已删除！');
             }
             
             // 设置头像点击事件
