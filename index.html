@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -7,7 +6,6 @@
     <title>WTX的个人网页</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* 基础样式与重置 */
         * {
             margin: 0;
             padding: 0;
@@ -34,7 +32,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -1; /* 确保背景在内容后面 */
+            z-index: -1;
             background: #000;
         }
         
@@ -1889,42 +1887,6 @@
             font-size: 14px;
         }
         
-        /* 渐变模糊效果样式 */
-        .gradual-blur-container {
-            position: relative;
-            height: 500px;
-            overflow: hidden;
-        }
-        
-        .gradual-blur-content {
-            height: 100%;
-            overflow-y: auto;
-            padding: 6rem 2rem;
-        }
-        
-        .gradual-blur-effect {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 6rem;
-            pointer-events: none;
-            z-index: 1;
-        }
-        
-        .gradual-blur-layer {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            backdrop-filter: blur(calc(var(--strength, 1) * 2px));
-            -webkit-backdrop-filter: blur(calc(var(--strength, 1) * 2px));
-            mask-image: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
-            -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%);
-            opacity: var(--opacity, 1);
-        }
-        
         /* 点击火花效果样式 */
         .click-spark-container {
             position: fixed;
@@ -2816,7 +2778,7 @@
         <section class="contact" id="contact">
             <div class="container">
                 <h2 class="section-title" data-i18n="contact">与我联系</h2>
-                <p class="contact-desc" data-i18n="contactDesc">如果您有项目想法或合作机会，请随时与我联系。我期待与您讨论如何将您的愿景变为现实。(666还有机会吗？不会以为我还在社团吧)</p>
+                <p class="contact-desc" data-i18n="contactDesc">如果您有项目想法或合作机会，请随时与我联系。我期待与您讨论如何将您的愿景变为现实。</p>
                 <div class="contact-buttons">
                     <a href="mailto:13522567881@163.com" class="contact-button">
                         <i class="fas fa-envelope"></i> <span data-i18n="sendEmail">发送邮件</span>
@@ -3003,168 +2965,1486 @@
     </footer>
 
     <script>
-        // 修复的核心功能代码
+        // 翻译字典
+        const translations = {
+            'zh': {
+                'welcome': '欢迎来到我的个人网页',
+                'tagline': 'Think different-非同凡想(此网页处于工程状态非成品)',
+                'contactMe': '联系我',
+                'skills': '专业技能',
+                'frontend': '前端开发',
+                'frontendDesc': '会使用html和现代前端框架来制作简洁明了的网页。',
+                'uiux': 'UI/UX设计',
+                'uiuxDesc': '注重用户体验和界面设计，创建直观美观的设计方案。',
+                'media': '媒体开发',
+                'mediaDesc': '具有多媒体创作经验，确保一致的观感体验(如达芬奇)。',
+                'projects': '项目经验',
+                'collaboration': '关于合作',
+                'collaborationDesc': '擅长模块化合作将时间减少了40%，并提高了用户参与度。',
+                'uiDesign': 'UI设计',
+                'uiDesignDesc': '具有直观的用户界面和个性化推荐功能。',
+                'viewDetails': '查看详情',
+                'about': '关于我',
+                'aboutDesc1': '我是一名多媒体与网页和UI计师，我专注于创建直观、美观且功能强大的体验。(额...我虽然只是一位同学，但是看过我做的都知道)',
+                'aboutDesc2': '我会注重细节、持续学习并与他人紧密合作，以确保作品不仅满足而且超出期望。',
+                'learnMore': '了解更多',
+                'contact': '与我联系',
+                'contactDesc': '如果您有项目想法或合作机会，请随时与我联系。我期待与您讨论如何将您的愿景变为现实。',
+                'sendEmail': '发送邮件',
+                'events': '事件',
+                'syncTranslation': '同步翻译内容',
+                'login': '登录',
+                'username': '用户名',
+                'password': '密码',
+                'noAccount': '没有账户？',
+                'register': '注册',
+                'confirmPassword': '确认密码',
+                'hasAccount': '已有账户？',
+                'editProfile': '编辑资料',
+                'logout': '退出登录',
+                'rights': '保留所有权利。',
+                'socialMedia': '社交媒体',
+                'settings': '网站设置',
+                'theme': '主题',
+                'light': '浅色',
+                'dark': '深色',
+                'cyan': '青色',
+                'fontSize': '字体大小',
+                'small': '小',
+                'medium': '中',
+                'large': '大',
+                'animations': '动画效果',
+                'smoothScroll': '平滑滚动',
+                'hoverEffects': '悬停效果',
+                'reset': '重置为默认设置'
+            },
+            'en': {
+                'welcome': 'Welcome to My Personal Website',
+                'tagline': 'Think different - Extraordinary thinking (This webpage is under construction)',
+                'contactMe': 'Contact Me',
+                'skills': 'Professional Skills',
+                'frontend': 'Frontend Development',
+                'frontendDesc': 'Proficient in HTML and modern frontend frameworks to create clean and intuitive web pages.',
+                'uiux': 'UI/UX Design',
+                'uiuxDesc': 'Focus on user experience and interface design, creating intuitive and aesthetically pleasing design solutions.',
+                'media': 'Media Development',
+                'mediaDesc': 'Experienced in multimedia creation, ensuring consistent visual experiences (e.g., DaVinci Resolve).',
+                'projects': 'Project Experience',
+                'collaboration': 'About Collaboration',
+                'collaborationDesc': 'Skilled in modular collaboration, reducing time by 40% and improving user engagement.',
+                'uiDesign': 'UI Design',
+                'uiDesignDesc': 'Features intuitive user interfaces and personalized recommendation functions.',
+                'viewDetails': 'View Details',
+                'about': 'About Me',
+                'aboutDesc1': 'I am a multimedia, web, and UI designer focused on creating intuitive, beautiful, and powerful experiences. (Well... I may just be a student, but those who have seen my work know)',
+                'aboutDesc2': 'I pay attention to details, continuously learn, and work closely with others to ensure that my work not only meets but exceeds expectations.',
+                'learnMore': 'Learn More',
+                'contact': 'Contact Me',
+                'contactDesc': 'If you have project ideas or collaboration opportunities, feel free to contact me. I look forward to discussing how to turn your vision into reality.',
+                'sendEmail': 'Send Email',
+                'events': 'Events',
+                'syncTranslation': 'Synchronize Translations',
+                'login': 'Login',
+                'username': 'Username',
+                'password': 'Password',
+                'noAccount': 'No account?',
+                'register': 'Register',
+                'confirmPassword': 'Confirm Password',
+                'hasAccount': 'Already have an account?',
+                'editProfile': 'Edit Profile',
+                'logout': 'Logout',
+                'rights': 'All rights reserved.',
+                'socialMedia': 'Social Media',
+                'settings': 'Website Settings',
+                'theme': 'Theme',
+                'light': 'Light',
+                'dark': 'Dark',
+                'cyan': 'Cyan',
+                'fontSize': 'Font Size',
+                'small': 'Small',
+                'medium': 'Medium',
+                'large': 'Large',
+                'animations': 'Animations',
+                'smoothScroll': 'Smooth Scroll',
+                'hoverEffects': 'Hover Effects',
+                'reset': 'Reset to Default Settings'
+            },
+            'fr': {
+                'welcome': 'Bienvenue sur mon site personnel',
+                'tagline': 'Pensez différemment - Pensée extraordinaire (Ce site web est en construction)',
+                'contactMe': 'Contactez-moi',
+                'skills': 'Compétences professionnelles',
+                'frontend': 'Développement Frontend',
+                'frontendDesc': 'Maîtrise du HTML et des frameworks frontend modernes pour créer des pages web claires et intuitives.',
+                'uiux': 'Conception UI/UX',
+                'uiuxDesc': 'Se concentre sur l\'expérience utilisateur et la conception d\'interface, créant des solutions de design intuitives et esthétiques.',
+                'media': 'Développement Média',
+                'mediaDesc': 'Expérience en création multimédia, assurant des expériences visuelles cohérentes (ex: DaVinci Resolve).',
+                'projects': 'Expérience de projet',
+                'collaboration': 'À propos de la collaboration',
+                'collaborationDesc': 'Compétent en collaboration modulaire, réduisant le temps de 40% et améliorant l\'engagement des utilisateurs.',
+                'uiDesign': 'Conception UI',
+                'uiDesignDesc': 'Comprend des interfaces utilisateur intuitives et des fonctions de recommandation personnalisées.',
+                'viewDetails': 'Voir les détails',
+                'about': 'À propos de moi',
+                'aboutDesc1': 'Je suis un designer multimédia, web et UI, spécialisé dans la création d\'expériences intuitives, belles et puissantes. (Eh bien... je ne suis peut-être qu\'un étudiant, mais ceux qui ont vu mon travail savent)',
+                'aboutDesc2': 'Je prête attention aux détails, j\'apprends continuellement et je travaille en étroite collaboration avec les autres pour m\'assurer que mon travail dépasse les attentes.',
+                'learnMore': 'En savoir plus',
+                'contact': 'Contactez-moi',
+                'contactDesc': 'Si vous avez des idées de projet ou des opportunités de collaboration, n\'hésitez pas à me contacter. J\'ai hâte de discuter de la façon de transformer votre vision en réalité.',
+                'sendEmail': 'Envoyer un email',
+                'events': 'Événements',
+                'syncTranslation': 'Synchroniser les traductions',
+                'login': 'Connexion',
+                'username': 'Nom d\'utilisateur',
+                'password': 'Mot de passe',
+                'noAccount': 'Pas de compte?',
+                'register': 'S\'inscrire',
+                'confirmPassword': 'Confirmer le mot de passe',
+                'hasAccount': 'Vous avez déjà un compte?',
+                'editProfile': 'Modifier le profil',
+                'logout': 'Se déconnecter',
+                'rights': 'Tous droits réservés.',
+                'socialMedia': 'Médias sociaux',
+                'settings': 'Paramètres du site',
+                'theme': 'Thème',
+                'light': 'Clair',
+                'dark': 'Sombre',
+                'cyan': 'Cyan',
+                'fontSize': 'Taille de police',
+                'small': 'Petit',
+                'medium': 'Moyen',
+                'large': 'Grand',
+                'animations': 'Animations',
+                'smoothScroll': 'Défilement fluide',
+                'hoverEffects': 'Effets de survol',
+                'reset': 'Réinitialiser les paramètres'
+            }
+        };
+
+        // 应用翻译
+        function applyTranslations(lang) {
+            const elements = document.querySelectorAll('[data-i18n]');
+            elements.forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translations[lang] && translations[lang][key]) {
+                    element.textContent = translations[lang][key];
+                }
+            });
+            
+            // 更新当前语言显示
+            const currentLanguageElements = document.querySelectorAll('#currentLanguage, #mobileCurrentLanguage');
+            currentLanguageElements.forEach(element => {
+                if (lang === 'zh') element.textContent = '中文';
+                else if (lang === 'en') element.textContent = 'English';
+                else if (lang === 'fr') element.textContent = 'Français';
+            });
+            
+            // 更新HTML lang属性
+            document.documentElement.lang = lang;
+        }
+
+        // 初始化翻译功能
         document.addEventListener('DOMContentLoaded', function() {
-            // 初始化设置
-            initializeSettings();
+            // 从本地存储获取语言设置或使用默认语言
+            let currentLanguage = localStorage.getItem('language') || 'zh';
             
-            // 初始化点击火花效果
-            initializeClickSpark();
+            // 应用初始语言
+            applyTranslations(currentLanguage);
             
-            // 初始化GradientBlinds背景特效
-            initializeGradientBlindsBackground();
-            
-            // 初始化3D方块效果
-            initialize3DCubes();
-            
-            // 初始化历史数据
-            initializeHistoryData();
-            
-            // 初始化事件数据
-            initializeEventData();
-            
-            // 修复设置面板打开功能
-            const settingsBtn = document.getElementById('settingsBtn');
-            const closeSettings = document.getElementById('closeSettings');
-            const settingsPanel = document.getElementById('settingsPanel');
-            const settingsOverlay = document.getElementById('settingsOverlay');
-            
-            settingsBtn.addEventListener('click', function() {
-                settingsPanel.classList.add('active');
-                settingsOverlay.classList.add('active');
-            });
-            
-            closeSettings.addEventListener('click', function() {
-                settingsPanel.classList.remove('active');
-                settingsOverlay.classList.remove('active');
-            });
-            
-            settingsOverlay.addEventListener('click', function() {
-                settingsPanel.classList.remove('active');
-                settingsOverlay.classList.remove('active');
-            });
-            
-            // 气泡菜单功能
-            const bubbleMenu = document.getElementById('bubbleMenu');
-            const bubbleMenuToggle = document.getElementById('bubbleMenuToggle');
-            
-            bubbleMenuToggle.addEventListener('click', function() {
-                bubbleMenu.classList.toggle('active');
-            });
-            
-            // 点击气泡菜单项的处理
-            document.querySelectorAll('.bubble-menu-item').forEach(item => {
-                item.addEventListener('click', function() {
-                    const action = this.getAttribute('data-action');
-                    handleBubbleMenuAction(action);
+            // 语言切换器功能
+            document.querySelectorAll('.language-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    const lang = this.getAttribute('data-lang');
+                    localStorage.setItem('language', lang);
+                    applyTranslations(lang);
                     
-                    // 关闭气泡菜单
-                    bubbleMenu.classList.remove('active');
+                    // 关闭语言选项菜单
+                    document.querySelectorAll('.language-options').forEach(menu => {
+                        menu.classList.remove('active');
+                    });
                 });
             });
             
-            // 处理气泡菜单项点击
-            function handleBubbleMenuAction(action) {
-                switch(action) {
-                    case 'theme':
-                        toggleTheme();
-                        break;
-                    case 'font-size':
-                        toggleFontSize();
-                        break;
-                    case 'animations':
-                        toggleAnimations();
-                        break;
-                    case 'smooth-scroll':
-                        toggleSmoothScroll();
-                        break;
-                    case 'hover-effects':
-                        toggleHoverEffects();
-                        break;
-                    case 'click-spark':
-                        toggleClickSpark();
-                        break;
-                    case 'reset':
-                        resetSettings();
-                        break;
+            // 切换语言选项菜单显示
+            document.querySelectorAll('.language-switcher').forEach(switcher => {
+                switcher.addEventListener('click', function() {
+                    const options = this.querySelector('.language-options');
+                    options.classList.toggle('active');
+                });
+            });
+            
+            // 点击页面其他地方关闭语言选项菜单
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.language-switcher')) {
+                    document.querySelectorAll('.language-options').forEach(menu => {
+                        menu.classList.remove('active');
+                    });
+                }
+            });
+            
+            // 同步翻译按钮功能
+            const syncTranslationBtn = document.getElementById('syncTranslationBtn');
+            if (syncTranslationBtn) {
+                syncTranslationBtn.addEventListener('click', function() {
+                    const currentLanguage = localStorage.getItem('language') || 'zh';
+                    applyTranslations(currentLanguage);
+                    alert('翻译内容已同步！');
+                });
+            }
+            
+            // 其他初始化代码保持不变
+            // ... 之前的初始化代码 ...
+        });
+
+        // 初始化设置
+        initializeSettings();
+        
+        // 初始化点击火花效果
+        initializeClickSpark();
+        
+        // 初始化GradientBlinds背景特效
+        initializeGradientBlindsBackground();
+        
+        // 初始化3D方块效果
+        initialize3DCubes();
+        
+        // 初始化历史数据
+        initializeHistoryData();
+        
+        // 初始化事件数据
+        initializeEventData();
+        
+        // 修复设置面板打开功能
+        const settingsBtn = document.getElementById('settingsBtn');
+        const closeSettings = document.getElementById('closeSettings');
+        const settingsPanel = document.getElementById('settingsPanel');
+        const settingsOverlay = document.getElementById('settingsOverlay');
+        
+        settingsBtn.addEventListener('click', function() {
+            settingsPanel.classList.add('active');
+            settingsOverlay.classList.add('active');
+        });
+        
+        closeSettings.addEventListener('click', function() {
+            settingsPanel.classList.remove('active');
+            settingsOverlay.classList.remove('active');
+        });
+        
+        settingsOverlay.addEventListener('click', function() {
+            settingsPanel.classList.remove('active');
+            settingsOverlay.classList.remove('active');
+        });
+        
+        // 气泡菜单功能
+        const bubbleMenu = document.getElementById('bubbleMenu');
+        const bubbleMenuToggle = document.getElementById('bubbleMenuToggle');
+        
+        bubbleMenuToggle.addEventListener('click', function() {
+            bubbleMenu.classList.toggle('active');
+        });
+        
+        // 点击气泡菜单项的处理
+        document.querySelectorAll('.bubble-menu-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const action = this.getAttribute('data-action');
+                handleBubbleMenuAction(action);
+                
+                // 关闭气泡菜单
+                bubbleMenu.classList.remove('active');
+            });
+        });
+        
+        // 处理气泡菜单项点击
+        function handleBubbleMenuAction(action) {
+            switch(action) {
+                case 'theme':
+                    toggleTheme();
+                    break;
+                case 'font-size':
+                    toggleFontSize();
+                    break;
+                case 'animations':
+                    toggleAnimations();
+                    break;
+                case 'smooth-scroll':
+                    toggleSmoothScroll();
+                    break;
+                case 'hover-effects':
+                    toggleHoverEffects();
+                    break;
+                case 'click-spark':
+                    toggleClickSpark();
+                    break;
+                case 'reset':
+                    resetSettings();
+                    break;
+            }
+        }
+        
+        // 主题切换
+        function toggleTheme() {
+            const currentTheme = localStorage.getItem('theme') || 'light';
+            let newTheme;
+            
+            if (currentTheme === 'light') newTheme = 'dark';
+            else if (currentTheme === 'dark') newTheme = 'cyan';
+            else newTheme = 'light';
+            
+            applyTheme(newTheme);
+            localStorage.setItem('theme', newTheme);
+            
+            // 显示提示
+            showNotification(`已切换到${newTheme === 'light' ? '浅色' : newTheme === 'dark' ? '深色' : '青色'}主题`);
+        }
+        
+        // 字体大小切换
+        function toggleFontSize() {
+            const currentSize = localStorage.getItem('fontSize') || 'medium';
+            let newSize;
+            
+            if (currentSize === 'small') newSize = 'medium';
+            else if (currentSize === 'medium') newSize = 'large';
+            else newSize = 'small';
+            
+            applyFontSize(newSize);
+            localStorage.setItem('fontSize', newSize);
+            
+            // 显示提示
+            showNotification(`字体大小已设置为${newSize === 'small' ? '小' : newSize === 'medium' ? '中' : '大'}`);
+        }
+        
+        // 动画开关
+        function toggleAnimations() {
+            const animationsEnabled = document.body.classList.toggle('no-animation');
+            localStorage.setItem('animationsEnabled', !animationsEnabled);
+            
+            // 显示提示
+            showNotification(animationsEnabled ? '动画效果已关闭' : '动画效果已开启');
+        }
+        
+        // 平滑滚动开关
+        function toggleSmoothScroll() {
+            const smoothScrollEnabled = document.documentElement.style.scrollBehavior === 'smooth';
+            document.documentElement.style.scrollBehavior = smoothScrollEnabled ? 'auto' : 'smooth';
+            localStorage.setItem('smoothScrollEnabled', !smoothScrollEnabled);
+            
+            // 显示提示
+            showNotification(smoothScrollEnabled ? '平滑滚动已关闭' : '平滑滚动已开启');
+        }
+        
+        // 悬停效果开关
+        function toggleHoverEffects() {
+            const hoverEffectsEnabled = document.body.classList.toggle('no-hover');
+            localStorage.setItem('hoverEffectsEnabled', !hoverEffectsEnabled);
+            
+            // 显示提示
+            showNotification(hoverEffectsEnabled ? '悬停效果已关闭' : '悬停效果已开启');
+        }
+        
+        // 点击火花效果开关
+        function toggleClickSpark() {
+            const clickSparkToggle = document.getElementById('clickSparkToggle');
+            if (clickSparkToggle) {
+                clickSparkToggle.checked = !clickSparkToggle.checked;
+                clickSparkToggle.dispatchEvent(new Event('change'));
+            }
+            
+            // 显示提示
+            const clickSparkEnabled = localStorage.getItem('clickSparkEnabled') !== 'false';
+            showNotification(clickSparkEnabled ? '点击火花效果已开启' : '点击火花效果已关闭');
+        }
+        
+        // 重置设置
+        function resetSettings() {
+            localStorage.removeItem('theme');
+            localStorage.removeItem('fontSize');
+            localStorage.removeItem('animationsEnabled');
+            localStorage.removeItem('smoothScrollEnabled');
+            localStorage.removeItem('hoverEffectsEnabled');
+            localStorage.removeItem('clickSparkEnabled');
+            
+            applyTheme('light');
+            applyFontSize('medium');
+            document.body.classList.remove('no-animation', 'no-hover');
+            document.documentElement.style.scrollBehavior = 'smooth';
+            
+            // 重置点击火花设置
+            const clickSparkToggle = document.getElementById('clickSparkToggle');
+            if (clickSparkToggle) {
+                clickSparkToggle.checked = true;
+            }
+            
+            // 显示提示
+            showNotification('所有设置已重置为默认值');
+        }
+        
+        // 显示通知
+        function showNotification(message) {
+            // 创建通知元素
+            const notification = document.createElement('div');
+            notification.textContent = message;
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background-color: #0066cc;
+                color: white;
+                padding: 12px 20px;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                z-index: 3000;
+                font-size: 14px;
+                transition: all 0.3s ease;
+                opacity: 0;
+                transform: translateY(-20px);
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // 显示动画
+            setTimeout(() => {
+                notification.style.opacity = '1';
+                notification.style.transform = 'translateY(0)';
+            }, 10);
+            
+            // 自动隐藏
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transform = 'translateY(-20px)';
+                
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+        
+        // 修复登录/注册页面切换
+        const loginBtn = document.getElementById('loginBtn');
+        const registerLink = document.getElementById('registerLink');
+        const loginLink = document.getElementById('loginLink');
+        
+        loginBtn.addEventListener('click', function() {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById('login').classList.add('active');
+        });
+        
+        registerLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById('register').classList.add('active');
+        });
+        
+        loginLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById('login').classList.add('active');
+        });
+        
+        // 修复页面导航
+        document.querySelectorAll('.nav-link[data-page]').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetPage = this.getAttribute('data-page');
+                
+                document.querySelectorAll('.page').forEach(page => {
+                    page.classList.remove('active');
+                });
+                
+                document.getElementById(targetPage).classList.add('active');
+                
+                if (targetPage === 'home') {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+                
+                // 如果是历史页面，重新加载历史数据
+                if (targetPage === 'history') {
+                    loadHistoryData();
+                }
+                
+                // 如果是事件页面，重新加载事件数据
+                if (targetPage === 'events') {
+                    loadEventData();
+                }
+            });
+        });
+        
+        // GradientBlinds背景特效实现
+        function initializeGradientBlindsBackground() {
+            const container = document.getElementById('gradientBlindsBg');
+            if (!container) return;
+            
+            const blindsContainer = document.createElement('div');
+            blindsContainer.className = 'gradient-blinds';
+            container.appendChild(blindsContainer);
+            
+            // 创建百叶窗
+            const blindCount = 12;
+            for (let i = 0; i < blindCount; i++) {
+                const blind = document.createElement('div');
+                blind.className = 'blind';
+                blindsContainer.appendChild(blind);
+            }
+            
+            // 鼠标移动效果
+            document.addEventListener('mousemove', function(e) {
+                const blinds = document.querySelectorAll('.blind');
+                const mouseX = e.clientX / window.innerWidth;
+                const mouseY = e.clientY / window.innerHeight;
+                
+                blinds.forEach((blind, index) => {
+                    // 计算每个百叶窗的偏移量
+                    const offset = (index / blinds.length - 0.5) * 2;
+                    const transformX = (mouseX - 0.5) * 20 * offset;
+                    const transformY = (mouseY - 0.5) * 20 * offset;
+                    
+                    blind.style.transform = `translate(${transformX}px, ${transformY}px)`;
+                    
+                    // 添加噪声效果
+                    const noise = Math.random() * 0.3;
+                    blind.style.filter = `brightness(${1 + noise})`;
+                });
+            });
+            
+            // 鼠标离开时重置
+            document.addEventListener('mouseleave', function() {
+                const blinds = document.querySelectorAll('.blind');
+                blinds.forEach(blind => {
+                    blind.style.transform = 'translate(0, 0)';
+                    blind.style.filter = 'brightness(1)';
+                });
+            });
+        }
+        
+        // 初始化3D方块效果
+        function initialize3DCubes() {
+            const container = document.getElementById('cubesContainer');
+            if (!container) return;
+            
+            // 清空容器
+            container.innerHTML = '';
+            
+            // 创建多个3D方块
+            const cubeCount = 15;
+            const cubes = [];
+            
+            for (let i = 0; i < cubeCount; i++) {
+                const cube = document.createElement('div');
+                cube.className = 'cube-3d';
+                
+                // 随机位置
+                const x = Math.random() * 100;
+                const y = Math.random() * 100;
+                cube.style.left = `${x}%`;
+                cube.style.top = `${y}%`;
+                
+                // 随机旋转
+                const rotateX = Math.random() * 360;
+                const rotateY = Math.random() * 360;
+                cube.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+                
+                // 创建6个面
+                for (let j = 0; j < 6; j++) {
+                    const face = document.createElement('div');
+                    face.className = 'cube-face';
+                    face.innerHTML = '<i class="fas fa-cube"></i>';
+                    cube.appendChild(face);
+                }
+                
+                container.appendChild(cube);
+                cubes.push({
+                    element: cube,
+                    x: x,
+                    y: y,
+                    vx: (Math.random() - 0.5) * 0.5,
+                    vy: (Math.random() - 0.5) * 0.5,
+                    rotationX: rotateX,
+                    rotationY: rotateY,
+                    rotationSpeedX: (Math.random() - 0.5) * 0.5,
+                    rotationSpeedY: (Math.random() - 0.5) * 0.5
+                });
+            }
+            
+            // 鼠标位置
+            let mouseX = 0;
+            let mouseY = 0;
+            
+            // 监听鼠标移动
+            document.addEventListener('mousemove', function(e) {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+            });
+            
+            // 动画循环
+            function animate() {
+                cubes.forEach(cube => {
+                    // 计算与鼠标的距离
+                    const rect = cube.element.getBoundingClientRect();
+                    const cubeCenterX = rect.left + rect.width / 2;
+                    const cubeCenterY = rect.top + rect.height / 2;
+                    
+                    const dx = cubeCenterX - mouseX;
+                    const dy = cubeCenterY - mouseY;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    // 鼠标排斥效果
+                    if (distance < 150) {
+                        const force = 150 - distance;
+                        const angle = Math.atan2(dy, dx);
+                        
+                        cube.vx += Math.cos(angle) * force * 0.0005;
+                        cube.vy += Math.sin(angle) * force * 0.0005;
+                    }
+                    
+                    // 更新位置
+                    cube.x += cube.vx;
+                    cube.y += cube.vy;
+                    
+                    // 边界检测
+                    if (cube.x < 0 || cube.x > 100) {
+                        cube.vx *= -0.8;
+                        cube.x = Math.max(0, Math.min(100, cube.x));
+                    }
+                    
+                    if (cube.y < 0 || cube.y > 100) {
+                        cube.vy *= -0.8;
+                        cube.y = Math.max(0, Math.min(100, cube.y));
+                    }
+                    
+                    // 阻尼
+                    cube.vx *= 0.98;
+                    cube.vy *= 0.98;
+                    
+                    // 更新旋转
+                    cube.rotationX += cube.rotationSpeedX;
+                    cube.rotationY += cube.rotationSpeedY;
+                    
+                    // 应用变换
+                    cube.element.style.left = `${cube.x}%`;
+                    cube.element.style.top = `${cube.y}%`;
+                    cube.element.style.transform = `rotateX(${cube.rotationX}deg) rotateY(${cube.rotationY}deg)`;
+                });
+                
+                requestAnimationFrame(animate);
+            }
+            
+            animate();
+        }
+        
+        // 初始化历史数据
+        function initializeHistoryData() {
+            if (!localStorage.getItem('historyEvents')) {
+                const defaultHistory = [
+                    {
+                        id: 1,
+                        date: '2025-10-13',
+                        title: '域名创建成功',
+                        description: '此域名于2025年10月13日成功创建，标志着网站项目的正式启动。',
+                        type: 'milestone',
+                        image: 'https://via.placeholder.com/600x400'
+                    },
+                    {
+                        id: 2,
+                        date: '2025-10-15',
+                        title: '网站创建成功',
+                        description: '经过两天的开发，网站于2025年10月15日成功上线，实现了基本功能。',
+                        type: 'milestone',
+                        image: 'https://via.placeholder.com/600x400'
+                    },
+                    {
+                        id: 3,
+                        date: '2025-10-16',
+                        title: '页面美观与功能完善',
+                        description: '网站页面大美观基础功能已完善部分，用户体验得到显著提升。',
+                        type: 'improvement',
+                        image: 'https://via.placeholder.com/600x400'
+                    }
+                ];
+                localStorage.setItem('historyEvents', JSON.stringify(defaultHistory));
+            }
+            
+            // 加载历史数据
+            loadHistoryData();
+        }
+        
+        // 加载历史数据到页面
+        function loadHistoryData() {
+            const historyGrid = document.getElementById('historyGrid');
+            if (!historyGrid) return;
+            
+            const historyEvents = JSON.parse(localStorage.getItem('historyEvents')) || [];
+            
+            historyGrid.innerHTML = '';
+            
+            historyEvents.forEach(event => {
+                const historyCard = document.createElement('div');
+                historyCard.className = 'bento-card';
+                
+                const formattedDate = formatDate(event.date);
+                
+                historyCard.innerHTML = `
+                    <div class="bento-card-content">
+                        <div class="bento-label">${formattedDate}</div>
+                        ${event.image ? `<img src="${event.image}" alt="${event.title}" class="history-image">` : ''}
+                        <h3 class="bento-title">${event.title}</h3>
+                        <p class="bento-description">${event.description}</p>
+                    </div>
+                `;
+                
+                historyGrid.appendChild(historyCard);
+            });
+        }
+        
+        // 初始化事件数据
+        function initializeEventData() {
+            if (!localStorage.getItem('events')) {
+                const defaultEvents = [
+                    {
+                        id: 1,
+                        date: '2025-10-20',
+                        title: '网站正式上线',
+                        description: '经过多轮测试，网站正式上线，欢迎访问！',
+                        image: 'https://via.placeholder.com/600x400'
+                    },
+                    {
+                        id: 2,
+                        date: '2025-10-25',
+                        title: '新增多语言支持',
+                        description: '网站新增了中文、英文和法文多语言支持，提升国际化体验。',
+                        image: 'https://via.placeholder.com/600x400'
+                    }
+                ];
+                localStorage.setItem('events', JSON.stringify(defaultEvents));
+            }
+            
+            // 加载事件数据
+            loadEventData();
+        }
+        
+        // 加载事件数据到页面
+        function loadEventData() {
+            const eventsGrid = document.getElementById('eventsGrid');
+            if (!eventsGrid) return;
+            
+            const events = JSON.parse(localStorage.getItem('events')) || [];
+            
+            eventsGrid.innerHTML = '';
+            
+            events.forEach(event => {
+                const eventCard = document.createElement('div');
+                eventCard.className = 'event-card';
+                
+                const formattedDate = formatDate(event.date);
+                
+                eventCard.innerHTML = `
+                    ${event.image ? `<img src="${event.image}" alt="${event.title}" class="event-image">` : ''}
+                    <div class="event-content">
+                        <div class="event-date">${formattedDate}</div>
+                        <h3 class="event-title">${event.title}</h3>
+                        <p class="event-desc">${event.description}</p>
+                    </div>
+                `;
+                
+                eventsGrid.appendChild(eventCard);
+            });
+        }
+        
+        // 格式化日期
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`;
+        }
+        
+        // 初始化用户状态
+        function checkLoginStatus() {
+            const user = JSON.parse(localStorage.getItem('currentUser'));
+            const userAvatar = document.getElementById('userAvatar');
+            const userName = document.getElementById('userName');
+            const loginBtn = document.getElementById('loginBtn');
+            const profileName = document.getElementById('profileName');
+            const profileEmail = document.getElementById('profileEmail');
+            const profileAvatar = document.getElementById('profileAvatar');
+            
+            // 移动端元素
+            const mobileUserAvatar = document.getElementById('mobileUserAvatar');
+            const mobileUserName = document.getElementById('mobileUserName');
+            const mobileLoginBtn = document.getElementById('mobileLoginBtn');
+            
+            if (user) {
+                // 桌面端用户状态
+                loginBtn.style.display = 'none';
+                userAvatar.style.display = 'flex';
+                userName.style.display = 'block';
+                userAvatar.textContent = user.username.charAt(0).toUpperCase();
+                userName.textContent = user.username;
+                
+                // 移动端用户状态
+                if (mobileUserAvatar && mobileUserName && mobileLoginBtn) {
+                    mobileLoginBtn.style.display = 'none';
+                    mobileUserAvatar.style.display = 'flex';
+                    mobileUserName.style.display = 'block';
+                    mobileUserAvatar.textContent = user.username.charAt(0).toUpperCase();
+                    mobileUserName.textContent = user.username;
+                }
+                
+                // 更新个人资料页面
+                profileName.textContent = user.username;
+                profileEmail.textContent = user.email || `${user.username}@example.com`;
+                profileAvatar.textContent = user.username.charAt(0).toUpperCase();
+                
+                // 如果是管理员，显示管理员面板
+                if (user.role === 'admin') {
+                    document.getElementById('adminPanel').style.display = 'block';
+                    
+                    // 初始化事件管理
+                    initializeEventManagement();
+                    // 初始化历史事件管理
+                    initializeHistoryManagement();
+                }
+                
+                // 添加头像点击事件
+                setupAvatarClickEvents();
+            } else {
+                // 桌面端用户状态
+                loginBtn.style.display = 'block';
+                userAvatar.style.display = 'none';
+                userName.style.display = 'none';
+                
+                // 移动端用户状态
+                if (mobileUserAvatar && mobileUserName && mobileLoginBtn) {
+                    mobileLoginBtn.style.display = 'block';
+                    mobileUserAvatar.style.display = 'none';
+                    mobileUserName.style.display = 'none';
+                }
+                
+                document.getElementById('adminPanel').style.display = 'none';
+            }
+        }
+        
+        // 初始化事件管理
+        function initializeEventManagement() {
+            const eventForm = document.getElementById('eventForm');
+            const existingEvents = document.getElementById('existingEvents');
+            
+            if (!eventForm || !existingEvents) return;
+            
+            // 加载现有事件
+            loadExistingEvents();
+            
+            // 处理事件表单提交
+            eventForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const title = document.getElementById('eventTitle').value;
+                const description = document.getElementById('eventDescription').value;
+                const image = document.getElementById('eventImage').value;
+                const date = document.getElementById('eventDate').value;
+                
+                if (!title || !description || !date) {
+                    alert('请填写所有必填字段');
+                    return;
+                }
+                
+                const events = JSON.parse(localStorage.getItem('events')) || [];
+                const newId = events.length > 0 ? Math.max(...events.map(e => e.id)) + 1 : 1;
+                
+                const newEvent = {
+                    id: newId,
+                    date: date,
+                    title: title,
+                    description: description,
+                    image: image || 'https://via.placeholder.com/600x400'
+                };
+                
+                events.push(newEvent);
+                localStorage.setItem('events', JSON.stringify(events));
+                
+                // 重新加载事件数据
+                loadEventData();
+                loadExistingEvents();
+                
+                // 重置表单
+                eventForm.reset();
+                
+                alert('事件添加成功！');
+            });
+            
+            // 图片预览功能
+            const eventImageInput = document.getElementById('eventImage');
+            const eventImagePreview = document.getElementById('eventImagePreview');
+            
+            if (eventImageInput && eventImagePreview) {
+                eventImageInput.addEventListener('input', function() {
+                    if (this.value) {
+                        eventImagePreview.src = this.value;
+                        eventImagePreview.classList.add('active');
+                    } else {
+                        eventImagePreview.classList.remove('active');
+                    }
+                });
+            }
+        }
+        
+        // 加载现有事件到管理面板
+        function loadExistingEvents() {
+            const existingEvents = document.getElementById('existingEvents');
+            if (!existingEvents) return;
+            
+            const events = JSON.parse(localStorage.getItem('events')) || [];
+            
+            existingEvents.innerHTML = '';
+            
+            events.forEach(event => {
+                const eventItem = document.createElement('div');
+                eventItem.className = 'user-item';
+                eventItem.innerHTML = `
+                    <div>
+                        <strong>${event.title}</strong> - ${formatDate(event.date)}
+                        <p style="margin: 5px 0 0; font-size: 12px; color: #666;">${event.description}</p>
+                    </div>
+                    <div>
+                        <button class="admin-btn delete" data-id="${event.id}">删除</button>
+                    </div>
+                `;
+                
+                existingEvents.appendChild(eventItem);
+            });
+            
+            // 添加删除事件监听
+            document.querySelectorAll('#existingEvents .admin-btn.delete').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = parseInt(this.getAttribute('data-id'));
+                    deleteEvent(id);
+                });
+            });
+        }
+        
+        // 删除事件
+        function deleteEvent(id) {
+            if (!confirm('确定要删除这个事件吗？')) return;
+            
+            let events = JSON.parse(localStorage.getItem('events')) || [];
+            events = events.filter(event => event.id !== id);
+            localStorage.setItem('events', JSON.stringify(events));
+            
+            // 重新加载事件数据
+            loadEventData();
+            loadExistingEvents();
+            
+            alert('事件已删除！');
+        }
+        
+        // 初始化历史事件管理
+        function initializeHistoryManagement() {
+            const historyForm = document.getElementById('historyForm');
+            const existingHistories = document.getElementById('existingHistories');
+            
+            if (!historyForm || !existingHistories) return;
+            
+            // 加载现有历史事件
+            loadExistingHistories();
+            
+            // 处理历史事件表单提交
+            historyForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const title = document.getElementById('historyTitle').value;
+                const description = document.getElementById('historyDescription').value;
+                const image = document.getElementById('historyImage').value;
+                const date = document.getElementById('historyDate').value;
+                
+                if (!title || !description || !date) {
+                    alert('请填写所有必填字段');
+                    return;
+                }
+                
+                const historyEvents = JSON.parse(localStorage.getItem('historyEvents')) || [];
+                const newId = historyEvents.length > 0 ? Math.max(...historyEvents.map(e => e.id)) + 1 : 1;
+                
+                const newHistory = {
+                    id: newId,
+                    date: date,
+                    title: title,
+                    description: description,
+                    image: image || 'https://via.placeholder.com/600x400',
+                    type: 'milestone'
+                };
+                
+                historyEvents.push(newHistory);
+                localStorage.setItem('historyEvents', JSON.stringify(historyEvents));
+                
+                // 重新加载历史数据
+                loadHistoryData();
+                loadExistingHistories();
+                
+                // 重置表单
+                historyForm.reset();
+                
+                alert('历史事件添加成功！');
+            });
+            
+            // 图片预览功能
+            const historyImageInput = document.getElementById('historyImage');
+            const historyImagePreview = document.getElementById('historyImagePreview');
+            
+            if (historyImageInput && historyImagePreview) {
+                historyImageInput.addEventListener('input', function() {
+                    if (this.value) {
+                        historyImagePreview.src = this.value;
+                        historyImagePreview.classList.add('active');
+                    } else {
+                        historyImagePreview.classList.remove('active');
+                    }
+                });
+            }
+        }
+        
+        // 加载现有历史事件到管理面板
+        function loadExistingHistories() {
+            const existingHistories = document.getElementById('existingHistories');
+            if (!existingHistories) return;
+            
+            const historyEvents = JSON.parse(localStorage.getItem('historyEvents')) || [];
+            
+            existingHistories.innerHTML = '';
+            
+            historyEvents.forEach(event => {
+                const historyItem = document.createElement('div');
+                historyItem.className = 'user-item';
+                historyItem.innerHTML = `
+                    <div>
+                        <strong>${event.title}</strong> - ${formatDate(event.date)}
+                        <p style="margin: 5px 0 0; font-size: 12px; color: #666;">${event.description}</p>
+                    </div>
+                    <div>
+                        <button class="admin-btn delete" data-id="${event.id}">删除</button>
+                    </div>
+                `;
+                
+                existingHistories.appendChild(historyItem);
+            });
+            
+            // 添加删除事件监听
+            document.querySelectorAll('#existingHistories .admin-btn.delete').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = parseInt(this.getAttribute('data-id'));
+                    deleteHistoryEvent(id);
+                });
+            });
+        }
+        
+        // 删除历史事件
+        function deleteHistoryEvent(id) {
+            if (!confirm('确定要删除这个历史事件吗？')) return;
+            
+            let historyEvents = JSON.parse(localStorage.getItem('historyEvents')) || [];
+            historyEvents = historyEvents.filter(event => event.id !== id);
+            localStorage.setItem('historyEvents', JSON.stringify(historyEvents));
+            
+            // 重新加载历史数据
+            loadHistoryData();
+            loadExistingHistories();
+            
+            alert('历史事件已删除！');
+        }
+        
+        // 设置头像点击事件
+        function setupAvatarClickEvents() {
+            // 桌面端头像点击事件
+            const userAvatar = document.getElementById('userAvatar');
+            const userName = document.getElementById('userName');
+            
+            if (userAvatar) {
+                userAvatar.addEventListener('click', function() {
+                    document.querySelectorAll('.page').forEach(page => {
+                        page.classList.remove('active');
+                    });
+                    document.getElementById('profile').classList.add('active');
+                });
+            }
+            
+            if (userName) {
+                userName.addEventListener('click', function() {
+                    document.querySelectorAll('.page').forEach(page => {
+                        page.classList.remove('active');
+                    });
+                    document.getElementById('profile').classList.add('active');
+                });
+            }
+            
+            // 移动端头像点击事件
+            const mobileUserAvatar = document.getElementById('mobileUserAvatar');
+            const mobileUserName = document.getElementById('mobileUserName');
+            
+            if (mobileUserAvatar) {
+                mobileUserAvatar.addEventListener('click', function() {
+                    document.querySelectorAll('.page').forEach(page => {
+                        page.classList.remove('active');
+                    });
+                    document.getElementById('profile').classList.add('active');
+                    
+                    // 关闭移动端菜单
+                    const mobileMenu = document.getElementById('mobileMenu');
+                    const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+                    if (mobileMenu && mobileMenuOverlay) {
+                        mobileMenu.classList.remove('active');
+                        mobileMenuOverlay.classList.remove('active');
+                    }
+                });
+            }
+            
+            if (mobileUserName) {
+                mobileUserName.addEventListener('click', function() {
+                    document.querySelectorAll('.page').forEach(page => {
+                        page.classList.remove('active');
+                    });
+                    document.getElementById('profile').classList.add('active');
+                    
+                    // 关闭移动端菜单
+                    const mobileMenu = document.getElementById('mobileMenu');
+                    const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+                    if (mobileMenu && mobileMenuOverlay) {
+                        mobileMenu.classList.remove('active');
+                        mobileMenuOverlay.classList.remove('active');
+                    }
+                });
+            }
+        }
+        
+        // 初始化用户数据
+        function initializeUsers() {
+            if (!localStorage.getItem('users')) {
+                const defaultUsers = [
+                    { 
+                        username: 'WTX', 
+                        password: 'Wgp@201123', 
+                        role: 'admin',
+                        email: 'wtx@example.com'
+                    }
+                ];
+                localStorage.setItem('users', JSON.stringify(defaultUsers));
+            }
+        }
+        
+        // 修复登录表单提交
+        const loginForm = document.getElementById('loginForm');
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            const users = JSON.parse(localStorage.getItem('users'));
+            const user = users.find(u => u.username === username && u.password === password);
+            
+            if (user) {
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                checkLoginStatus();
+                
+                // 切换到首页
+                document.querySelectorAll('.page').forEach(page => {
+                    page.classList.remove('active');
+                });
+                document.getElementById('home').classList.add('active');
+                
+                alert('登录成功！');
+            } else {
+                alert('用户名或密码错误！');
+            }
+        });
+        
+        // 修复注册表单提交
+        const registerForm = document.getElementById('registerForm');
+        registerForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('regUsername').value;
+            const password = document.getElementById('regPassword').value;
+            const confirmPassword = document.getElementById('regConfirmPassword').value;
+            
+            if (password !== confirmPassword) {
+                alert('密码不匹配！');
+                return;
+            }
+            
+            if (username.length < 3) {
+                alert('用户名至少需要3个字符！');
+                return;
+            }
+            
+            if (password.length < 6) {
+                alert('密码至少需要6个字符！');
+                return;
+            }
+            
+            const users = JSON.parse(localStorage.getItem('users'));
+            if (users.find(u => u.username === username)) {
+                alert('用户名已存在！');
+                return;
+            }
+            
+            const newUser = {
+                username: username,
+                password: password,
+                role: 'user',
+                email: `${username}@example.com`
+            };
+            
+            users.push(newUser);
+            localStorage.setItem('users', JSON.stringify(users));
+            
+            localStorage.setItem('currentUser', JSON.stringify(newUser));
+            checkLoginStatus();
+            
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById('home').classList.add('active');
+            
+            alert('注册成功！');
+        });
+        
+        // 修复退出登录
+        const logoutBtn = document.getElementById('logoutBtn');
+        logoutBtn.addEventListener('click', function() {
+            localStorage.removeItem('currentUser');
+            checkLoginStatus();
+            
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById('home').classList.add('active');
+            
+            alert('已退出登录！');
+        });
+        
+        // 修复移动端菜单
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenuClose = document.getElementById('mobileMenuClose');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+        const mobileSettingsBtn = document.getElementById('mobileSettingsBtn');
+        const mobileLoginBtn = document.getElementById('mobileLoginBtn');
+        
+        mobileMenuBtn.addEventListener('click', function() {
+            mobileMenu.classList.add('active');
+            mobileMenuOverlay.classList.add('active');
+        });
+        
+        mobileMenuClose.addEventListener('click', function() {
+            mobileMenu.classList.remove('active');
+            mobileMenuOverlay.classList.remove('active');
+        });
+        
+        mobileMenuOverlay.addEventListener('click', function() {
+            mobileMenu.classList.remove('active');
+            mobileMenuOverlay.classList.remove('active');
+        });
+        
+        mobileSettingsBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            mobileMenu.classList.remove('active');
+            mobileMenuOverlay.classList.remove('active');
+            settingsPanel.classList.add('active');
+            settingsOverlay.classList.add('active');
+        });
+        
+        mobileLoginBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            mobileMenu.classList.remove('active');
+            mobileMenuOverlay.classList.remove('active');
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById('login').classList.add('active');
+        });
+        
+        // 点击火花效果初始化
+        function initializeClickSpark() {
+            const clickSparkToggle = document.getElementById('clickSparkToggle');
+            const clickSparkContainer = document.getElementById('clickSparkContainer');
+            let clickSparkEnabled = localStorage.getItem('clickSparkEnabled') !== 'false';
+            
+            // 设置初始状态
+            if (clickSparkToggle) {
+                clickSparkToggle.checked = clickSparkEnabled;
+            }
+            updateClickSparkState(clickSparkEnabled);
+            
+            // 监听切换事件
+            if (clickSparkToggle) {
+                clickSparkToggle.addEventListener('change', function() {
+                    clickSparkEnabled = this.checked;
+                    localStorage.setItem('clickSparkEnabled', clickSparkEnabled);
+                    updateClickSparkState(clickSparkEnabled);
+                });
+            }
+            
+            function updateClickSparkState(enabled) {
+                if (enabled) {
+                    document.addEventListener('click', createClickSpark);
+                } else {
+                    document.removeEventListener('click', createClickSpark);
                 }
             }
             
-            // 主题切换
-            function toggleTheme() {
-                const currentTheme = localStorage.getItem('theme') || 'light';
-                let newTheme;
-                
-                if (currentTheme === 'light') newTheme = 'dark';
-                else if (currentTheme === 'dark') newTheme = 'cyan';
-                else newTheme = 'light';
-                
-                applyTheme(newTheme);
-                localStorage.setItem('theme', newTheme);
-                
-                // 显示提示
-                showNotification(`已切换到${newTheme === 'light' ? '浅色' : newTheme === 'dark' ? '深色' : '青色'}主题`);
-            }
-            
-            // 字体大小切换
-            function toggleFontSize() {
-                const currentSize = localStorage.getItem('fontSize') || 'medium';
-                let newSize;
-                
-                if (currentSize === 'small') newSize = 'medium';
-                else if (currentSize === 'medium') newSize = 'large';
-                else newSize = 'small';
-                
-                applyFontSize(newSize);
-                localStorage.setItem('fontSize', newSize);
-                
-                // 显示提示
-                showNotification(`字体大小已设置为${newSize === 'small' ? '小' : newSize === 'medium' ? '中' : '大'}`);
-            }
-            
-            // 动画开关
-            function toggleAnimations() {
-                const animationsEnabled = document.body.classList.toggle('no-animation');
-                localStorage.setItem('animationsEnabled', !animationsEnabled);
-                
-                // 显示提示
-                showNotification(animationsEnabled ? '动画效果已关闭' : '动画效果已开启');
-            }
-            
-            // 平滑滚动开关
-            function toggleSmoothScroll() {
-                const smoothScrollEnabled = document.documentElement.style.scrollBehavior === 'smooth';
-                document.documentElement.style.scrollBehavior = smoothScrollEnabled ? 'auto' : 'smooth';
-                localStorage.setItem('smoothScrollEnabled', !smoothScrollEnabled);
-                
-                // 显示提示
-                showNotification(smoothScrollEnabled ? '平滑滚动已关闭' : '平滑滚动已开启');
-            }
-            
-            // 悬停效果开关
-            function toggleHoverEffects() {
-                const hoverEffectsEnabled = document.body.classList.toggle('no-hover');
-                localStorage.setItem('hoverEffectsEnabled', !hoverEffectsEnabled);
-                
-                // 显示提示
-                showNotification(hoverEffectsEnabled ? '悬停效果已关闭' : '悬停效果已开启');
-            }
-            
-            // 点击火花效果开关
-            function toggleClickSpark() {
-                const clickSparkToggle = document.getElementById('clickSparkToggle');
-                if (clickSparkToggle) {
-                    clickSparkToggle.checked = !clickSparkToggle.checked;
-                    clickSparkToggle.dispatchEvent(new Event('change'));
+            function createClickSpark(e) {
+                // 如果动画被禁用，则不创建火花
+                if (document.body.classList.contains('no-animation')) {
+                    return;
                 }
                 
-                // 显示提示
-                const clickSparkEnabled = localStorage.getItem('clickSparkEnabled') !== 'false';
-                showNotification(clickSparkEnabled ? '点击火花效果已开启' : '点击火花效果已关闭');
+                const sparkCount = 8;
+                const sparkRadius = 15;
+                const duration = 400;
+                
+                for (let i = 0; i < sparkCount; i++) {
+                    const spark = document.createElement('div');
+                    spark.className = 'spark';
+                    
+                    // 设置火花位置
+                    spark.style.left = `${e.clientX}px`;
+                    spark.style.top = `${e.clientY}px`;
+                    
+                    // 随机角度
+                    const angle = (i / sparkCount) * Math.PI * 2;
+                    const distance = Math.random() * sparkRadius + 5;
+                    
+                    // 计算最终位置
+                    const endX = e.clientX + Math.cos(angle) * distance;
+                    const endY = e.clientY + Math.sin(angle) * distance;
+                    
+                    // 添加到容器
+                    clickSparkContainer.appendChild(spark);
+                    
+                    // 火花动画
+                    const animation = spark.animate([
+                        {
+                            transform: 'translate(-50%, -50%) scale(1)',
+                            opacity: 1
+                        },
+                        {
+                            transform: `translate(calc(-50% + ${endX - e.clientX}px), calc(-50% + ${endY - e.clientY}px)) scale(0)`,
+                            opacity: 0
+                        }
+                    ], {
+                        duration: duration,
+                        easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+                        fill: 'forwards'
+                    });
+                    
+                    // 动画结束后移除元素
+                    animation.onfinish = () => {
+                        spark.remove();
+                    };
+                }
             }
+        }
+        
+        // 深色模式切换功能
+        function initializeSettings() {
+            // 从本地存储加载设置
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            const savedFontSize = localStorage.getItem('fontSize') || 'medium';
+            const savedAnimations = localStorage.getItem('animationsEnabled') !== 'false';
+            const savedSmoothScroll = localStorage.getItem('smoothScrollEnabled') !== 'false';
+            const savedHoverEffects = localStorage.getItem('hoverEffectsEnabled') !== 'false';
+            const savedClickSpark = localStorage.getItem('clickSparkEnabled') !== 'false';
+            
+            // 应用保存的设置
+            applyTheme(savedTheme);
+            applyFontSize(savedFontSize);
+            
+            if (!savedAnimations) document.body.classList.add('no-animation');
+            if (!savedHoverEffects) document.body.classList.add('no-hover');
+            if (!savedSmoothScroll) document.documentElement.style.scrollBehavior = 'auto';
+            
+            // 设置面板中的选项状态
+            document.querySelectorAll('.theme-option').forEach(option => {
+                if (option.getAttribute('data-theme') === savedTheme) {
+                    option.classList.add('active');
+                } else {
+                    option.classList.remove('active');
+                }
+            });
+            
+            document.querySelectorAll('.font-option').forEach(option => {
+                if (option.getAttribute('data-font') === savedFontSize) {
+                    option.classList.add('active');
+                } else {
+                    option.classList.remove('active');
+                }
+            });
+            
+            // 设置开关状态
+            document.getElementById('animationsToggle').checked = savedAnimations;
+            document.getElementById('smoothScrollToggle').checked = savedSmoothScroll;
+            document.getElementById('hoverEffectsToggle').checked = savedHoverEffects;
+            document.getElementById('clickSparkToggle').checked = savedClickSpark;
+            
+            // 主题切换事件
+            document.querySelectorAll('.theme-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    const theme = this.getAttribute('data-theme');
+                    
+                    // 更新活动状态
+                    document.querySelectorAll('.theme-option').forEach(opt => {
+                        opt.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                    
+                    // 应用主题
+                    applyTheme(theme);
+                    localStorage.setItem('theme', theme);
+                });
+            });
+            
+            // 字体大小切换事件
+            document.querySelectorAll('.font-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    const fontSize = this.getAttribute('data-font');
+                    
+                    // 更新活动状态
+                    document.querySelectorAll('.font-option').forEach(opt => {
+                        opt.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                    
+                    // 应用字体大小
+                    applyFontSize(fontSize);
+                    localStorage.setItem('fontSize', fontSize);
+                });
+            });
+            
+            // 开关事件
+            document.getElementById('animationsToggle').addEventListener('change', function() {
+                document.body.classList.toggle('no-animation', !this.checked);
+                localStorage.setItem('animationsEnabled', this.checked);
+            });
+            
+            document.getElementById('smoothScrollToggle').addEventListener('change', function() {
+                document.documentElement.style.scrollBehavior = this.checked ? 'smooth' : 'auto';
+                localStorage.setItem('smoothScrollEnabled', this.checked);
+            });
+            
+            document.getElementById('hoverEffectsToggle').addEventListener('change', function() {
+                document.body.classList.toggle('no-hover', !this.checked);
+                localStorage.setItem('hoverEffectsEnabled', this.checked);
+            });
+            
+            document.getElementById('clickSparkToggle').addEventListener('change', function() {
+                localStorage.setItem('clickSparkEnabled', this.checked);
+                updateClickSparkState(this.checked);
+            });
             
             // 重置设置
-            function resetSettings() {
+            document.getElementById('resetSettings').addEventListener('click', function() {
                 localStorage.removeItem('theme');
                 localStorage.removeItem('fontSize');
                 localStorage.removeItem('animationsEnabled');
@@ -3177,1178 +4457,89 @@
                 document.body.classList.remove('no-animation', 'no-hover');
                 document.documentElement.style.scrollBehavior = 'smooth';
                 
+                // 更新设置面板中的选项状态
+                document.querySelectorAll('.theme-option').forEach(option => {
+                    if (option.getAttribute('data-theme') === 'light') {
+                        option.classList.add('active');
+                    } else {
+                        option.classList.remove('active');
+                    }
+                });
+                
+                document.querySelectorAll('.font-option').forEach(option => {
+                    if (option.getAttribute('data-font') === 'medium') {
+                        option.classList.add('active');
+                    } else {
+                        option.classList.remove('active');
+                    }
+                });
+                
+                // 重置开关状态
+                document.getElementById('animationsToggle').checked = true;
+                document.getElementById('smoothScrollToggle').checked = true;
+                document.getElementById('hoverEffectsToggle').checked = true;
+                document.getElementById('clickSparkToggle').checked = true;
+                
                 // 重置点击火花设置
-                const clickSparkToggle = document.getElementById('clickSparkToggle');
-                if (clickSparkToggle) {
-                    clickSparkToggle.checked = true;
-                }
+                updateClickSparkState(true);
                 
-                // 显示提示
-                showNotification('所有设置已重置为默认值');
+                alert('设置已重置为默认值！');
+            });
+            
+            // 初始化点击火花效果
+            initializeClickSpark();
+        }
+        
+        function applyTheme(theme) {
+            document.body.classList.remove('dark-theme', 'cyan-theme');
+            if (theme === 'dark') {
+                document.body.classList.add('dark-theme');
+            } else if (theme === 'cyan') {
+                document.body.classList.add('cyan-theme');
             }
-            
-            // 显示通知
-            function showNotification(message) {
-                // 创建通知元素
-                const notification = document.createElement('div');
-                notification.textContent = message;
-                notification.style.cssText = `
-                    position: fixed;
-                    top: 20px;
-                    right: 20px;
-                    background-color: #0066cc;
-                    color: white;
-                    padding: 12px 20px;
-                    border-radius: 8px;
-                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-                    z-index: 3000;
-                    font-size: 14px;
-                    transition: all 0.3s ease;
-                    opacity: 0;
-                    transform: translateY(-20px);
-                `;
-                
-                document.body.appendChild(notification);
-                
-                // 显示动画
-                setTimeout(() => {
-                    notification.style.opacity = '1';
-                    notification.style.transform = 'translateY(0)';
-                }, 10);
-                
-                // 自动隐藏
-                setTimeout(() => {
-                    notification.style.opacity = '0';
-                    notification.style.transform = 'translateY(-20px)';
-                    
-                    setTimeout(() => {
-                        document.body.removeChild(notification);
-                    }, 300);
-                }, 3000);
+        }
+        
+        function applyFontSize(fontSize) {
+            document.body.classList.remove('small-font', 'large-font');
+            if (fontSize === 'small') {
+                document.body.classList.add('small-font');
+            } else if (fontSize === 'large') {
+                document.body.classList.add('large-font');
             }
-            
-            // 修复登录/注册页面切换
-            const loginBtn = document.getElementById('loginBtn');
-            const registerLink = document.getElementById('registerLink');
-            const loginLink = document.getElementById('loginLink');
-            
-            loginBtn.addEventListener('click', function() {
-                document.querySelectorAll('.page').forEach(page => {
-                    page.classList.remove('active');
-                });
-                document.getElementById('login').classList.add('active');
-            });
-            
-            registerLink.addEventListener('click', function(e) {
-                e.preventDefault();
-                document.querySelectorAll('.page').forEach(page => {
-                    page.classList.remove('active');
-                });
-                document.getElementById('register').classList.add('active');
-            });
-            
-            loginLink.addEventListener('click', function(e) {
-                e.preventDefault();
-                document.querySelectorAll('.page').forEach(page => {
-                    page.classList.remove('active');
-                });
-                document.getElementById('login').classList.add('active');
-            });
-            
-            // 修复页面导航
-            document.querySelectorAll('.nav-link[data-page]').forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const targetPage = this.getAttribute('data-page');
-                    
-                    document.querySelectorAll('.page').forEach(page => {
-                        page.classList.remove('active');
-                    });
-                    
-                    document.getElementById(targetPage).classList.add('active');
-                    
-                    if (targetPage === 'home') {
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
-                    }
-                    
-                    // 如果是历史页面，重新加载历史数据
-                    if (targetPage === 'history') {
-                        loadHistoryData();
-                    }
-                    
-                    // 如果是事件页面，重新加载事件数据
-                    if (targetPage === 'events') {
-                        loadEventData();
-                    }
+        }
+        
+        // 初始化
+        initializeUsers();
+        checkLoginStatus();
+        
+        // 激光动效交互
+        const hero = document.querySelector('.hero');
+        const laserBg = document.querySelector('.laser-bg');
+        
+        if (hero && laserBg) {
+            hero.addEventListener('mousemove', (e) => {
+                const rect = hero.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                // 移动激光背景位置
+                laserBg.style.transform = `translate(${x * 0.02}px, ${y * 0.02}px)`;
+                
+                // 更新激光束的颜色和位置
+                const beams = document.querySelectorAll('.laser-beam');
+                beams.forEach((beam, index) => {
+                    const intensity = 0.5 + (Math.sin(Date.now() * 0.001 + index) * 0.3);
+                    beam.style.opacity = intensity;
+                    beam.style.background = `linear-gradient(90deg, 
+                        rgba(255, ${50 + index * 50}, ${150 + index * 30}, ${intensity}), 
+                        rgba(${100 + index * 40}, 0, 255, ${intensity}))`;
                 });
             });
             
-            // GradientBlinds背景特效实现
-            function initializeGradientBlindsBackground() {
-                const container = document.getElementById('gradientBlindsBg');
-                if (!container) return;
-                
-                const blindsContainer = document.createElement('div');
-                blindsContainer.className = 'gradient-blinds';
-                container.appendChild(blindsContainer);
-                
-                // 创建百叶窗
-                const blindCount = 12;
-                for (let i = 0; i < blindCount; i++) {
-                    const blind = document.createElement('div');
-                    blind.className = 'blind';
-                    blindsContainer.appendChild(blind);
-                }
-                
-                // 鼠标移动效果
-                document.addEventListener('mousemove', function(e) {
-                    const blinds = document.querySelectorAll('.blind');
-                    const mouseX = e.clientX / window.innerWidth;
-                    const mouseY = e.clientY / window.innerHeight;
-                    
-                    blinds.forEach((blind, index) => {
-                        // 计算每个百叶窗的偏移量
-                        const offset = (index / blinds.length - 0.5) * 2;
-                        const transformX = (mouseX - 0.5) * 20 * offset;
-                        const transformY = (mouseY - 0.5) * 20 * offset;
-                        
-                        blind.style.transform = `translate(${transformX}px, ${transformY}px)`;
-                        
-                        // 添加噪声效果
-                        const noise = Math.random() * 0.3;
-                        blind.style.filter = `brightness(${1 + noise})`;
-                    });
-                });
-                
-                // 鼠标离开时重置
-                document.addEventListener('mouseleave', function() {
-                    const blinds = document.querySelectorAll('.blind');
-                    blinds.forEach(blind => {
-                        blind.style.transform = 'translate(0, 0)';
-                        blind.style.filter = 'brightness(1)';
-                    });
-                });
-            }
-            
-            // 初始化3D方块效果
-            function initialize3DCubes() {
-                const container = document.getElementById('cubesContainer');
-                if (!container) return;
-                
-                // 清空容器
-                container.innerHTML = '';
-                
-                // 创建多个3D方块
-                const cubeCount = 15;
-                const cubes = [];
-                
-                for (let i = 0; i < cubeCount; i++) {
-                    const cube = document.createElement('div');
-                    cube.className = 'cube-3d';
-                    
-                    // 随机位置
-                    const x = Math.random() * 100;
-                    const y = Math.random() * 100;
-                    cube.style.left = `${x}%`;
-                    cube.style.top = `${y}%`;
-                    
-                    // 随机旋转
-                    const rotateX = Math.random() * 360;
-                    const rotateY = Math.random() * 360;
-                    cube.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-                    
-                    // 创建6个面
-                    for (let j = 0; j < 6; j++) {
-                        const face = document.createElement('div');
-                        face.className = 'cube-face';
-                        face.innerHTML = '<i class="fas fa-cube"></i>';
-                        cube.appendChild(face);
-                    }
-                    
-                    container.appendChild(cube);
-                    cubes.push({
-                        element: cube,
-                        x: x,
-                        y: y,
-                        vx: (Math.random() - 0.5) * 0.5,
-                        vy: (Math.random() - 0.5) * 0.5,
-                        rotationX: rotateX,
-                        rotationY: rotateY,
-                        rotationSpeedX: (Math.random() - 0.5) * 0.5,
-                        rotationSpeedY: (Math.random() - 0.5) * 0.5
-                    });
-                }
-                
-                // 鼠标位置
-                let mouseX = 0;
-                let mouseY = 0;
-                
-                // 监听鼠标移动
-                document.addEventListener('mousemove', function(e) {
-                    mouseX = e.clientX;
-                    mouseY = e.clientY;
-                });
-                
-                // 动画循环
-                function animate() {
-                    cubes.forEach(cube => {
-                        // 计算与鼠标的距离
-                        const rect = cube.element.getBoundingClientRect();
-                        const cubeCenterX = rect.left + rect.width / 2;
-                        const cubeCenterY = rect.top + rect.height / 2;
-                        
-                        const dx = cubeCenterX - mouseX;
-                        const dy = cubeCenterY - mouseY;
-                        const distance = Math.sqrt(dx * dx + dy * dy);
-                        
-                        // 鼠标排斥效果
-                        if (distance < 150) {
-                            const force = 150 - distance;
-                            const angle = Math.atan2(dy, dx);
-                            
-                            cube.vx += Math.cos(angle) * force * 0.0005;
-                            cube.vy += Math.sin(angle) * force * 0.0005;
-                        }
-                        
-                        // 更新位置
-                        cube.x += cube.vx;
-                        cube.y += cube.vy;
-                        
-                        // 边界检测
-                        if (cube.x < 0 || cube.x > 100) {
-                            cube.vx *= -0.8;
-                            cube.x = Math.max(0, Math.min(100, cube.x));
-                        }
-                        
-                        if (cube.y < 0 || cube.y > 100) {
-                            cube.vy *= -0.8;
-                            cube.y = Math.max(0, Math.min(100, cube.y));
-                        }
-                        
-                        // 阻尼
-                        cube.vx *= 0.98;
-                        cube.vy *= 0.98;
-                        
-                        // 更新旋转
-                        cube.rotationX += cube.rotationSpeedX;
-                        cube.rotationY += cube.rotationSpeedY;
-                        
-                        // 应用变换
-                        cube.element.style.left = `${cube.x}%`;
-                        cube.element.style.top = `${cube.y}%`;
-                        cube.element.style.transform = `rotateX(${cube.rotationX}deg) rotateY(${cube.rotationY}deg)`;
-                    });
-                    
-                    requestAnimationFrame(animate);
-                }
-                
-                animate();
-            }
-            
-            // 初始化历史数据
-            function initializeHistoryData() {
-                if (!localStorage.getItem('historyEvents')) {
-                    const defaultHistory = [
-                        {
-                            id: 1,
-                            date: '2025-10-13',
-                            title: '域名创建成功',
-                            description: '此域名于2025年10月13日成功创建，标志着网站项目的正式启动。',
-                            type: 'milestone',
-                            image: 'https://via.placeholder.com/600x400'
-                        },
-                        {
-                            id: 2,
-                            date: '2025-10-15',
-                            title: '网站创建成功',
-                            description: '经过两天的开发，网站于2025年10月15日成功上线，实现了基本功能。',
-                            type: 'milestone',
-                            image: 'https://via.placeholder.com/600x400'
-                        },
-                        {
-                            id: 3,
-                            date: '2025-10-16',
-                            title: '页面美观与功能完善',
-                            description: '网站页面大美观基础功能已完善部分，用户体验得到显著提升。',
-                            type: 'improvement',
-                            image: 'https://via.placeholder.com/600x400'
-                        }
-                    ];
-                    localStorage.setItem('historyEvents', JSON.stringify(defaultHistory));
-                }
-                
-                // 加载历史数据
-                loadHistoryData();
-            }
-            
-            // 加载历史数据到页面
-            function loadHistoryData() {
-                const historyGrid = document.getElementById('historyGrid');
-                if (!historyGrid) return;
-                
-                const historyEvents = JSON.parse(localStorage.getItem('historyEvents')) || [];
-                
-                historyGrid.innerHTML = '';
-                
-                historyEvents.forEach(event => {
-                    const historyCard = document.createElement('div');
-                    historyCard.className = 'bento-card';
-                    
-                    const formattedDate = formatDate(event.date);
-                    
-                    historyCard.innerHTML = `
-                        <div class="bento-card-content">
-                            <div class="bento-label">${formattedDate}</div>
-                            ${event.image ? `<img src="${event.image}" alt="${event.title}" class="history-image">` : ''}
-                            <h3 class="bento-title">${event.title}</h3>
-                            <p class="bento-description">${event.description}</p>
-                        </div>
-                    `;
-                    
-                    historyGrid.appendChild(historyCard);
-                });
-            }
-            
-            // 初始化事件数据
-            function initializeEventData() {
-                if (!localStorage.getItem('events')) {
-                    const defaultEvents = [
-                        {
-                            id: 1,
-                            date: '2025-10-20',
-                            title: '网站正式上线',
-                            description: '经过多轮测试，网站正式上线，欢迎访问！',
-                            image: 'https://via.placeholder.com/600x400'
-                        },
-                        {
-                            id: 2,
-                            date: '2025-10-25',
-                            title: '新增多语言支持',
-                            description: '网站新增了中文、英文和法文多语言支持，提升国际化体验。',
-                            image: 'https://via.placeholder.com/600x400'
-                        }
-                    ];
-                    localStorage.setItem('events', JSON.stringify(defaultEvents));
-                }
-                
-                // 加载事件数据
-                loadEventData();
-            }
-            
-            // 加载事件数据到页面
-            function loadEventData() {
-                const eventsGrid = document.getElementById('eventsGrid');
-                if (!eventsGrid) return;
-                
-                const events = JSON.parse(localStorage.getItem('events')) || [];
-                
-                eventsGrid.innerHTML = '';
-                
-                events.forEach(event => {
-                    const eventCard = document.createElement('div');
-                    eventCard.className = 'event-card';
-                    
-                    const formattedDate = formatDate(event.date);
-                    
-                    eventCard.innerHTML = `
-                        ${event.image ? `<img src="${event.image}" alt="${event.title}" class="event-image">` : ''}
-                        <div class="event-content">
-                            <div class="event-date">${formattedDate}</div>
-                            <h3 class="event-title">${event.title}</h3>
-                            <p class="event-desc">${event.description}</p>
-                        </div>
-                    `;
-                    
-                    eventsGrid.appendChild(eventCard);
-                });
-            }
-            
-            // 格式化日期
-            function formatDate(dateString) {
-                const date = new Date(dateString);
-                return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`;
-            }
-            
-            // 初始化用户状态
-            function checkLoginStatus() {
-                const user = JSON.parse(localStorage.getItem('currentUser'));
-                const userAvatar = document.getElementById('userAvatar');
-                const userName = document.getElementById('userName');
-                const loginBtn = document.getElementById('loginBtn');
-                const profileName = document.getElementById('profileName');
-                const profileEmail = document.getElementById('profileEmail');
-                const profileAvatar = document.getElementById('profileAvatar');
-                
-                // 移动端元素
-                const mobileUserAvatar = document.getElementById('mobileUserAvatar');
-                const mobileUserName = document.getElementById('mobileUserName');
-                const mobileLoginBtn = document.getElementById('mobileLoginBtn');
-                
-                if (user) {
-                    // 桌面端用户状态
-                    loginBtn.style.display = 'none';
-                    userAvatar.style.display = 'flex';
-                    userName.style.display = 'block';
-                    userAvatar.textContent = user.username.charAt(0).toUpperCase();
-                    userName.textContent = user.username;
-                    
-                    // 移动端用户状态
-                    if (mobileUserAvatar && mobileUserName && mobileLoginBtn) {
-                        mobileLoginBtn.style.display = 'none';
-                        mobileUserAvatar.style.display = 'flex';
-                        mobileUserName.style.display = 'block';
-                        mobileUserAvatar.textContent = user.username.charAt(0).toUpperCase();
-                        mobileUserName.textContent = user.username;
-                    }
-                    
-                    // 更新个人资料页面
-                    profileName.textContent = user.username;
-                    profileEmail.textContent = user.email || `${user.username}@example.com`;
-                    profileAvatar.textContent = user.username.charAt(0).toUpperCase();
-                    
-                    // 如果是管理员，显示管理员面板
-                    if (user.role === 'admin') {
-                        document.getElementById('adminPanel').style.display = 'block';
-                        
-                        // 初始化事件管理
-                        initializeEventManagement();
-                        // 初始化历史事件管理
-                        initializeHistoryManagement();
-                    }
-                    
-                    // 添加头像点击事件
-                    setupAvatarClickEvents();
-                } else {
-                    // 桌面端用户状态
-                    loginBtn.style.display = 'block';
-                    userAvatar.style.display = 'none';
-                    userName.style.display = 'none';
-                    
-                    // 移动端用户状态
-                    if (mobileUserAvatar && mobileUserName && mobileLoginBtn) {
-                        mobileLoginBtn.style.display = 'block';
-                        mobileUserAvatar.style.display = 'none';
-                        mobileUserName.style.display = 'none';
-                    }
-                    
-                    document.getElementById('adminPanel').style.display = 'none';
-                }
-            }
-            
-            // 初始化事件管理
-            function initializeEventManagement() {
-                const eventForm = document.getElementById('eventForm');
-                const existingEvents = document.getElementById('existingEvents');
-                
-                if (!eventForm || !existingEvents) return;
-                
-                // 加载现有事件
-                loadExistingEvents();
-                
-                // 处理事件表单提交
-                eventForm.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    
-                    const title = document.getElementById('eventTitle').value;
-                    const description = document.getElementById('eventDescription').value;
-                    const image = document.getElementById('eventImage').value;
-                    const date = document.getElementById('eventDate').value;
-                    
-                    if (!title || !description || !date) {
-                        alert('请填写所有必填字段');
-                        return;
-                    }
-                    
-                    const events = JSON.parse(localStorage.getItem('events')) || [];
-                    const newId = events.length > 0 ? Math.max(...events.map(e => e.id)) + 1 : 1;
-                    
-                    const newEvent = {
-                        id: newId,
-                        date: date,
-                        title: title,
-                        description: description,
-                        image: image || 'https://via.placeholder.com/600x400'
-                    };
-                    
-                    events.push(newEvent);
-                    localStorage.setItem('events', JSON.stringify(events));
-                    
-                    // 重新加载事件数据
-                    loadEventData();
-                    loadExistingEvents();
-                    
-                    // 重置表单
-                    eventForm.reset();
-                    
-                    alert('事件添加成功！');
-                });
-                
-                // 图片预览功能
-                const eventImageInput = document.getElementById('eventImage');
-                const eventImagePreview = document.getElementById('eventImagePreview');
-                
-                if (eventImageInput && eventImagePreview) {
-                    eventImageInput.addEventListener('input', function() {
-                        if (this.value) {
-                            eventImagePreview.src = this.value;
-                            eventImagePreview.classList.add('active');
-                        } else {
-                            eventImagePreview.classList.remove('active');
-                        }
-                    });
-                }
-            }
-            
-            // 加载现有事件到管理面板
-            function loadExistingEvents() {
-                const existingEvents = document.getElementById('existingEvents');
-                if (!existingEvents) return;
-                
-                const events = JSON.parse(localStorage.getItem('events')) || [];
-                
-                existingEvents.innerHTML = '';
-                
-                events.forEach(event => {
-                    const eventItem = document.createElement('div');
-                    eventItem.className = 'user-item';
-                    eventItem.innerHTML = `
-                        <div>
-                            <strong>${event.title}</strong> - ${formatDate(event.date)}
-                            <p style="margin: 5px 0 0; font-size: 12px; color: #666;">${event.description}</p>
-                        </div>
-                        <div>
-                            <button class="admin-btn delete" data-id="${event.id}">删除</button>
-                        </div>
-                    `;
-                    
-                    existingEvents.appendChild(eventItem);
-                });
-                
-                // 添加删除事件监听
-                document.querySelectorAll('#existingEvents .admin-btn.delete').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const id = parseInt(this.getAttribute('data-id'));
-                        deleteEvent(id);
-                    });
-                });
-            }
-            
-            // 删除事件
-            function deleteEvent(id) {
-                if (!confirm('确定要删除这个事件吗？')) return;
-                
-                let events = JSON.parse(localStorage.getItem('events')) || [];
-                events = events.filter(event => event.id !== id);
-                localStorage.setItem('events', JSON.stringify(events));
-                
-                // 重新加载事件数据
-                loadEventData();
-                loadExistingEvents();
-                
-                alert('事件已删除！');
-            }
-            
-            // 初始化历史事件管理
-            function initializeHistoryManagement() {
-                const historyForm = document.getElementById('historyForm');
-                const existingHistories = document.getElementById('existingHistories');
-                
-                if (!historyForm || !existingHistories) return;
-                
-                // 加载现有历史事件
-                loadExistingHistories();
-                
-                // 处理历史事件表单提交
-                historyForm.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    
-                    const title = document.getElementById('historyTitle').value;
-                    const description = document.getElementById('historyDescription').value;
-                    const image = document.getElementById('historyImage').value;
-                    const date = document.getElementById('historyDate').value;
-                    
-                    if (!title || !description || !date) {
-                        alert('请填写所有必填字段');
-                        return;
-                    }
-                    
-                    const historyEvents = JSON.parse(localStorage.getItem('historyEvents')) || [];
-                    const newId = historyEvents.length > 0 ? Math.max(...historyEvents.map(e => e.id)) + 1 : 1;
-                    
-                    const newHistory = {
-                        id: newId,
-                        date: date,
-                        title: title,
-                        description: description,
-                        image: image || 'https://via.placeholder.com/600x400',
-                        type: 'milestone'
-                    };
-                    
-                    historyEvents.push(newHistory);
-                    localStorage.setItem('historyEvents', JSON.stringify(historyEvents));
-                    
-                    // 重新加载历史数据
-                    loadHistoryData();
-                    loadExistingHistories();
-                    
-                    // 重置表单
-                    historyForm.reset();
-                    
-                    alert('历史事件添加成功！');
-                });
-                
-                // 图片预览功能
-                const historyImageInput = document.getElementById('historyImage');
-                const historyImagePreview = document.getElementById('historyImagePreview');
-                
-                if (historyImageInput && historyImagePreview) {
-                    historyImageInput.addEventListener('input', function() {
-                        if (this.value) {
-                            historyImagePreview.src = this.value;
-                            historyImagePreview.classList.add('active');
-                        } else {
-                            historyImagePreview.classList.remove('active');
-                        }
-                    });
-                }
-            }
-            
-            // 加载现有历史事件到管理面板
-            function loadExistingHistories() {
-                const existingHistories = document.getElementById('existingHistories');
-                if (!existingHistories) return;
-                
-                const historyEvents = JSON.parse(localStorage.getItem('historyEvents')) || [];
-                
-                existingHistories.innerHTML = '';
-                
-                historyEvents.forEach(event => {
-                    const historyItem = document.createElement('div');
-                    historyItem.className = 'user-item';
-                    historyItem.innerHTML = `
-                        <div>
-                            <strong>${event.title}</strong> - ${formatDate(event.date)}
-                            <p style="margin: 5px 0 0; font-size: 12px; color: #666;">${event.description}</p>
-                        </div>
-                        <div>
-                            <button class="admin-btn delete" data-id="${event.id}">删除</button>
-                        </div>
-                    `;
-                    
-                    existingHistories.appendChild(historyItem);
-                });
-                
-                // 添加删除事件监听
-                document.querySelectorAll('#existingHistories .admin-btn.delete').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const id = parseInt(this.getAttribute('data-id'));
-                        deleteHistoryEvent(id);
-                    });
-                });
-            }
-            
-            // 删除历史事件
-            function deleteHistoryEvent(id) {
-                if (!confirm('确定要删除这个历史事件吗？')) return;
-                
-                let historyEvents = JSON.parse(localStorage.getItem('historyEvents')) || [];
-                historyEvents = historyEvents.filter(event => event.id !== id);
-                localStorage.setItem('historyEvents', JSON.stringify(historyEvents));
-                
-                // 重新加载历史数据
-                loadHistoryData();
-                loadExistingHistories();
-                
-                alert('历史事件已删除！');
-            }
-            
-            // 设置头像点击事件
-            function setupAvatarClickEvents() {
-                // 桌面端头像点击事件
-                const userAvatar = document.getElementById('userAvatar');
-                const userName = document.getElementById('userName');
-                
-                if (userAvatar) {
-                    userAvatar.addEventListener('click', function() {
-                        document.querySelectorAll('.page').forEach(page => {
-                            page.classList.remove('active');
-                        });
-                        document.getElementById('profile').classList.add('active');
-                    });
-                }
-                
-                if (userName) {
-                    userName.addEventListener('click', function() {
-                        document.querySelectorAll('.page').forEach(page => {
-                            page.classList.remove('active');
-                        });
-                        document.getElementById('profile').classList.add('active');
-                    });
-                }
-                
-                // 移动端头像点击事件
-                const mobileUserAvatar = document.getElementById('mobileUserAvatar');
-                const mobileUserName = document.getElementById('mobileUserName');
-                
-                if (mobileUserAvatar) {
-                    mobileUserAvatar.addEventListener('click', function() {
-                        document.querySelectorAll('.page').forEach(page => {
-                            page.classList.remove('active');
-                        });
-                        document.getElementById('profile').classList.add('active');
-                        
-                        // 关闭移动端菜单
-                        const mobileMenu = document.getElementById('mobileMenu');
-                        const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
-                        if (mobileMenu && mobileMenuOverlay) {
-                            mobileMenu.classList.remove('active');
-                            mobileMenuOverlay.classList.remove('active');
-                        }
-                    });
-                }
-                
-                if (mobileUserName) {
-                    mobileUserName.addEventListener('click', function() {
-                        document.querySelectorAll('.page').forEach(page => {
-                            page.classList.remove('active');
-                        });
-                        document.getElementById('profile').classList.add('active');
-                        
-                        // 关闭移动端菜单
-                        const mobileMenu = document.getElementById('mobileMenu');
-                        const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
-                        if (mobileMenu && mobileMenuOverlay) {
-                            mobileMenu.classList.remove('active');
-                            mobileMenuOverlay.classList.remove('active');
-                        }
-                    });
-                }
-            }
-            
-            // 初始化用户数据
-            function initializeUsers() {
-                if (!localStorage.getItem('users')) {
-                    const defaultUsers = [
-                        { 
-                            username: 'WTX', 
-                            password: 'Wgp@201123', 
-                            role: 'admin',
-                            email: 'wtx@example.com'
-                        }
-                    ];
-                    localStorage.setItem('users', JSON.stringify(defaultUsers));
-                }
-            }
-            
-            // 修复登录表单提交
-            const loginForm = document.getElementById('loginForm');
-            loginForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                const username = document.getElementById('username').value;
-                const password = document.getElementById('password').value;
-                
-                const users = JSON.parse(localStorage.getItem('users'));
-                const user = users.find(u => u.username === username && u.password === password);
-                
-                if (user) {
-                    localStorage.setItem('currentUser', JSON.stringify(user));
-                    checkLoginStatus();
-                    
-                    // 切换到首页
-                    document.querySelectorAll('.page').forEach(page => {
-                        page.classList.remove('active');
-                    });
-                    document.getElementById('home').classList.add('active');
-                    
-                    alert('登录成功！');
-                } else {
-                    alert('用户名或密码错误！');
-                }
+            hero.addEventListener('mouseleave', () => {
+                laserBg.style.transform = 'translate(0, 0)';
             });
-            
-            // 修复注册表单提交
-            const registerForm = document.getElementById('registerForm');
-            registerForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                const username = document.getElementById('regUsername').value;
-                const password = document.getElementById('regPassword').value;
-                const confirmPassword = document.getElementById('regConfirmPassword').value;
-                
-                if (password !== confirmPassword) {
-                    alert('密码不匹配！');
-                    return;
-                }
-                
-                if (username.length < 3) {
-                    alert('用户名至少需要3个字符！');
-                    return;
-                }
-                
-                if (password.length < 6) {
-                    alert('密码至少需要6个字符！');
-                    return;
-                }
-                
-                const users = JSON.parse(localStorage.getItem('users'));
-                if (users.find(u => u.username === username)) {
-                    alert('用户名已存在！');
-                    return;
-                }
-                
-                const newUser = {
-                    username: username,
-                    password: password,
-                    role: 'user',
-                    email: `${username}@example.com`
-                };
-                
-                users.push(newUser);
-                localStorage.setItem('users', JSON.stringify(users));
-                
-                localStorage.setItem('currentUser', JSON.stringify(newUser));
-                checkLoginStatus();
-                
-                document.querySelectorAll('.page').forEach(page => {
-                    page.classList.remove('active');
-                });
-                document.getElementById('home').classList.add('active');
-                
-                alert('注册成功！');
-            });
-            
-            // 修复退出登录
-            const logoutBtn = document.getElementById('logoutBtn');
-            logoutBtn.addEventListener('click', function() {
-                localStorage.removeItem('currentUser');
-                checkLoginStatus();
-                
-                document.querySelectorAll('.page').forEach(page => {
-                    page.classList.remove('active');
-                });
-                document.getElementById('home').classList.add('active');
-                
-                alert('已退出登录！');
-            });
-            
-            // 修复移动端菜单
-            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-            const mobileMenuClose = document.getElementById('mobileMenuClose');
-            const mobileMenu = document.getElementById('mobileMenu');
-            const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
-            const mobileSettingsBtn = document.getElementById('mobileSettingsBtn');
-            const mobileLoginBtn = document.getElementById('mobileLoginBtn');
-            
-            mobileMenuBtn.addEventListener('click', function() {
-                mobileMenu.classList.add('active');
-                mobileMenuOverlay.classList.add('active');
-            });
-            
-            mobileMenuClose.addEventListener('click', function() {
-                mobileMenu.classList.remove('active');
-                mobileMenuOverlay.classList.remove('active');
-            });
-            
-            mobileMenuOverlay.addEventListener('click', function() {
-                mobileMenu.classList.remove('active');
-                mobileMenuOverlay.classList.remove('active');
-            });
-            
-            mobileSettingsBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                mobileMenu.classList.remove('active');
-                mobileMenuOverlay.classList.remove('active');
-                settingsPanel.classList.add('active');
-                settingsOverlay.classList.add('active');
-            });
-            
-            mobileLoginBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                mobileMenu.classList.remove('active');
-                mobileMenuOverlay.classList.remove('active');
-                document.querySelectorAll('.page').forEach(page => {
-                    page.classList.remove('active');
-                });
-                document.getElementById('login').classList.add('active');
-            });
-            
-            // 点击火花效果初始化
-            function initializeClickSpark() {
-                const clickSparkToggle = document.getElementById('clickSparkToggle');
-                const clickSparkContainer = document.getElementById('clickSparkContainer');
-                let clickSparkEnabled = localStorage.getItem('clickSparkEnabled') !== 'false';
-                
-                // 设置初始状态
-                if (clickSparkToggle) {
-                    clickSparkToggle.checked = clickSparkEnabled;
-                }
-                updateClickSparkState(clickSparkEnabled);
-                
-                // 监听切换事件
-                if (clickSparkToggle) {
-                    clickSparkToggle.addEventListener('change', function() {
-                        clickSparkEnabled = this.checked;
-                        localStorage.setItem('clickSparkEnabled', clickSparkEnabled);
-                        updateClickSparkState(clickSparkEnabled);
-                    });
-                }
-                
-                function updateClickSparkState(enabled) {
-                    if (enabled) {
-                        document.addEventListener('click', createClickSpark);
-                    } else {
-                        document.removeEventListener('click', createClickSpark);
-                    }
-                }
-                
-                function createClickSpark(e) {
-                    // 如果动画被禁用，则不创建火花
-                    if (document.body.classList.contains('no-animation')) {
-                        return;
-                    }
-                    
-                    const sparkCount = 8;
-                    const sparkRadius = 15;
-                    const duration = 400;
-                    
-                    for (let i = 0; i < sparkCount; i++) {
-                        const spark = document.createElement('div');
-                        spark.className = 'spark';
-                        
-                        // 设置火花位置
-                        spark.style.left = `${e.clientX}px`;
-                        spark.style.top = `${e.clientY}px`;
-                        
-                        // 随机角度
-                        const angle = (i / sparkCount) * Math.PI * 2;
-                        const distance = Math.random() * sparkRadius + 5;
-                        
-                        // 计算最终位置
-                        const endX = e.clientX + Math.cos(angle) * distance;
-                        const endY = e.clientY + Math.sin(angle) * distance;
-                        
-                        // 添加到容器
-                        clickSparkContainer.appendChild(spark);
-                        
-                        // 火花动画
-                        const animation = spark.animate([
-                            {
-                                transform: 'translate(-50%, -50%) scale(1)',
-                                opacity: 1
-                            },
-                            {
-                                transform: `translate(calc(-50% + ${endX - e.clientX}px), calc(-50% + ${endY - e.clientY}px)) scale(0)`,
-                                opacity: 0
-                            }
-                        ], {
-                            duration: duration,
-                            easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-                            fill: 'forwards'
-                        });
-                        
-                        // 动画结束后移除元素
-                        animation.onfinish = () => {
-                            spark.remove();
-                        };
-                    }
-                }
-            }
-            
-            // 深色模式切换功能
-            function initializeSettings() {
-                // 从本地存储加载设置
-                const savedTheme = localStorage.getItem('theme') || 'light';
-                const savedFontSize = localStorage.getItem('fontSize') || 'medium';
-                const savedAnimations = localStorage.getItem('animationsEnabled') !== 'false';
-                const savedSmoothScroll = localStorage.getItem('smoothScrollEnabled') !== 'false';
-                const savedHoverEffects = localStorage.getItem('hoverEffectsEnabled') !== 'false';
-                const savedClickSpark = localStorage.getItem('clickSparkEnabled') !== 'false';
-                
-                // 应用保存的设置
-                applyTheme(savedTheme);
-                applyFontSize(savedFontSize);
-                
-                if (!savedAnimations) document.body.classList.add('no-animation');
-                if (!savedHoverEffects) document.body.classList.add('no-hover');
-                if (!savedSmoothScroll) document.documentElement.style.scrollBehavior = 'auto';
-                
-                // 设置面板中的选项状态
-                document.querySelectorAll('.theme-option').forEach(option => {
-                    if (option.getAttribute('data-theme') === savedTheme) {
-                        option.classList.add('active');
-                    } else {
-                        option.classList.remove('active');
-                    }
-                });
-                
-                document.querySelectorAll('.font-option').forEach(option => {
-                    if (option.getAttribute('data-font') === savedFontSize) {
-                        option.classList.add('active');
-                    } else {
-                        option.classList.remove('active');
-                    }
-                });
-                
-                // 设置开关状态
-                document.getElementById('animationsToggle').checked = savedAnimations;
-                document.getElementById('smoothScrollToggle').checked = savedSmoothScroll;
-                document.getElementById('hoverEffectsToggle').checked = savedHoverEffects;
-                document.getElementById('clickSparkToggle').checked = savedClickSpark;
-                
-                // 主题切换事件
-                document.querySelectorAll('.theme-option').forEach(option => {
-                    option.addEventListener('click', function() {
-                        const theme = this.getAttribute('data-theme');
-                        
-                        // 更新活动状态
-                        document.querySelectorAll('.theme-option').forEach(opt => {
-                            opt.classList.remove('active');
-                        });
-                        this.classList.add('active');
-                        
-                        // 应用主题
-                        applyTheme(theme);
-                        localStorage.setItem('theme', theme);
-                    });
-                });
-                
-                // 字体大小切换事件
-                document.querySelectorAll('.font-option').forEach(option => {
-                    option.addEventListener('click', function() {
-                        const fontSize = this.getAttribute('data-font');
-                        
-                        // 更新活动状态
-                        document.querySelectorAll('.font-option').forEach(opt => {
-                            opt.classList.remove('active');
-                        });
-                        this.classList.add('active');
-                        
-                        // 应用字体大小
-                        applyFontSize(fontSize);
-                        localStorage.setItem('fontSize', fontSize);
-                    });
-                });
-                
-                // 开关事件
-                document.getElementById('animationsToggle').addEventListener('change', function() {
-                    document.body.classList.toggle('no-animation', !this.checked);
-                    localStorage.setItem('animationsEnabled', this.checked);
-                });
-                
-                document.getElementById('smoothScrollToggle').addEventListener('change', function() {
-                    document.documentElement.style.scrollBehavior = this.checked ? 'smooth' : 'auto';
-                    localStorage.setItem('smoothScrollEnabled', this.checked);
-                });
-                
-                document.getElementById('hoverEffectsToggle').addEventListener('change', function() {
-                    document.body.classList.toggle('no-hover', !this.checked);
-                    localStorage.setItem('hoverEffectsEnabled', this.checked);
-                });
-                
-                document.getElementById('clickSparkToggle').addEventListener('change', function() {
-                    localStorage.setItem('clickSparkEnabled', this.checked);
-                    updateClickSparkState(this.checked);
-                });
-                
-                // 重置设置
-                document.getElementById('resetSettings').addEventListener('click', function() {
-                    localStorage.removeItem('theme');
-                    localStorage.removeItem('fontSize');
-                    localStorage.removeItem('animationsEnabled');
-                    localStorage.removeItem('smoothScrollEnabled');
-                    localStorage.removeItem('hoverEffectsEnabled');
-                    localStorage.removeItem('clickSparkEnabled');
-                    
-                    applyTheme('light');
-                    applyFontSize('medium');
-                    document.body.classList.remove('no-animation', 'no-hover');
-                    document.documentElement.style.scrollBehavior = 'smooth';
-                    
-                    // 更新设置面板中的选项状态
-                    document.querySelectorAll('.theme-option').forEach(option => {
-                        if (option.getAttribute('data-theme') === 'light') {
-                            option.classList.add('active');
-                        } else {
-                            option.classList.remove('active');
-                        }
-                    });
-                    
-                    document.querySelectorAll('.font-option').forEach(option => {
-                        if (option.getAttribute('data-font') === 'medium') {
-                            option.classList.add('active');
-                        } else {
-                            option.classList.remove('active');
-                        }
-                    });
-                    
-                    // 重置开关状态
-                    document.getElementById('animationsToggle').checked = true;
-                    document.getElementById('smoothScrollToggle').checked = true;
-                    document.getElementById('hoverEffectsToggle').checked = true;
-                    document.getElementById('clickSparkToggle').checked = true;
-                    
-                    // 重置点击火花设置
-                    updateClickSparkState(true);
-                    
-                    alert('设置已重置为默认值！');
-                });
-                
-                // 初始化点击火花效果
-                initializeClickSpark();
-            }
-            
-            function applyTheme(theme) {
-                document.body.classList.remove('dark-theme', 'cyan-theme');
-                if (theme === 'dark') {
-                    document.body.classList.add('dark-theme');
-                } else if (theme === 'cyan') {
-                    document.body.classList.add('cyan-theme');
-                }
-            }
-            
-            function applyFontSize(fontSize) {
-                document.body.classList.remove('small-font', 'large-font');
-                if (fontSize === 'small') {
-                    document.body.classList.add('small-font');
-                } else if (fontSize === 'large') {
-                    document.body.classList.add('large-font');
-                }
-            }
-            
-            // 初始化
-            initializeUsers();
-            checkLoginStatus();
-            
-            // 激光动效交互
-            const hero = document.querySelector('.hero');
-            const laserBg = document.querySelector('.laser-bg');
-            
-            if (hero && laserBg) {
-                hero.addEventListener('mousemove', (e) => {
-                    const rect = hero.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
-                    
-                    // 移动激光背景位置
-                    laserBg.style.transform = `translate(${x * 0.02}px, ${y * 0.02}px)`;
-                    
-                    // 更新激光束的颜色和位置
-                    const beams = document.querySelectorAll('.laser-beam');
-                    beams.forEach((beam, index) => {
-                        const intensity = 0.5 + (Math.sin(Date.now() * 0.001 + index) * 0.3);
-                        beam.style.opacity = intensity;
-                        beam.style.background = `linear-gradient(90deg, 
-                            rgba(255, ${50 + index * 50}, ${150 + index * 30}, ${intensity}), 
-                            rgba(${100 + index * 40}, 0, 255, ${intensity}))`;
-                    });
-                });
-                
-                hero.addEventListener('mouseleave', () => {
-                    laserBg.style.transform = 'translate(0, 0)';
-                });
-            }
-        });
+        }
     </script>
 </body>
 </html>
