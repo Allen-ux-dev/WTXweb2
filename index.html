@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WTX的个人网页</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Three.js库 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -80,7 +82,12 @@
         /* 确保英雄区域内容可见 */
         .hero-content {
             position: relative;
-            z-index: 2;
+            z-index: 3;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            padding: 30px;
+            border-radius: 20px;
+            display: inline-block;
         }
         
         /* 页面切换动画 */
@@ -1512,11 +1519,6 @@
             }
         }
         
-        .hero-content {
-            position: relative;
-            z-index: 2;
-        }
-        
         /* 技能部分样式 */
         .skills {
             padding: 100px 0;
@@ -2209,6 +2211,49 @@
             margin-bottom: 15px;
         }
         
+        /* ============================================
+           ASCII文字效果自定义样式
+           ============================================ */
+        #ascii-hello-container pre {
+            background-image: radial-gradient(circle, #ff6188 0%, #fc9867 50%, #ffd866 100%);
+            background-attachment: fixed;
+            -webkit-text-fill-color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            mix-blend-mode: difference;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+            font-weight: bold;
+            letter-spacing: -1px;
+        }
+        
+        #ascii-hello-container canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.9;
+            image-rendering: pixelated;
+        }
+        
+        /* 浅色主题下的调整 */
+        body:not(.dark-theme):not(.cyan-theme) #ascii-hello-container pre {
+            background-image: linear-gradient(45deg, #0066cc, #0077dd, #0099ff);
+            mix-blend-mode: multiply;
+        }
+        
+        /* 青色主题下的调整 */
+        body.cyan-theme #ascii-hello-container pre {
+            background-image: linear-gradient(45deg, #00FFFF, #00CED1, #008B8B);
+            mix-blend-mode: difference;
+        }
+        
+        /* 深色主题下的调整 */
+        body.dark-theme #ascii-hello-container pre {
+            background-image: linear-gradient(45deg, #3b82f6, #8b5cf6, #ec4899);
+            mix-blend-mode: screen;
+        }
+        
         /* 响应式设计 */
         @media (max-width: 968px) {
             .hero h1 {
@@ -2246,6 +2291,11 @@
             .cube-face:nth-child(4) { transform: rotateY(-90deg) translateZ(20px); }
             .cube-face:nth-child(5) { transform: rotateX(90deg) translateZ(20px); }
             .cube-face:nth-child(6) { transform: rotateX(-90deg) translateZ(20px); }
+            
+            .hero-content {
+                padding: 20px;
+                margin: 0 15px;
+            }
         }
         
         @media (max-width: 768px) {
@@ -2360,6 +2410,11 @@
             
             .cube-face {
                 font-size: 14px;
+            }
+            
+            #ascii-hello-container pre {
+                font-size: 6px !important;
+                letter-spacing: -0.5px;
             }
         }
         
@@ -2675,8 +2730,8 @@
 
     <!-- 首页内容 -->
     <div id="home" class="page active">
-        <!-- 英雄区域 -->
-        <section class="hero">
+        <!-- 英雄区域 - 带有ASCII文字效果 -->
+        <section class="hero" style="position: relative; overflow: hidden;">
             <!-- 3D方块效果 -->
             <div class="cubes-container" id="cubesContainer"></div>
             
@@ -2688,7 +2743,19 @@
                 <div class="laser-beam"></div>
             </div>
             
-            <div class="hero-content">
+            <!-- ASCII文字效果容器 -->
+            <div id="ascii-hello-container" style="
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                z-index: 2;
+                pointer-events: none;
+            "></div>
+            
+            <!-- 原有的文字内容，放在ASCII效果之上 -->
+            <div class="hero-content" style="position: relative; z-index: 3;">
                 <h1 data-i18n="welcome">欢迎来到我的个人网页</h1>
                 <p data-i18n="tagline">Think different-非同凡想(此网页处于工程状态非成品)</p>
                 <a href="#contact" class="cta-button" data-i18n="contactMe">联系我 <i class="fas fa-arrow-right"></i></a>
@@ -3192,49 +3259,645 @@
                     alert('翻译内容已同步！');
                 });
             }
-            
-            // 其他初始化代码保持不变
-            // ... 之前的初始化代码 ...
         });
 
+        // ============================================
+        // ASCII文字效果初始化
+        // ============================================
+        (function() {
+            // 检查Three.js是否已加载
+            if (typeof THREE === 'undefined') {
+                console.error('Three.js is not loaded. Please make sure Three.js is included.');
+                return;
+            }
+            
+            // 等待页面完全加载
+            window.addEventListener('load', function() {
+                // 延迟初始化，确保所有资源已加载
+                setTimeout(initASCIIText, 1000);
+            });
+            
+            function initASCIIText() {
+                const container = document.getElementById('ascii-hello-container');
+                if (!container) {
+                    console.error('ASCII container not found');
+                    return;
+                }
+                
+                // 创建ASCII效果
+                try {
+                    // 首先添加map方法到Math对象（如果不存在）
+                    if (!Math.map) {
+                        Math.map = function(n, start, stop, start2, stop2) {
+                            return ((n - start) / (stop - start)) * (stop2 - start2) + start2;
+                        };
+                    }
+                    
+                    const PX_RATIO = typeof window !== 'undefined' ? window.devicePixelRatio : 1;
+                    
+                    // AsciiFilter类
+                    class AsciiFilter {
+                        constructor(renderer, { fontSize, fontFamily, charset, invert } = {}) {
+                            this.renderer = renderer;
+                            this.domElement = document.createElement('div');
+                            this.domElement.style.position = 'absolute';
+                            this.domElement.style.top = '0';
+                            this.domElement.style.left = '0';
+                            this.domElement.style.width = '100%';
+                            this.domElement.style.height = '100%';
+                            
+                            this.pre = document.createElement('pre');
+                            this.domElement.appendChild(this.pre);
+                            
+                            this.canvas = document.createElement('canvas');
+                            this.context = this.canvas.getContext('2d');
+                            this.domElement.appendChild(this.canvas);
+                            
+                            this.deg = 0;
+                            this.invert = invert ?? true;
+                            this.fontSize = fontSize ?? 12;
+                            this.fontFamily = fontFamily ?? "'Courier New', monospace";
+                            this.charset = charset ?? ' .\'`^",:;Il!i~+_-?][}{1)(|/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$';
+                            
+                            this.context.webkitImageSmoothingEnabled = false;
+                            this.context.mozImageSmoothingEnabled = false;
+                            this.context.msImageSmoothingEnabled = false;
+                            this.context.imageSmoothingEnabled = false;
+                            
+                            this.onMouseMove = this.onMouseMove.bind(this);
+                            document.addEventListener('mousemove', this.onMouseMove);
+                        }
+                        
+                        setSize(width, height) {
+                            this.width = width;
+                            this.height = height;
+                            this.renderer.setSize(width, height);
+                            this.reset();
+                            
+                            this.center = { x: width / 2, y: height / 2 };
+                            this.mouse = { x: this.center.x, y: this.center.y };
+                        }
+                        
+                        reset() {
+                            this.context.font = `${this.fontSize}px ${this.fontFamily}`;
+                            const charWidth = this.context.measureText('A').width;
+                            
+                            this.cols = Math.floor(this.width / (this.fontSize * (charWidth / this.fontSize)));
+                            this.rows = Math.floor(this.height / this.fontSize);
+                            
+                            this.canvas.width = this.cols;
+                            this.canvas.height = this.rows;
+                            this.pre.style.fontFamily = this.fontFamily;
+                            this.pre.style.fontSize = `${this.fontSize}px`;
+                            this.pre.style.margin = '0';
+                            this.pre.style.padding = '0';
+                            this.pre.style.lineHeight = '1em';
+                            this.pre.style.position = 'absolute';
+                            this.pre.style.left = '50%';
+                            this.pre.style.top = '50%';
+                            this.pre.style.transform = 'translate(-50%, -50%)';
+                            this.pre.style.zIndex = '9';
+                            this.pre.style.backgroundAttachment = 'fixed';
+                            this.pre.style.mixBlendMode = 'difference';
+                        }
+                        
+                        render(scene, camera) {
+                            this.renderer.render(scene, camera);
+                            
+                            const w = this.canvas.width;
+                            const h = this.canvas.height;
+                            this.context.clearRect(0, 0, w, h);
+                            if (this.context && w && h) {
+                                this.context.drawImage(this.renderer.domElement, 0, 0, w, h);
+                            }
+                            
+                            this.asciify(this.context, w, h);
+                            this.hue();
+                        }
+                        
+                        onMouseMove(e) {
+                            this.mouse = { x: e.clientX * PX_RATIO, y: e.clientY * PX_RATIO };
+                        }
+                        
+                        get dx() {
+                            return this.mouse.x - this.center.x;
+                        }
+                        
+                        get dy() {
+                            return this.mouse.y - this.center.y;
+                        }
+                        
+                        hue() {
+                            const deg = (Math.atan2(this.dy, this.dx) * 180) / Math.PI;
+                            this.deg += (deg - this.deg) * 0.075;
+                            this.domElement.style.filter = `hue-rotate(${this.deg.toFixed(1)}deg)`;
+                        }
+                        
+                        asciify(ctx, w, h) {
+                            if (w && h) {
+                                const imgData = ctx.getImageData(0, 0, w, h).data;
+                                let str = '';
+                                for (let y = 0; y < h; y++) {
+                                    for (let x = 0; x < w; x++) {
+                                        const i = x * 4 + y * 4 * w;
+                                        const [r, g, b, a] = [imgData[i], imgData[i + 1], imgData[i + 2], imgData[i + 3]];
+                                        
+                                        if (a === 0) {
+                                            str += ' ';
+                                            continue;
+                                        }
+                                        
+                                        let gray = (0.3 * r + 0.6 * g + 0.1 * b) / 255;
+                                        let idx = Math.floor((1 - gray) * (this.charset.length - 1));
+                                        if (this.invert) idx = this.charset.length - idx - 1;
+                                        str += this.charset[idx];
+                                    }
+                                    str += '\n';
+                                }
+                                this.pre.innerHTML = str;
+                            }
+                        }
+                        
+                        dispose() {
+                            document.removeEventListener('mousemove', this.onMouseMove);
+                        }
+                    }
+                    
+                    // CanvasTxt类
+                    class CanvasTxt {
+                        constructor(txt, { fontSize = 200, fontFamily = 'Arial', color = '#fdf9f3' } = {}) {
+                            this.canvas = document.createElement('canvas');
+                            this.context = this.canvas.getContext('2d');
+                            this.txt = txt;
+                            this.fontSize = fontSize;
+                            this.fontFamily = fontFamily;
+                            this.color = color;
+                            
+                            this.font = `600 ${this.fontSize}px ${this.fontFamily}`;
+                        }
+                        
+                        resize() {
+                            this.context.font = this.font;
+                            const metrics = this.context.measureText(this.txt);
+                            
+                            const textWidth = Math.ceil(metrics.width) + 20;
+                            const textHeight = Math.ceil(metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent) + 20;
+                            
+                            this.canvas.width = textWidth;
+                            this.canvas.height = textHeight;
+                        }
+                        
+                        render() {
+                            this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                            this.context.fillStyle = this.color;
+                            this.context.font = this.font;
+                            
+                            const metrics = this.context.measureText(this.txt);
+                            const yPos = 10 + metrics.actualBoundingBoxAscent;
+                            
+                            this.context.fillText(this.txt, 10, yPos);
+                        }
+                        
+                        get width() {
+                            return this.canvas.width;
+                        }
+                        
+                        get height() {
+                            return this.canvas.height;
+                        }
+                        
+                        get texture() {
+                            return this.canvas;
+                        }
+                    }
+                    
+                    // CanvAscii类 - 主类
+                    class CanvAscii {
+                        constructor(config, containerElem, width, height) {
+                            this.textString = config.text;
+                            this.asciiFontSize = config.asciiFontSize;
+                            this.textFontSize = config.textFontSize;
+                            this.textColor = config.textColor;
+                            this.planeBaseHeight = config.planeBaseHeight;
+                            this.container = containerElem;
+                            this.width = width;
+                            this.height = height;
+                            this.enableWaves = config.enableWaves;
+                            
+                            this.camera = new THREE.PerspectiveCamera(45, this.width / this.height, 1, 1000);
+                            this.camera.position.z = 30;
+                            
+                            this.scene = new THREE.Scene();
+                            this.mouse = { x: 0, y: 0 };
+                            
+                            this.onMouseMove = this.onMouseMove.bind(this);
+                            
+                            this.setMesh();
+                            this.setRenderer();
+                        }
+                        
+                        setMesh() {
+                            this.textCanvas = new CanvasTxt(this.textString, {
+                                fontSize: this.textFontSize,
+                                fontFamily: 'IBM Plex Mono',
+                                color: this.textColor
+                            });
+                            this.textCanvas.resize();
+                            this.textCanvas.render();
+                            
+                            this.texture = new THREE.CanvasTexture(this.textCanvas.texture);
+                            this.texture.minFilter = THREE.NearestFilter;
+                            
+                            const textAspect = this.textCanvas.width / this.textCanvas.height;
+                            const baseH = this.planeBaseHeight;
+                            const planeW = baseH * textAspect;
+                            const planeH = baseH;
+                            
+                            this.geometry = new THREE.PlaneGeometry(planeW, planeH, 36, 36);
+                            
+                            // 着色器代码
+                            const vertexShader = `
+                                varying vec2 vUv;
+                                uniform float uTime;
+                                uniform float mouse;
+                                uniform float uEnableWaves;
+                                
+                                void main() {
+                                    vUv = uv;
+                                    float time = uTime * 5.;
+                                    
+                                    float waveFactor = uEnableWaves;
+                                    
+                                    vec3 transformed = position;
+                                    
+                                    transformed.x += sin(time + position.y) * 0.5 * waveFactor;
+                                    transformed.y += cos(time + position.z) * 0.15 * waveFactor;
+                                    transformed.z += sin(time + position.x) * waveFactor;
+                                    
+                                    gl_Position = projectionMatrix * modelViewMatrix * vec4(transformed, 1.0);
+                                }
+                            `;
+                            
+                            const fragmentShader = `
+                                varying vec2 vUv;
+                                uniform float mouse;
+                                uniform float uTime;
+                                uniform sampler2D uTexture;
+                                
+                                void main() {
+                                    float time = uTime;
+                                    vec2 pos = vUv;
+                                    
+                                    float move = sin(time + mouse) * 0.01;
+                                    float r = texture2D(uTexture, pos + cos(time * 2. - time + pos.x) * .01).r;
+                                    float g = texture2D(uTexture, pos + tan(time * .5 + pos.x - time) * .01).g;
+                                    float b = texture2D(uTexture, pos - cos(time * 2. + time + pos.y) * .01).b;
+                                    float a = texture2D(uTexture, pos).a;
+                                    gl_FragColor = vec4(r, g, b, a);
+                                }
+                            `;
+                            
+                            this.material = new THREE.ShaderMaterial({
+                                vertexShader: vertexShader,
+                                fragmentShader: fragmentShader,
+                                transparent: true,
+                                uniforms: {
+                                    uTime: { value: 0 },
+                                    mouse: { value: 1.0 },
+                                    uTexture: { value: this.texture },
+                                    uEnableWaves: { value: this.enableWaves ? 1.0 : 0.0 }
+                                }
+                            });
+                            
+                            this.mesh = new THREE.Mesh(this.geometry, this.material);
+                            this.scene.add(this.mesh);
+                        }
+                        
+                        setRenderer() {
+                            this.renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true });
+                            this.renderer.setPixelRatio(1);
+                            this.renderer.setClearColor(0x000000, 0);
+                            
+                            this.filter = new AsciiFilter(this.renderer, {
+                                fontFamily: 'IBM Plex Mono',
+                                fontSize: this.asciiFontSize,
+                                invert: true
+                            });
+                            
+                            this.container.appendChild(this.filter.domElement);
+                            this.setSize(this.width, this.height);
+                            
+                            this.container.addEventListener('mousemove', this.onMouseMove);
+                            this.container.addEventListener('touchmove', this.onMouseMove);
+                        }
+                        
+                        setSize(w, h) {
+                            this.width = w;
+                            this.height = h;
+                            
+                            this.camera.aspect = w / h;
+                            this.camera.updateProjectionMatrix();
+                            
+                            this.filter.setSize(w, h);
+                            
+                            this.center = { x: w / 2, y: h / 2 };
+                        }
+                        
+                        load() {
+                            this.animate();
+                        }
+                        
+                        onMouseMove(evt) {
+                            const e = evt.touches ? evt.touches[0] : evt;
+                            const bounds = this.container.getBoundingClientRect();
+                            const x = e.clientX - bounds.left;
+                            const y = e.clientY - bounds.top;
+                            this.mouse = { x, y };
+                        }
+                        
+                        animate() {
+                            const animateFrame = () => {
+                                this.animationFrameId = requestAnimationFrame(animateFrame);
+                                this.render();
+                            };
+                            animateFrame();
+                        }
+                        
+                        render() {
+                            const time = new Date().getTime() * 0.001;
+                            
+                            this.textCanvas.render();
+                            this.texture.needsUpdate = true;
+                            
+                            this.mesh.material.uniforms.uTime.value = Math.sin(time);
+                            
+                            this.updateRotation();
+                            this.filter.render(this.scene, this.camera);
+                        }
+                        
+                        updateRotation() {
+                            const x = Math.map(this.mouse.y, 0, this.height, 0.5, -0.5);
+                            const y = Math.map(this.mouse.x, 0, this.width, -0.5, 0.5);
+                            
+                            this.mesh.rotation.x += (x - this.mesh.rotation.x) * 0.05;
+                            this.mesh.rotation.y += (y - this.mesh.rotation.y) * 0.05;
+                        }
+                        
+                        clear() {
+                            this.scene.traverse(obj => {
+                                if (obj.isMesh && typeof obj.material === 'object' && obj.material !== null) {
+                                    Object.keys(obj.material).forEach(key => {
+                                        const matProp = obj.material[key];
+                                        if (matProp !== null && typeof matProp === 'object' && typeof matProp.dispose === 'function') {
+                                            matProp.dispose();
+                                        }
+                                    });
+                                    obj.material.dispose();
+                                    obj.geometry.dispose();
+                                }
+                            });
+                            this.scene.clear();
+                        }
+                        
+                        dispose() {
+                            if (this.animationFrameId) {
+                                cancelAnimationFrame(this.animationFrameId);
+                            }
+                            if (this.filter) {
+                                this.filter.dispose();
+                            }
+                            if (this.container && this.filter && this.filter.domElement) {
+                                this.container.removeChild(this.filter.domElement);
+                            }
+                            this.container.removeEventListener('mousemove', this.onMouseMove);
+                            this.container.removeEventListener('touchmove', this.onMouseMove);
+                            this.clear();
+                            if (this.renderer) {
+                                this.renderer.dispose();
+                            }
+                        }
+                    }
+                    
+                    // 获取容器尺寸
+                    const { width, height } = container.getBoundingClientRect();
+                    
+                    // 创建ASCII效果实例
+                    window.asciiEffect = new CanvAscii(
+                        {
+                            text: 'hello',
+                            asciiFontSize: 9,
+                            textFontSize: 180,
+                            textColor: '#fdf9f3',
+                            planeBaseHeight: 9,
+                            enableWaves: true
+                        },
+                        container,
+                        width,
+                        height
+                    );
+                    
+                    // 加载效果
+                    window.asciiEffect.load();
+                    
+                    // 允许鼠标交互
+                    container.style.pointerEvents = 'auto';
+                    
+                    // 添加鼠标悬停效果
+                    container.addEventListener('mouseenter', function() {
+                        if (window.asciiEffect && window.asciiEffect.material && window.asciiEffect.material.uniforms) {
+                            window.asciiEffect.material.uniforms.uEnableWaves.value = 1.5;
+                        }
+                    });
+                    
+                    container.addEventListener('mouseleave', function() {
+                        if (window.asciiEffect && window.asciiEffect.material && window.asciiEffect.material.uniforms) {
+                            window.asciiEffect.material.uniforms.uEnableWaves.value = 1.0;
+                        }
+                    });
+                    
+                    // 监听窗口大小变化
+                    window.addEventListener('resize', function() {
+                        if (window.asciiEffect) {
+                            const { width: newWidth, height: newHeight } = container.getBoundingClientRect();
+                            window.asciiEffect.setSize(newWidth, newHeight);
+                        }
+                    });
+                    
+                    console.log('ASCII文字效果初始化成功！');
+                    
+                } catch (error) {
+                    console.error('初始化ASCII文字效果时出错:', error);
+                }
+            }
+        })();
+
         // 初始化设置
-        initializeSettings();
+        function initializeSettings() {
+            // 从本地存储加载设置
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            const savedFontSize = localStorage.getItem('fontSize') || 'medium';
+            const savedAnimations = localStorage.getItem('animationsEnabled') !== 'false';
+            const savedSmoothScroll = localStorage.getItem('smoothScrollEnabled') !== 'false';
+            const savedHoverEffects = localStorage.getItem('hoverEffectsEnabled') !== 'false';
+            const savedClickSpark = localStorage.getItem('clickSparkEnabled') !== 'false';
+            
+            // 应用保存的设置
+            applyTheme(savedTheme);
+            applyFontSize(savedFontSize);
+            
+            if (!savedAnimations) document.body.classList.add('no-animation');
+            if (!savedHoverEffects) document.body.classList.add('no-hover');
+            if (!savedSmoothScroll) document.documentElement.style.scrollBehavior = 'auto';
+            
+            // 设置面板中的选项状态
+            document.querySelectorAll('.theme-option').forEach(option => {
+                if (option.getAttribute('data-theme') === savedTheme) {
+                    option.classList.add('active');
+                } else {
+                    option.classList.remove('active');
+                }
+            });
+            
+            document.querySelectorAll('.font-option').forEach(option => {
+                if (option.getAttribute('data-font') === savedFontSize) {
+                    option.classList.add('active');
+                } else {
+                    option.classList.remove('active');
+                }
+            });
+            
+            // 设置开关状态
+            document.getElementById('animationsToggle').checked = savedAnimations;
+            document.getElementById('smoothScrollToggle').checked = savedSmoothScroll;
+            document.getElementById('hoverEffectsToggle').checked = savedHoverEffects;
+            document.getElementById('clickSparkToggle').checked = savedClickSpark;
+            
+            // 主题切换事件
+            document.querySelectorAll('.theme-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    const theme = this.getAttribute('data-theme');
+                    
+                    // 更新活动状态
+                    document.querySelectorAll('.theme-option').forEach(opt => {
+                        opt.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                    
+                    // 应用主题
+                    applyTheme(theme);
+                    localStorage.setItem('theme', theme);
+                });
+            });
+            
+            // 字体大小切换事件
+            document.querySelectorAll('.font-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    const fontSize = this.getAttribute('data-font');
+                    
+                    // 更新活动状态
+                    document.querySelectorAll('.font-option').forEach(opt => {
+                        opt.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                    
+                    // 应用字体大小
+                    applyFontSize(fontSize);
+                    localStorage.setItem('fontSize', fontSize);
+                });
+            });
+            
+            // 开关事件
+            document.getElementById('animationsToggle').addEventListener('change', function() {
+                document.body.classList.toggle('no-animation', !this.checked);
+                localStorage.setItem('animationsEnabled', this.checked);
+            });
+            
+            document.getElementById('smoothScrollToggle').addEventListener('change', function() {
+                document.documentElement.style.scrollBehavior = this.checked ? 'smooth' : 'auto';
+                localStorage.setItem('smoothScrollEnabled', this.checked);
+            });
+            
+            document.getElementById('hoverEffectsToggle').addEventListener('change', function() {
+                document.body.classList.toggle('no-hover', !this.checked);
+                localStorage.setItem('hoverEffectsEnabled', this.checked);
+            });
+            
+            document.getElementById('clickSparkToggle').addEventListener('change', function() {
+                localStorage.setItem('clickSparkEnabled', this.checked);
+                updateClickSparkState(this.checked);
+            });
+            
+            // 重置设置
+            document.getElementById('resetSettings').addEventListener('click', function() {
+                localStorage.removeItem('theme');
+                localStorage.removeItem('fontSize');
+                localStorage.removeItem('animationsEnabled');
+                localStorage.removeItem('smoothScrollEnabled');
+                localStorage.removeItem('hoverEffectsEnabled');
+                localStorage.removeItem('clickSparkEnabled');
+                
+                applyTheme('light');
+                applyFontSize('medium');
+                document.body.classList.remove('no-animation', 'no-hover');
+                document.documentElement.style.scrollBehavior = 'smooth';
+                
+                // 更新设置面板中的选项状态
+                document.querySelectorAll('.theme-option').forEach(option => {
+                    if (option.getAttribute('data-theme') === 'light') {
+                        option.classList.add('active');
+                    } else {
+                        option.classList.remove('active');
+                    }
+                });
+                
+                document.querySelectorAll('.font-option').forEach(option => {
+                    if (option.getAttribute('data-font') === 'medium') {
+                        option.classList.add('active');
+                    } else {
+                        option.classList.remove('active');
+                    }
+                });
+                
+                // 重置开关状态
+                document.getElementById('animationsToggle').checked = true;
+                document.getElementById('smoothScrollToggle').checked = true;
+                document.getElementById('hoverEffectsToggle').checked = true;
+                document.getElementById('clickSparkToggle').checked = true;
+                
+                // 重置点击火花设置
+                updateClickSparkState(true);
+                
+                alert('设置已重置为默认值！');
+            });
+            
+            // 初始化点击火花效果
+            initializeClickSpark();
+        }
         
-        // 初始化点击火花效果
-        initializeClickSpark();
+        function applyTheme(theme) {
+            document.body.classList.remove('dark-theme', 'cyan-theme');
+            if (theme === 'dark') {
+                document.body.classList.add('dark-theme');
+            } else if (theme === 'cyan') {
+                document.body.classList.add('cyan-theme');
+            }
+            
+            // 重新渲染ASCII效果以适应新主题
+            setTimeout(() => {
+                if (window.asciiEffect && window.asciiEffect.render) {
+                    window.asciiEffect.render();
+                }
+            }, 100);
+        }
         
-        // 初始化GradientBlinds背景特效
-        initializeGradientBlindsBackground();
-        
-        // 初始化3D方块效果
-        initialize3DCubes();
-        
-        // 初始化历史数据
-        initializeHistoryData();
-        
-        // 初始化事件数据
-        initializeEventData();
-        
-        // 修复设置面板打开功能
-        const settingsBtn = document.getElementById('settingsBtn');
-        const closeSettings = document.getElementById('closeSettings');
-        const settingsPanel = document.getElementById('settingsPanel');
-        const settingsOverlay = document.getElementById('settingsOverlay');
-        
-        settingsBtn.addEventListener('click', function() {
-            settingsPanel.classList.add('active');
-            settingsOverlay.classList.add('active');
-        });
-        
-        closeSettings.addEventListener('click', function() {
-            settingsPanel.classList.remove('active');
-            settingsOverlay.classList.remove('active');
-        });
-        
-        settingsOverlay.addEventListener('click', function() {
-            settingsPanel.classList.remove('active');
-            settingsOverlay.classList.remove('active');
-        });
+        function applyFontSize(fontSize) {
+            document.body.classList.remove('small-font', 'large-font');
+            if (fontSize === 'small') {
+                document.body.classList.add('small-font');
+            } else if (fontSize === 'large') {
+                document.body.classList.add('large-font');
+            }
+        }
         
         // 气泡菜单功能
         const bubbleMenu = document.getElementById('bubbleMenu');
@@ -3417,6 +4080,109 @@
                     document.body.removeChild(notification);
                 }, 300);
             }, 3000);
+        }
+        
+        // 修复设置面板打开功能
+        const settingsBtn = document.getElementById('settingsBtn');
+        const closeSettings = document.getElementById('closeSettings');
+        const settingsPanel = document.getElementById('settingsPanel');
+        const settingsOverlay = document.getElementById('settingsOverlay');
+        
+        settingsBtn.addEventListener('click', function() {
+            settingsPanel.classList.add('active');
+            settingsOverlay.classList.add('active');
+        });
+        
+        closeSettings.addEventListener('click', function() {
+            settingsPanel.classList.remove('active');
+            settingsOverlay.classList.remove('active');
+        });
+        
+        settingsOverlay.addEventListener('click', function() {
+            settingsPanel.classList.remove('active');
+            settingsOverlay.classList.remove('active');
+        });
+        
+        // 点击火花效果初始化
+        function initializeClickSpark() {
+            const clickSparkToggle = document.getElementById('clickSparkToggle');
+            const clickSparkContainer = document.getElementById('clickSparkContainer');
+            let clickSparkEnabled = localStorage.getItem('clickSparkEnabled') !== 'false';
+            
+            // 设置初始状态
+            if (clickSparkToggle) {
+                clickSparkToggle.checked = clickSparkEnabled;
+            }
+            updateClickSparkState(clickSparkEnabled);
+            
+            // 监听切换事件
+            if (clickSparkToggle) {
+                clickSparkToggle.addEventListener('change', function() {
+                    clickSparkEnabled = this.checked;
+                    localStorage.setItem('clickSparkEnabled', clickSparkEnabled);
+                    updateClickSparkState(clickSparkEnabled);
+                });
+            }
+            
+            function updateClickSparkState(enabled) {
+                if (enabled) {
+                    document.addEventListener('click', createClickSpark);
+                } else {
+                    document.removeEventListener('click', createClickSpark);
+                }
+            }
+            
+            function createClickSpark(e) {
+                // 如果动画被禁用，则不创建火花
+                if (document.body.classList.contains('no-animation')) {
+                    return;
+                }
+                
+                const sparkCount = 8;
+                const sparkRadius = 15;
+                const duration = 400;
+                
+                for (let i = 0; i < sparkCount; i++) {
+                    const spark = document.createElement('div');
+                    spark.className = 'spark';
+                    
+                    // 设置火花位置
+                    spark.style.left = `${e.clientX}px`;
+                    spark.style.top = `${e.clientY}px`;
+                    
+                    // 随机角度
+                    const angle = (i / sparkCount) * Math.PI * 2;
+                    const distance = Math.random() * sparkRadius + 5;
+                    
+                    // 计算最终位置
+                    const endX = e.clientX + Math.cos(angle) * distance;
+                    const endY = e.clientY + Math.sin(angle) * distance;
+                    
+                    // 添加到容器
+                    clickSparkContainer.appendChild(spark);
+                    
+                    // 火花动画
+                    const animation = spark.animate([
+                        {
+                            transform: 'translate(-50%, -50%) scale(1)',
+                            opacity: 1
+                        },
+                        {
+                            transform: `translate(calc(-50% + ${endX - e.clientX}px), calc(-50% + ${endY - e.clientY}px)) scale(0)`,
+                            opacity: 0
+                        }
+                    ], {
+                        duration: duration,
+                        easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+                        fill: 'forwards'
+                    });
+                    
+                    // 动画结束后移除元素
+                    animation.onfinish = () => {
+                        spark.remove();
+                    };
+                }
+            }
         }
         
         // 修复登录/注册页面切换
@@ -4265,253 +5031,6 @@
             document.getElementById('login').classList.add('active');
         });
         
-        // 点击火花效果初始化
-        function initializeClickSpark() {
-            const clickSparkToggle = document.getElementById('clickSparkToggle');
-            const clickSparkContainer = document.getElementById('clickSparkContainer');
-            let clickSparkEnabled = localStorage.getItem('clickSparkEnabled') !== 'false';
-            
-            // 设置初始状态
-            if (clickSparkToggle) {
-                clickSparkToggle.checked = clickSparkEnabled;
-            }
-            updateClickSparkState(clickSparkEnabled);
-            
-            // 监听切换事件
-            if (clickSparkToggle) {
-                clickSparkToggle.addEventListener('change', function() {
-                    clickSparkEnabled = this.checked;
-                    localStorage.setItem('clickSparkEnabled', clickSparkEnabled);
-                    updateClickSparkState(clickSparkEnabled);
-                });
-            }
-            
-            function updateClickSparkState(enabled) {
-                if (enabled) {
-                    document.addEventListener('click', createClickSpark);
-                } else {
-                    document.removeEventListener('click', createClickSpark);
-                }
-            }
-            
-            function createClickSpark(e) {
-                // 如果动画被禁用，则不创建火花
-                if (document.body.classList.contains('no-animation')) {
-                    return;
-                }
-                
-                const sparkCount = 8;
-                const sparkRadius = 15;
-                const duration = 400;
-                
-                for (let i = 0; i < sparkCount; i++) {
-                    const spark = document.createElement('div');
-                    spark.className = 'spark';
-                    
-                    // 设置火花位置
-                    spark.style.left = `${e.clientX}px`;
-                    spark.style.top = `${e.clientY}px`;
-                    
-                    // 随机角度
-                    const angle = (i / sparkCount) * Math.PI * 2;
-                    const distance = Math.random() * sparkRadius + 5;
-                    
-                    // 计算最终位置
-                    const endX = e.clientX + Math.cos(angle) * distance;
-                    const endY = e.clientY + Math.sin(angle) * distance;
-                    
-                    // 添加到容器
-                    clickSparkContainer.appendChild(spark);
-                    
-                    // 火花动画
-                    const animation = spark.animate([
-                        {
-                            transform: 'translate(-50%, -50%) scale(1)',
-                            opacity: 1
-                        },
-                        {
-                            transform: `translate(calc(-50% + ${endX - e.clientX}px), calc(-50% + ${endY - e.clientY}px)) scale(0)`,
-                            opacity: 0
-                        }
-                    ], {
-                        duration: duration,
-                        easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-                        fill: 'forwards'
-                    });
-                    
-                    // 动画结束后移除元素
-                    animation.onfinish = () => {
-                        spark.remove();
-                    };
-                }
-            }
-        }
-        
-        // 深色模式切换功能
-        function initializeSettings() {
-            // 从本地存储加载设置
-            const savedTheme = localStorage.getItem('theme') || 'light';
-            const savedFontSize = localStorage.getItem('fontSize') || 'medium';
-            const savedAnimations = localStorage.getItem('animationsEnabled') !== 'false';
-            const savedSmoothScroll = localStorage.getItem('smoothScrollEnabled') !== 'false';
-            const savedHoverEffects = localStorage.getItem('hoverEffectsEnabled') !== 'false';
-            const savedClickSpark = localStorage.getItem('clickSparkEnabled') !== 'false';
-            
-            // 应用保存的设置
-            applyTheme(savedTheme);
-            applyFontSize(savedFontSize);
-            
-            if (!savedAnimations) document.body.classList.add('no-animation');
-            if (!savedHoverEffects) document.body.classList.add('no-hover');
-            if (!savedSmoothScroll) document.documentElement.style.scrollBehavior = 'auto';
-            
-            // 设置面板中的选项状态
-            document.querySelectorAll('.theme-option').forEach(option => {
-                if (option.getAttribute('data-theme') === savedTheme) {
-                    option.classList.add('active');
-                } else {
-                    option.classList.remove('active');
-                }
-            });
-            
-            document.querySelectorAll('.font-option').forEach(option => {
-                if (option.getAttribute('data-font') === savedFontSize) {
-                    option.classList.add('active');
-                } else {
-                    option.classList.remove('active');
-                }
-            });
-            
-            // 设置开关状态
-            document.getElementById('animationsToggle').checked = savedAnimations;
-            document.getElementById('smoothScrollToggle').checked = savedSmoothScroll;
-            document.getElementById('hoverEffectsToggle').checked = savedHoverEffects;
-            document.getElementById('clickSparkToggle').checked = savedClickSpark;
-            
-            // 主题切换事件
-            document.querySelectorAll('.theme-option').forEach(option => {
-                option.addEventListener('click', function() {
-                    const theme = this.getAttribute('data-theme');
-                    
-                    // 更新活动状态
-                    document.querySelectorAll('.theme-option').forEach(opt => {
-                        opt.classList.remove('active');
-                    });
-                    this.classList.add('active');
-                    
-                    // 应用主题
-                    applyTheme(theme);
-                    localStorage.setItem('theme', theme);
-                });
-            });
-            
-            // 字体大小切换事件
-            document.querySelectorAll('.font-option').forEach(option => {
-                option.addEventListener('click', function() {
-                    const fontSize = this.getAttribute('data-font');
-                    
-                    // 更新活动状态
-                    document.querySelectorAll('.font-option').forEach(opt => {
-                        opt.classList.remove('active');
-                    });
-                    this.classList.add('active');
-                    
-                    // 应用字体大小
-                    applyFontSize(fontSize);
-                    localStorage.setItem('fontSize', fontSize);
-                });
-            });
-            
-            // 开关事件
-            document.getElementById('animationsToggle').addEventListener('change', function() {
-                document.body.classList.toggle('no-animation', !this.checked);
-                localStorage.setItem('animationsEnabled', this.checked);
-            });
-            
-            document.getElementById('smoothScrollToggle').addEventListener('change', function() {
-                document.documentElement.style.scrollBehavior = this.checked ? 'smooth' : 'auto';
-                localStorage.setItem('smoothScrollEnabled', this.checked);
-            });
-            
-            document.getElementById('hoverEffectsToggle').addEventListener('change', function() {
-                document.body.classList.toggle('no-hover', !this.checked);
-                localStorage.setItem('hoverEffectsEnabled', this.checked);
-            });
-            
-            document.getElementById('clickSparkToggle').addEventListener('change', function() {
-                localStorage.setItem('clickSparkEnabled', this.checked);
-                updateClickSparkState(this.checked);
-            });
-            
-            // 重置设置
-            document.getElementById('resetSettings').addEventListener('click', function() {
-                localStorage.removeItem('theme');
-                localStorage.removeItem('fontSize');
-                localStorage.removeItem('animationsEnabled');
-                localStorage.removeItem('smoothScrollEnabled');
-                localStorage.removeItem('hoverEffectsEnabled');
-                localStorage.removeItem('clickSparkEnabled');
-                
-                applyTheme('light');
-                applyFontSize('medium');
-                document.body.classList.remove('no-animation', 'no-hover');
-                document.documentElement.style.scrollBehavior = 'smooth';
-                
-                // 更新设置面板中的选项状态
-                document.querySelectorAll('.theme-option').forEach(option => {
-                    if (option.getAttribute('data-theme') === 'light') {
-                        option.classList.add('active');
-                    } else {
-                        option.classList.remove('active');
-                    }
-                });
-                
-                document.querySelectorAll('.font-option').forEach(option => {
-                    if (option.getAttribute('data-font') === 'medium') {
-                        option.classList.add('active');
-                    } else {
-                        option.classList.remove('active');
-                    }
-                });
-                
-                // 重置开关状态
-                document.getElementById('animationsToggle').checked = true;
-                document.getElementById('smoothScrollToggle').checked = true;
-                document.getElementById('hoverEffectsToggle').checked = true;
-                document.getElementById('clickSparkToggle').checked = true;
-                
-                // 重置点击火花设置
-                updateClickSparkState(true);
-                
-                alert('设置已重置为默认值！');
-            });
-            
-            // 初始化点击火花效果
-            initializeClickSpark();
-        }
-        
-        function applyTheme(theme) {
-            document.body.classList.remove('dark-theme', 'cyan-theme');
-            if (theme === 'dark') {
-                document.body.classList.add('dark-theme');
-            } else if (theme === 'cyan') {
-                document.body.classList.add('cyan-theme');
-            }
-        }
-        
-        function applyFontSize(fontSize) {
-            document.body.classList.remove('small-font', 'large-font');
-            if (fontSize === 'small') {
-                document.body.classList.add('small-font');
-            } else if (fontSize === 'large') {
-                document.body.classList.add('large-font');
-            }
-        }
-        
-        // 初始化
-        initializeUsers();
-        checkLoginStatus();
-        
         // 激光动效交互
         const hero = document.querySelector('.hero');
         const laserBg = document.querySelector('.laser-bg');
@@ -4540,6 +5059,15 @@
                 laserBg.style.transform = 'translate(0, 0)';
             });
         }
+        
+        // 初始化
+        initializeSettings();
+        initializeUsers();
+        checkLoginStatus();
+        initializeGradientBlindsBackground();
+        initialize3DCubes();
+        initializeHistoryData();
+        initializeEventData();
     </script>
 </body>
 </html>
