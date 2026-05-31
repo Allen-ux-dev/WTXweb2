@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>历史 - WTX</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-i18n-title="historyPageTitle">
+    <div class="gradient-blinds-container" id="gradientBlindsBg"></div>
+    <div class="click-spark-container" id="clickSparkContainer"></div>
+
+    <nav>
+        <div class="container nav-container">
+            <a href="index.html" class="logo">WTX</a>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link" data-i18n="home">首页</a>
+                <a href="history.html" class="nav-link active" data-i18n="history">历史</a>
+                <a href="events.html" class="nav-link" data-i18n="events">事件</a>
+                <a href="index.html#skills" class="nav-link" data-i18n="navSkills">专业技能</a>
+                <a href="index.html#projects" class="nav-link" data-i18n="navProjects">项目经验</a>
+                <a href="index.html#about" class="nav-link" data-i18n="navAbout">关于我</a>
+                <a href="index.html#contact" class="nav-link" data-i18n="navContact">联系方式</a>
+                <div class="user-status" id="userStatus">
+                    <div class="user-avatar" id="userAvatar" style="display: none;"></div>
+                    <span class="user-name" id="userName" style="display: none;"></span>
+                    <button class="login-btn" id="loginBtn" data-i18n="login">登录</button>
+                </div>
+                <div class="language-switcher" id="languageSwitcher">
+                    <span id="currentLanguage">中文</span>
+                    <i class="fas fa-chevron-down"></i>
+                    <div class="language-options" id="languageOptions">
+                        <div class="language-option" data-lang="zh">中文</div>
+                        <div class="language-option" data-lang="en">English</div>
+                        <div class="language-option" data-lang="fr">Français</div>
+                    </div>
+                </div>
+                <button class="settings-btn" id="settingsBtn">
+                    <i class="fas fa-cog"></i>
+                </button>
+            </div>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+    <div class="mobile-menu" id="mobileMenu">
+        <button class="mobile-menu-close" id="mobileMenuClose">
+            <i class="fas fa-times"></i>
+        </button>
+        <div class="mobile-menu-links">
+            <a href="index.html" class="nav-link" data-i18n="home">首页</a>
+            <a href="history.html" class="nav-link active" data-i18n="history">历史</a>
+            <a href="events.html" class="nav-link" data-i18n="events">事件</a>
+            <a href="index.html#skills" class="nav-link" data-i18n="navSkills">专业技能</a>
+            <a href="index.html#projects" class="nav-link" data-i18n="navProjects">项目经验</a>
+            <a href="index.html#about" class="nav-link" data-i18n="navAbout">关于我</a>
+            <a href="index.html#contact" class="nav-link" data-i18n="navContact">联系方式</a>
+            <div class="user-status" id="mobileUserStatus">
+                <div class="user-avatar" id="mobileUserAvatar" style="display: none;"></div>
+                <span class="user-name" id="mobileUserName" style="display: none;"></span>
+                <a href="#" class="mobile-login-btn" id="mobileLoginBtn" data-i18n="login">登录</a>
+            </div>
+            <div class="language-switcher" id="mobileLanguageSwitcher">
+                <span id="mobileCurrentLanguage">中文</span>
+                <i class="fas fa-chevron-down"></i>
+                <div class="language-options" id="mobileLanguageOptions">
+                    <div class="language-option" data-lang="zh">中文</div>
+                    <div class="language-option" data-lang="en">English</div>
+                    <div class="language-option" data-lang="fr">Français</div>
+                </div>
+            </div>
+            <a href="#" id="mobileSettingsBtn">
+                <i class="fas fa-cog"></i> <span data-i18n="mobileSettings">网站设置</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="settings-overlay" id="settingsOverlay"></div>
+    <div class="settings-panel" id="settingsPanel">
+        <div class="settings-header">
+            <h2 class="settings-title" data-i18n="settings">网站设置</h2>
+            <button class="close-settings" id="closeSettings">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="setting-group">
+            <label class="setting-label" data-i18n="theme">主题</label>
+            <div class="theme-options">
+                <div class="theme-option active" data-theme="light" data-i18n="light">浅色</div>
+                <div class="theme-option" data-theme="dark" data-i18n="dark">深色</div>
+                <div class="theme-option" data-theme="cyan" data-i18n="cyan">青色</div>
+            </div>
+        </div>
+        <div class="setting-group">
+            <label class="setting-label" data-i18n="fontSize">字体大小</label>
+            <div class="font-options">
+                <div class="font-option" data-font="small" data-i18n="small">小</div>
+                <div class="font-option active" data-font="medium" data-i18n="medium">中</div>
+                <div class="font-option" data-font="large" data-i18n="large">大</div>
+            </div>
+        </div>
+        <div class="setting-option">
+            <span class="setting-option-label" data-i18n="animations">动画效果</span>
+            <label class="toggle-switch">
+                <input type="checkbox" id="animationsToggle" checked>
+                <span class="toggle-slider"></span>
+            </label>
+        </div>
+        <div class="setting-option">
+            <span class="setting-option-label" data-i18n="smoothScroll">平滑滚动</span>
+            <label class="toggle-switch">
+                <input type="checkbox" id="smoothScrollToggle" checked>
+                <span class="toggle-slider"></span>
+            </label>
+        </div>
+        <div class="setting-option">
+            <span class="setting-option-label" data-i18n="hoverEffects">悬停效果</span>
+            <label class="toggle-switch">
+                <input type="checkbox" id="hoverEffectsToggle" checked>
+                <span class="toggle-slider"></span>
+            </label>
+        </div>
+        <div class="setting-option">
+            <span class="setting-option-label" data-i18n="clickSpark">点击火花效果</span>
+            <label class="toggle-switch">
+                <input type="checkbox" id="clickSparkToggle" checked>
+                <span class="toggle-slider"></span>
+            </label>
+        </div>
+        <div class="setting-group">
+            <button class="reset-btn" id="resetSettings" data-i18n="reset">重置为默认设置</button>
+        </div>
+    </div>
+
+    <main>
+        <section class="page-hero">
+            <div class="container">
+                <h1 data-i18n="historyTitle">历史</h1>
+                <p data-i18n="historyIntro">这里展示项目成长记录和历史节点。</p>
+            </div>
+        </section>
+        <section class="history-section">
+            <div class="container">
+                <div id="historyGrid" class="history-grid"></div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>WTX</h3>
+                    <p data-i18n="footerTagline">苹果风格个人网页 · 模块化版本</p>
+                </div>
+                <div class="footer-column">
+                    <h3 data-i18n="pages">页面</h3>
+                    <ul>
+                        <li><a href="events.html" data-i18n="events">事件</a></li>
+                        <li><a href="history.html" data-i18n="history">历史</a></li>
+                        <li><a href="admin-event-history.html" data-i18n="adminShort">管理</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">© 2026 WTX. Modular Apple Style Site.</div>
+        </div>
+    </footer>
+    <script src="js/common.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/history.js"></script>
+</body>
+</html>
