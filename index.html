@@ -25,7 +25,7 @@
                 <a href="history.html" class="nav-link">历史</a>
                 <a href="events.html" class="nav-link">事件</a>
                 <a href="#skills" class="nav-link">专业技能</a>
-                <a href="#projects" class="nav-link">项目经验</a>
+                <a href="#projects" class="nav-link">作品项目</a>
                 <a href="#about" class="nav-link">关于我</a>
                 <a href="#contact" class="nav-link">联系方式</a>
                 
@@ -71,7 +71,7 @@
             <a href="history.html" class="nav-link">历史</a>
             <a href="events.html" class="nav-link">事件</a>
             <a href="#skills" class="nav-link">专业技能</a>
-            <a href="#projects" class="nav-link">项目经验</a>
+            <a href="#projects" class="nav-link">作品项目</a>
             <a href="#about" class="nav-link">关于我</a>
             <a href="#contact" class="nav-link">联系方式</a>
             
@@ -346,32 +346,58 @@
             </div>
         </section>
 
-        <!-- 项目部分 -->
+        <!-- 作品部分 -->
         <section class="projects" id="projects">
             <div class="container">
-                <h2 class="section-title" data-i18n="projects">项目经验</h2>
+                <p class="section-kicker" data-i18n="worksKicker">Works</p>
+                <h2 class="section-title" data-i18n="projects">作品项目</h2>
+                <p class="works-intro" data-i18n="worksIntro">这里展示我做过的实用项目，可以在线查看教程，也可以直接下载文件。</p>
                 <div class="project-showcase">
-                    <div class="project">
+                    <article class="project work-card">
                         <div class="project-image">
-                            <img src="https://via.placeholder.com/600x400" alt="多媒体项目">
+                            <img src="https://images.unsplash.com/photo-1606167668584-78701c57f13d?auto=format&fit=crop&w=1200&q=80" alt="抽卡概率模拟器作品">
                         </div>
                         <div class="project-content">
-                            <h3 class="project-title" data-i18n="collaboration">关于合作</h3>
-                            <p class="project-desc" data-i18n="collaborationDesc">擅长模块化合作将时间减少了40%，并提高了用户参与度。</p>
-                            <a href="#" class="cta-button" data-i18n="viewDetails">查看详情</a>
+                            <div class="project-meta">
+                                <span data-i18n="workTypeTool">功能工具</span>
+                                <span>2026</span>
+                            </div>
+                            <h3 class="project-title" data-i18n="cardSimulatorProject">抽卡概率模拟器</h3>
+                            <p class="project-desc" data-i18n="cardSimulatorProjectDesc">一个用于模拟抽卡概率的互动网页，可以设置抽卡次数、概率和保底规则，直观看到结果分布。</p>
+                            <div class="project-tags">
+                                <span>Probability</span>
+                                <span>Simulator</span>
+                                <span>HTML</span>
+                            </div>
+                            <div class="project-actions">
+                                <a href="downloads/card_probability_simulator_v2.html" class="cta-button" data-i18n="viewDetails">查看详情</a>
+                                <a href="downloads/card_probability_simulator_v2.html" class="cta-button secondary" download data-i18n="downloadProject">下载</a>
+                            </div>
                         </div>
-                    </div>
-                    
-                    <div class="project">
+                    </article>
+
+                    <article class="project work-card">
                         <div class="project-image">
-                            <img src="https://via.placeholder.com/600x400" alt="项目">
+                            <img src="https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=1200&q=80" alt="macOS 快速新建文件快捷指令作品">
                         </div>
                         <div class="project-content">
-                            <h3 class="project-title" data-i18n="uiDesign">UI设计</h3>
-                            <p class="project-desc" data-i18n="uiDesignDesc">具有直观的用户界面和个性化推荐功能。</p>
-                            <a href="#" class="cta-button" data-i18n="viewDetails">查看详情</a>
+                            <div class="project-meta">
+                                <span data-i18n="workTypeShortcut">macOS 快捷指令</span>
+                                <span>2026</span>
+                            </div>
+                            <h3 class="project-title" data-i18n="quickNewFileProject">快速新建文件</h3>
+                            <p class="project-desc" data-i18n="quickNewFileProjectDesc">一个放进 macOS 快捷指令的 zsh 脚本，可以从 Finder 右键或菜单栏快速创建常用文件和文件夹。</p>
+                            <div class="project-tags">
+                                <span>macOS</span>
+                                <span>Shortcuts</span>
+                                <span>zsh</span>
+                            </div>
+                            <div class="project-actions">
+                                <a href="quick-new-file.html" class="cta-button" data-i18n="viewTutorial">查看教程</a>
+                                <a href="downloads/quick-new-file-pro-3.1.zsh" class="cta-button secondary" download data-i18n="downloadProject">下载</a>
+                            </div>
                         </div>
-                    </div>
+                    </article>
                 </div>
             </div>
         </section>
@@ -548,7 +574,7 @@
                     <h3>WTX</h3>
                     <ul>
                         <li><a href="#skills" data-i18n="skills">专业技能</a></li>
-                        <li><a href="#projects" data-i18n="projects">项目经验</a></li>
+                        <li><a href="#projects" data-i18n="projects">作品项目</a></li>
                         <li><a href="#about" data-i18n="about">关于我</a></li>
                     </ul>
                 </div>

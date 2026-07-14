@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>抽卡概率模拟器</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    :root {
+      --bg: #f4f6fb;
+      --card: rgba(255, 255, 255, 0.88);
+      --text: #1d1d1f;
+      --subtext: #6e6e73;
+      --border: rgba(0, 0, 0, 0.09);
+      --primary: #007aff;
+      --primary-hover: #0066d6;
+      --success: #34c759;
+      --danger: #ff3b30;
+      --warning: #ff9500;
+      --purple: #af52de;
+      --shadow: 0 18px 50px rgba(30, 45, 80, 0.12);
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+        "Microsoft YaHei", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 15% 10%, rgba(0, 122, 255, 0.18), transparent 32%),
+        radial-gradient(circle at 85% 90%, rgba(175, 82, 222, 0.16), transparent 34%),
+        var(--bg);
+      padding: 32px 18px;
+    }
+
+    button, input { font: inherit; }
+
+    .container {
+      width: min(1050px, 100%);
+      margin: 0 auto;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 26px;
+    }
+
+    .header h1 {
+      margin: 0 0 10px;
+      font-size: clamp(30px, 5vw, 48px);
+      letter-spacing: -1.5px;
+    }
+
+    .header p {
+      margin: 0;
+      color: var(--subtext);
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    .panel {
+      background: var(--card);
+      border: 1px solid rgba(255, 255, 255, 0.68);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-radius: 26px;
+      box-shadow: var(--shadow);
+      padding: 24px;
+    }
+
+    .mode-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
+      padding: 16px 18px;
+      margin-bottom: 20px;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: rgba(255,255,255,.7);
+    }
+
+    .mode-title {
+      font-size: 16px;
+      font-weight: 750;
+      margin-bottom: 4px;
+    }
+
+    .mode-description {
+      color: var(--subtext);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .switch {
+      position: relative;
+      width: 52px;
+      height: 31px;
+      flex: 0 0 auto;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      inset: 0;
+      cursor: pointer;
+      border-radius: 999px;
+      background: #c7c7cc;
+      transition: .25s ease;
+    }
+
+    .slider::before {
+      content: "";
+      position: absolute;
+      width: 27px;
+      height: 27px;
+      left: 2px;
+      top: 2px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,.24);
+      transition: .25s ease;
+    }
+
+    .switch input:checked + .slider {
+      background: var(--primary);
+    }
+
+    .switch input:checked + .slider::before {
+      transform: translateX(21px);
+    }
+
+    .settings-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+
+    .field label {
+      font-size: 14px;
+      font-weight: 650;
+    }
+
+    .input-wrap {
+      position: relative;
+    }
+
+    input[type="number"],
+    input[type="text"] {
+      width: 100%;
+      height: 52px;
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      background: rgba(255, 255, 255, 0.82);
+      padding: 0 48px 0 15px;
+      color: var(--text);
+      font-size: 17px;
+      outline: none;
+      transition: 0.2s ease;
+    }
+
+    input[type="number"]:focus,
+    input[type="text"]:focus {
+      border-color: rgba(0, 122, 255, 0.7);
+      box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.12);
+    }
+
+    .unit {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--subtext);
+      pointer-events: none;
+    }
+
+    .prize-config {
+      display: none;
+      margin-top: 20px;
+      border-top: 1px solid var(--border);
+      padding-top: 20px;
+    }
+
+    .prize-config.active {
+      display: block;
+      animation: fadeIn .25s ease;
+    }
+
+    .config-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 13px;
+    }
+
+    .config-head h2 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .small-btn {
+      height: 38px;
+      border: 0;
+      border-radius: 12px;
+      padding: 0 14px;
+      color: var(--primary);
+      background: rgba(0,122,255,.10);
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .prize-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .prize-row {
+      display: grid;
+      grid-template-columns: minmax(140px, 1fr) minmax(130px, .7fr) 44px;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .prize-row input {
+      height: 47px;
+      font-size: 15px;
+    }
+
+    .remove-btn {
+      width: 44px;
+      height: 44px;
+      border: 0;
+      border-radius: 13px;
+      color: var(--danger);
+      background: rgba(255,59,48,.09);
+      font-size: 21px;
+      cursor: pointer;
+    }
+
+    .probability-status {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 12px;
+      padding: 13px 15px;
+      border-radius: 14px;
+      background: rgba(0,0,0,.04);
+      color: var(--subtext);
+      font-size: 14px;
+    }
+
+    .probability-status.invalid {
+      background: rgba(255,59,48,.09);
+      color: var(--danger);
+    }
+
+    .button-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 22px;
+    }
+
+    button {
+      border: 0;
+      height: 50px;
+      border-radius: 15px;
+      padding: 0 22px;
+      font-size: 16px;
+      font-weight: 650;
+      cursor: pointer;
+      transition: transform 0.15s ease, opacity 0.15s ease, background 0.15s ease;
+    }
+
+    button:active { transform: scale(0.97); }
+
+    .primary-btn {
+      flex: 1;
+      color: white;
+      background: var(--primary);
+    }
+
+    .primary-btn:hover { background: var(--primary-hover); }
+
+    .secondary-btn {
+      color: var(--text);
+      background: rgba(0, 0, 0, 0.055);
+    }
+
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 22px;
+    }
+
+    .stat-card {
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 18px;
+      min-height: 108px;
+    }
+
+    .stat-label {
+      color: var(--subtext);
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+
+    .stat-value {
+      font-size: 28px;
+      font-weight: 750;
+      letter-spacing: -0.8px;
+    }
+
+    .success-text { color: var(--success); }
+    .fail-text { color: var(--danger); }
+
+    .progress-section { margin-top: 22px; }
+
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      color: var(--subtext);
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+
+    .progress-track {
+      height: 13px;
+      border-radius: 999px;
+      background: rgba(255, 59, 48, 0.16);
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #34c759, #30d158);
+      transition: width 0.45s ease;
+    }
+
+    .breakdown-section,
+    .results-section {
+      margin-top: 24px;
+      display: none;
+    }
+
+    .breakdown-section.active,
+    .results-section.active {
+      display: block;
+    }
+
+    .section-title {
+      margin: 0 0 14px;
+      font-size: 20px;
+    }
+
+    .breakdown-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+      gap: 12px;
+    }
+
+    .breakdown-card {
+      padding: 16px;
+      border-radius: 17px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.72);
+    }
+
+    .breakdown-name {
+      font-weight: 750;
+      margin-bottom: 7px;
+    }
+
+    .breakdown-count {
+      font-size: 25px;
+      font-weight: 800;
+    }
+
+    .breakdown-meta {
+      margin-top: 5px;
+      color: var(--subtext);
+      font-size: 12px;
+    }
+
+    .result-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
+      gap: 12px;
+      max-height: 440px;
+      overflow-y: auto;
+      padding-right: 3px;
+    }
+
+    .result-item {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-height: 70px;
+      padding: 12px 14px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.72);
+      animation: appear 0.28s ease both;
+    }
+
+    .result-item.win {
+      background: rgba(52, 199, 89, 0.09);
+      border-color: rgba(52, 199, 89, 0.24);
+    }
+
+    .result-item.lose {
+      background: rgba(255, 59, 48, 0.06);
+      border-color: rgba(255, 59, 48, 0.16);
+    }
+
+    .result-number {
+      color: var(--subtext);
+      font-size: 12px;
+    }
+
+    .result-status {
+      font-weight: 750;
+      font-size: 15px;
+      word-break: break-word;
+    }
+
+    .tip {
+      margin-top: 18px;
+      color: var(--subtext);
+      font-size: 13px;
+      line-height: 1.65;
+    }
+
+    @keyframes appear {
+      from { opacity: 0; transform: translateY(8px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 720px) {
+      body { padding: 20px 12px; }
+      .panel { padding: 18px; border-radius: 22px; }
+      .settings-grid { grid-template-columns: 1fr; }
+      .summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .button-row { flex-direction: column; }
+      .secondary-btn, .primary-btn { width: 100%; }
+      .prize-row { grid-template-columns: 1fr 110px 42px; }
+      .mode-row { align-items: flex-start; }
+    }
+
+    @media (max-width: 480px) {
+      .prize-row {
+        grid-template-columns: 1fr 42px;
+      }
+
+      .prize-row .probability-wrap {
+        grid-column: 1 / -1;
+        grid-row: 2;
+      }
+
+      .prize-row .remove-btn {
+        grid-column: 2;
+        grid-row: 1;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="container">
+    <header class="header">
+      <h1>抽卡概率模拟器</h1>
+      <p>设置中奖概率、奖项等级和抽卡次数，模拟每一次抽卡结果。</p>
+    </header>
+
+    <section class="panel">
+      <div class="mode-row">
+        <div>
+          <div class="mode-title">多奖项概率模式</div>
+          <div class="mode-description">打开后可分别设置一等奖、二等奖等多个奖项的概率。</div>
+        </div>
+        <label class="switch" aria-label="多奖项概率模式">
+          <input id="multiPrizeToggle" type="checkbox" />
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="settings-grid">
+        <div class="field" id="normalProbabilityField">
+          <label for="probability">中奖概率</label>
+          <div class="input-wrap">
+            <input id="probability" type="number" min="0" max="100" step="0.01" value="10" inputmode="decimal" />
+            <span class="unit">%</span>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="drawCount">抽卡次数</label>
+          <div class="input-wrap">
+            <input id="drawCount" type="number" min="1" max="10000" step="1" value="10" inputmode="numeric" />
+            <span class="unit">次</span>
+          </div>
+        </div>
+      </div>
+
+      <section class="prize-config" id="prizeConfig">
+        <div class="config-head">
+          <h2>奖项概率配置</h2>
+          <button class="small-btn" id="addPrizeBtn" type="button">＋ 添加奖项</button>
+        </div>
+
+        <div class="prize-list" id="prizeList"></div>
+
+        <div class="probability-status" id="probabilityStatus">
+          <span>奖项概率合计：<strong id="totalPrizeProbability">0%</strong></span>
+          <span>未中奖概率：<strong id="noPrizeProbability">100%</strong></span>
+        </div>
+      </section>
+
+      <div class="button-row">
+        <button class="primary-btn" id="simulateBtn">开始模拟抽卡</button>
+        <button class="secondary-btn" id="resetBtn">重置结果</button>
+      </div>
+
+      <div class="summary">
+        <div class="stat-card">
+          <div class="stat-label">总抽卡次数</div>
+          <div class="stat-value" id="totalCount">0</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-label">中奖次数</div>
+          <div class="stat-value success-text" id="winCount">0</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-label">未中奖次数</div>
+          <div class="stat-value fail-text" id="loseCount">0</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-label">实际中奖率</div>
+          <div class="stat-value" id="actualRate">0%</div>
+        </div>
+      </div>
+
+      <div class="progress-section">
+        <div class="progress-header">
+          <span>实际总中奖比例</span>
+          <span id="rateCompare">设定总中奖率：10%</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+      </div>
+
+      <section class="breakdown-section" id="breakdownSection">
+        <h2 class="section-title">奖项统计</h2>
+        <div class="breakdown-grid" id="breakdownGrid"></div>
+      </section>
+
+      <section class="results-section" id="resultsSection">
+        <h2 class="section-title">本次抽卡结果</h2>
+        <div class="result-list" id="resultList"></div>
+      </section>
+
+      <p class="tip">
+        提示：多奖项模式下，所有奖项概率之和不能超过 100%。没有分配给奖项的剩余概率会自动算作“未中奖”。
+      </p>
+    </section>
+  </main>
+
+  <script>
+    const probabilityInput = document.getElementById("probability");
+    const drawCountInput = document.getElementById("drawCount");
+    const multiPrizeToggle = document.getElementById("multiPrizeToggle");
+    const normalProbabilityField = document.getElementById("normalProbabilityField");
+    const prizeConfig = document.getElementById("prizeConfig");
+    const prizeList = document.getElementById("prizeList");
+    const addPrizeBtn = document.getElementById("addPrizeBtn");
+    const probabilityStatus = document.getElementById("probabilityStatus");
+    const totalPrizeProbability = document.getElementById("totalPrizeProbability");
+    const noPrizeProbability = document.getElementById("noPrizeProbability");
+
+    const simulateBtn = document.getElementById("simulateBtn");
+    const resetBtn = document.getElementById("resetBtn");
+    const totalCountElement = document.getElementById("totalCount");
+    const winCountElement = document.getElementById("winCount");
+    const loseCountElement = document.getElementById("loseCount");
+    const actualRateElement = document.getElementById("actualRate");
+    const progressFill = document.getElementById("progressFill");
+    const rateCompare = document.getElementById("rateCompare");
+    const breakdownSection = document.getElementById("breakdownSection");
+    const breakdownGrid = document.getElementById("breakdownGrid");
+    const resultList = document.getElementById("resultList");
+    const resultsSection = document.getElementById("resultsSection");
+
+    let prizeId = 0;
+
+    function formatPercent(value) {
+      return Number(Number(value).toFixed(2)).toString() + "%";
+    }
+
+    function createPrizeRow(name = "", probability = "") {
+      prizeId += 1;
+
+      const row = document.createElement("div");
+      row.className = "prize-row";
+      row.dataset.id = String(prizeId);
+
+      row.innerHTML = `
+        <input class="prize-name" type="text" maxlength="20" value="${escapeHtml(name)}" placeholder="例如：一等奖" aria-label="奖项名称">
+        <div class="input-wrap probability-wrap">
+          <input class="prize-probability" type="number" min="0" max="100" step="0.01"
+            value="${probability}" placeholder="概率" inputmode="decimal" aria-label="奖项概率">
+          <span class="unit">%</span>
+        </div>
+        <button class="remove-btn" type="button" title="删除奖项" aria-label="删除奖项">×</button>
+      `;
+
+      row.querySelector(".remove-btn").addEventListener("click", () => {
+        row.remove();
+        updateProbabilityStatus();
+      });
+
+      row.querySelectorAll("input").forEach(input => {
+        input.addEventListener("input", updateProbabilityStatus);
+      });
+
+      prizeList.appendChild(row);
+      updateProbabilityStatus();
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement("div");
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    function getPrizeSettings(showAlerts = false) {
+      const rows = [...prizeList.querySelectorAll(".prize-row")];
+      const prizes = [];
+      const usedNames = new Set();
+
+      for (let index = 0; index < rows.length; index++) {
+        const nameInput = rows[index].querySelector(".prize-name");
+        const probabilityInput = rows[index].querySelector(".prize-probability");
+        const name = nameInput.value.trim();
+        const probability = Number(probabilityInput.value);
+
+        if (!name) {
+          if (showAlerts) {
+            alert(`请填写第 ${index + 1} 个奖项的名称。`);
+            nameInput.focus();
+          }
+          return null;
+        }
+
+        if (usedNames.has(name)) {
+          if (showAlerts) {
+            alert(`奖项名称“${name}”重复，请使用不同名称。`);
+            nameInput.focus();
+          }
+          return null;
+        }
+
+        if (!Number.isFinite(probability) || probability < 0 || probability > 100) {
+          if (showAlerts) {
+            alert(`“${name}”的概率必须在 0% 到 100% 之间。`);
+            probabilityInput.focus();
+          }
+          return null;
+        }
+
+        usedNames.add(name);
+        prizes.push({ name, probability });
+      }
+
+      if (prizes.length === 0) {
+        if (showAlerts) alert("请至少添加一个奖项。");
+        return null;
+      }
+
+      const total = prizes.reduce((sum, prize) => sum + prize.probability, 0);
+
+      if (total > 100.000001) {
+        if (showAlerts) alert("所有奖项的概率合计不能超过 100%。");
+        return null;
+      }
+
+      return { prizes, total };
+    }
+
+    function updateProbabilityStatus() {
+      const rows = [...prizeList.querySelectorAll(".prize-row")];
+      let total = 0;
+
+      rows.forEach(row => {
+        const value = Number(row.querySelector(".prize-probability").value);
+        if (Number.isFinite(value) && value > 0) total += value;
+      });
+
+      totalPrizeProbability.textContent = formatPercent(total);
+      noPrizeProbability.textContent = formatPercent(Math.max(0, 100 - total));
+      probabilityStatus.classList.toggle("invalid", total > 100);
+
+      if (multiPrizeToggle.checked) {
+        rateCompare.textContent = `设定总中奖率：${formatPercent(total)}`;
+      }
+    }
+
+    function validateBaseInputs() {
+      const drawCount = Number(drawCountInput.value);
+
+      if (!Number.isInteger(drawCount) || drawCount < 1 || drawCount > 10000) {
+        alert("抽卡次数必须是 1 到 10000 之间的整数。");
+        drawCountInput.focus();
+        return null;
+      }
+
+      return { drawCount };
+    }
+
+    function simulateNormal(drawCount) {
+      const probability = Number(probabilityInput.value);
+
+      if (!Number.isFinite(probability) || probability < 0 || probability > 100) {
+        alert("中奖概率必须在 0% 到 100% 之间。");
+        probabilityInput.focus();
+        return;
+      }
+
+      const results = [];
+      let wins = 0;
+
+      for (let i = 1; i <= drawCount; i++) {
+        const isWin = Math.random() * 100 < probability;
+        if (isWin) wins++;
+
+        results.push({
+          number: i,
+          prize: isWin ? "中奖 🎉" : "未中奖",
+          isWin
+        });
+      }
+
+      displayResults({
+        results,
+        drawCount,
+        wins,
+        expectedRate: probability,
+        breakdown: [
+          { name: "中奖", count: wins, probability },
+          { name: "未中奖", count: drawCount - wins, probability: 100 - probability }
+        ]
+      });
+    }
+
+    function simulateMultiplePrizes(drawCount) {
+      const settings = getPrizeSettings(true);
+      if (!settings) return;
+
+      const results = [];
+      const counts = Object.fromEntries(settings.prizes.map(prize => [prize.name, 0]));
+      counts["未中奖"] = 0;
+
+      for (let i = 1; i <= drawCount; i++) {
+        const random = Math.random() * 100;
+        let cumulative = 0;
+        let selectedPrize = null;
+
+        for (const prize of settings.prizes) {
+          cumulative += prize.probability;
+          if (random < cumulative) {
+            selectedPrize = prize.name;
+            break;
+          }
+        }
+
+        if (selectedPrize) {
+          counts[selectedPrize]++;
+          results.push({ number: i, prize: selectedPrize + " 🎉", isWin: true });
+        } else {
+          counts["未中奖"]++;
+          results.push({ number: i, prize: "未中奖", isWin: false });
+        }
+      }
+
+      const wins = drawCount - counts["未中奖"];
+      const breakdown = [
+        ...settings.prizes.map(prize => ({
+          name: prize.name,
+          count: counts[prize.name],
+          probability: prize.probability
+        })),
+        {
+          name: "未中奖",
+          count: counts["未中奖"],
+          probability: 100 - settings.total
+        }
+      ];
+
+      displayResults({
+        results,
+        drawCount,
+        wins,
+        expectedRate: settings.total,
+        breakdown
+      });
+    }
+
+    function displayResults({ results, drawCount, wins, expectedRate, breakdown }) {
+      const losses = drawCount - wins;
+      const actualRate = drawCount ? (wins / drawCount) * 100 : 0;
+
+      totalCountElement.textContent = drawCount.toLocaleString("zh-CN");
+      winCountElement.textContent = wins.toLocaleString("zh-CN");
+      loseCountElement.textContent = losses.toLocaleString("zh-CN");
+      actualRateElement.textContent = formatPercent(actualRate);
+      rateCompare.textContent = `设定总中奖率：${formatPercent(expectedRate)}`;
+      progressFill.style.width = `${Math.min(actualRate, 100)}%`;
+
+      renderBreakdown(breakdown, drawCount);
+      renderResultList(results);
+    }
+
+    function renderBreakdown(breakdown, total) {
+      breakdownGrid.innerHTML = "";
+      const fragment = document.createDocumentFragment();
+
+      breakdown.forEach(item => {
+        const actual = total ? (item.count / total) * 100 : 0;
+        const card = document.createElement("div");
+        card.className = "breakdown-card";
+        card.innerHTML = `
+          <div class="breakdown-name">${escapeHtml(item.name)}</div>
+          <div class="breakdown-count">${item.count.toLocaleString("zh-CN")} 次</div>
+          <div class="breakdown-meta">
+            设定 ${formatPercent(item.probability)} · 实际 ${formatPercent(actual)}
+          </div>
+        `;
+        fragment.appendChild(card);
+      });
+
+      breakdownGrid.appendChild(fragment);
+      breakdownSection.classList.add("active");
+    }
+
+    function renderResultList(results) {
+      resultList.innerHTML = "";
+      const fragment = document.createDocumentFragment();
+
+      results.forEach((result, index) => {
+        const item = document.createElement("div");
+        item.className = `result-item ${result.isWin ? "win" : "lose"}`;
+        item.style.animationDelay = `${Math.min(index * 16, 500)}ms`;
+
+        const number = document.createElement("span");
+        number.className = "result-number";
+        number.textContent = `第 ${result.number} 抽`;
+
+        const status = document.createElement("span");
+        status.className = "result-status";
+        status.textContent = result.prize;
+
+        item.append(number, status);
+        fragment.appendChild(item);
+      });
+
+      resultList.appendChild(fragment);
+      resultsSection.classList.add("active");
+      resultsSection.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+
+    function simulateDraws() {
+      const base = validateBaseInputs();
+      if (!base) return;
+
+      if (multiPrizeToggle.checked) {
+        simulateMultiplePrizes(base.drawCount);
+      } else {
+        simulateNormal(base.drawCount);
+      }
+    }
+
+    function resetResults() {
+      totalCountElement.textContent = "0";
+      winCountElement.textContent = "0";
+      loseCountElement.textContent = "0";
+      actualRateElement.textContent = "0%";
+      progressFill.style.width = "0%";
+      breakdownGrid.innerHTML = "";
+      resultList.innerHTML = "";
+      breakdownSection.classList.remove("active");
+      resultsSection.classList.remove("active");
+
+      if (multiPrizeToggle.checked) {
+        updateProbabilityStatus();
+      } else {
+        rateCompare.textContent = `设定总中奖率：${formatPercent(Number(probabilityInput.value) || 0)}`;
+      }
+    }
+
+    multiPrizeToggle.addEventListener("change", () => {
+      const enabled = multiPrizeToggle.checked;
+      prizeConfig.classList.toggle("active", enabled);
+      normalProbabilityField.style.display = enabled ? "none" : "flex";
+      resetResults();
+
+      if (enabled) {
+        updateProbabilityStatus();
+      } else {
+        rateCompare.textContent = `设定总中奖率：${formatPercent(Number(probabilityInput.value) || 0)}`;
+      }
+    });
+
+    probabilityInput.addEventListener("input", () => {
+      if (!multiPrizeToggle.checked) {
+        const value = Math.max(0, Math.min(100, Number(probabilityInput.value) || 0));
+        rateCompare.textContent = `设定总中奖率：${formatPercent(value)}`;
+      }
+    });
+
+    addPrizeBtn.addEventListener("click", () => {
+      const count = prizeList.querySelectorAll(".prize-row").length;
+      createPrizeRow(`奖项 ${count + 1}`, "0");
+    });
+
+    simulateBtn.addEventListener("click", simulateDraws);
+    resetBtn.addEventListener("click", resetResults);
+
+    document.addEventListener("keydown", event => {
+      if (event.key === "Enter" && document.activeElement.tagName !== "BUTTON") {
+        simulateDraws();
+      }
+    });
+
+    createPrizeRow("一等奖", "1");
+    createPrizeRow("二等奖", "9");
+    updateProbabilityStatus();
+  </script>
+</body>
+</html>
