@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Three.js库 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css?v=20260714-works-fix">
 </head>
 <body>
     <!-- GradientBlinds背景容器 -->
@@ -17,9 +17,8 @@
     <div class="click-spark-container" id="clickSparkContainer"></div>
 
     <!-- 导航栏 -->
-    <nav>
+    <nav class="main-nav-no-logo">
         <div class="container nav-container">
-            <a href="#" class="logo">WTX</a>
             <div class="nav-links">
                 <a href="index.html" class="nav-link">首页</a>
                 <a href="history.html" class="nav-link">历史</a>
@@ -353,6 +352,34 @@
                 <h2 class="section-title" data-i18n="projects">作品项目</h2>
                 <p class="works-intro" data-i18n="worksIntro">这里展示我做过的实用项目，可以在线查看教程，也可以直接下载文件。</p>
                 <div class="project-showcase">
+                    <article class="project work-card obs-project-card">
+                        <div class="project-image obs-project-visual" role="img" aria-label="OBS Split Recorder 插件示意图">
+                            <div class="obs-app-mark"><i class="fas fa-microphone-lines"></i></div>
+                            <div class="obs-waveform" aria-hidden="true">
+                                <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+                            </div>
+                            <div class="obs-split-label">VIDEO <i class="fas fa-arrow-right-arrow-left"></i> MIC</div>
+                        </div>
+                        <div class="project-content">
+                            <div class="project-meta">
+                                <span>OBS Studio 插件</span>
+                                <span>2026</span>
+                            </div>
+                            <h3 class="project-title">OBS Split Recorder</h3>
+                            <p class="project-desc">一键将 OBS 录像画面与麦克风声音分别保存，让后期剪辑、降噪、调音量和重新配音更方便。</p>
+                            <div class="project-compatibility"><i class="fab fa-apple"></i> 当前下载仅支持 macOS Apple Silicon / M 系列芯片</div>
+                            <div class="project-tags">
+                                <span>OBS</span>
+                                <span>macOS</span>
+                                <span>Audio</span>
+                            </div>
+                            <div class="project-actions">
+                                <a href="obs-split-recorder.html" class="cta-button">查看详情</a>
+                                <a href="downloads/obs-split-recorder-macos-apple-silicon.zip" class="cta-button secondary" download onclick="return confirm('下载前请确认：当前版本仅适用于配备 Apple Silicon（M1、M2、M3、M4 及后续 M 系列）芯片的 macOS。Intel Mac 和 Windows 暂不支持。\n\n确定继续下载吗？')">下载 M 系列版</a>
+                            </div>
+                        </div>
+                    </article>
+
                     <article class="project work-card">
                         <div class="project-image">
                             <img src="https://images.unsplash.com/photo-1606167668584-78701c57f13d?auto=format&fit=crop&w=1200&q=80" alt="抽卡概率模拟器作品">

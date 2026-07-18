@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="OBS Split Recorder — 一键将 OBS 录像画面与麦克风声音分别保存的 macOS Apple Silicon 插件。">
+    <title>OBS Split Recorder - WTX</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css?v=20260717-obs-split-recorder">
+</head>
+<body class="product-page-body">
+    <div class="product-background" aria-hidden="true"></div>
+
+    <nav class="product-nav">
+        <div class="container nav-container product-nav-container">
+            <div class="nav-links product-nav-links">
+                <a href="index.html" class="nav-link">首页</a>
+                <a href="history.html" class="nav-link">历史</a>
+                <a href="events.html" class="nav-link">事件</a>
+                <a href="index.html#skills" class="nav-link">专业技能</a>
+                <a href="index.html#projects" class="nav-link active">作品项目</a>
+                <a href="index.html#about" class="nav-link">关于我</a>
+                <a href="index.html#contact" class="nav-link">联系方式</a>
+            </div>
+            <button class="product-menu-btn" id="productMenuBtn" aria-label="打开导航" aria-expanded="false"><i class="fas fa-bars"></i></button>
+        </div>
+        <div class="product-mobile-links" id="productMobileLinks">
+            <a href="index.html">首页</a><a href="index.html#projects">作品项目</a><a href="index.html#contact">联系方式</a>
+        </div>
+    </nav>
+
+    <main class="product-main">
+        <section class="product-hero">
+            <div class="container product-hero-grid">
+                <div class="product-hero-copy">
+                    <a class="product-back-link" href="index.html#projects"><i class="fas fa-arrow-left"></i> 返回作品展示</a>
+                    <div class="product-eyebrow">OBS STUDIO PLUGIN · macOS</div>
+                    <h1>OBS Split Recorder</h1>
+                    <p class="product-lead">一键将 OBS 录像画面与麦克风声音分别保存。</p>
+                    <p class="product-summary">OBS 继续负责保存视频画面，插件会将选定的麦克风声音单独保存为音频文件，方便后期剪辑、降噪、调整音量或重新配音。</p>
+                    <div class="compatibility-alert">
+                        <i class="fab fa-apple"></i>
+                        <div><strong>当前下载仅支持 macOS M 系列芯片</strong><span>适用于 M1、M2、M3、M4 及后续 Apple Silicon Mac。Intel Mac 与 Windows 版本正在制作中。</span></div>
+                    </div>
+                    <div class="product-hero-actions">
+                        <a class="product-download-btn" href="downloads/obs-split-recorder-macos-apple-silicon.zip" download id="obsDownloadButton"><i class="fas fa-download"></i> 下载 Apple Silicon 版</a>
+                        <a class="product-source-btn" href="https://github.com/Allen-ux-dev/obs-split-recorder" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i> 查看开源项目</a>
+                    </div>
+                    <p class="product-test-note">当前版本仍处于测试阶段，正式录制前请先进行约 1 分钟测试。</p>
+                </div>
+
+                <div class="product-demo" aria-label="视频与麦克风音频分离示意图">
+                    <div class="demo-window">
+                        <div class="demo-titlebar"><span></span><span></span><span></span><b>Split Recorder</b></div>
+                        <div class="demo-canvas"><i class="fas fa-video"></i><span>OBS VIDEO</span></div>
+                        <div class="demo-separator"><i class="fas fa-code-branch"></i></div>
+                        <div class="demo-audio"><i class="fas fa-microphone"></i><div class="demo-bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><span>_Mic.mp3</span></div>
+                        <div class="demo-status"><span><i></i> Following OBS recording</span><strong>00:18:42</strong></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="product-section">
+            <div class="container">
+                <div class="product-section-heading"><span>FEATURES</span><h2>主要功能</h2><p>跟随 OBS 原生录制流程，同时给独立麦克风音频更稳妥的保护。</p></div>
+                <div class="feature-grid">
+                    <article><i class="fas fa-circle-play"></i><h3>跟随 OBS 录制</h3><p>直接跟随原生“开始录制”、“停止录制”，并支持暂停与继续。</p></article>
+                    <article><i class="fas fa-file-waveform"></i><h3>独立音频文件</h3><p>视频与麦克风分别保存，支持 WAV、M4A 和 MP3，自动跟随 OBS 视频名命名。</p></article>
+                    <article><i class="fas fa-sliders"></i><h3>音频处理预设</h3><p>提供降噪、噪声门、压缩器与限制器预设，并可调整录音延迟。</p></article>
+                    <article><i class="fas fa-shield-halved"></i><h3>冲突自动处理</h3><p>自动处理麦克风静音与录像音轨冲突，停止录制后恢复原有设置。</p></article>
+                    <article><i class="fas fa-gauge-high"></i><h3>实时状态提示</h3><p>提供音量、无信号与爆音提示，支持紧凑模式和可滚动面板。</p></article>
+                    <article><i class="fas fa-rotate"></i><h3>异常恢复</h3><p>OBS 意外退出后，插件会尝试恢复尚未完成的 WAV 录音。</p></article>
+                    <article><i class="fas fa-language"></i><h3>中英文界面</h3><p>自动识别 OBS 界面语言，也可以手动选择中文或英文。</p></article>
+                    <article><i class="fas fa-file-audio"></i><h3>可靠的 MP3 转换</h3><p>依次尝试内置 LAME、系统 LAME 与 FFmpeg，转换失败时保留原始 WAV。</p></article>
+                </div>
+            </div>
+        </section>
+
+        <section class="product-section product-guide-section">
+            <div class="container product-guide-layout">
+                <div class="guide-main">
+                    <div class="product-section-heading left"><span>INSTALLATION</span><h2>一键安装</h2></div>
+                    <ol class="install-steps">
+                        <li><b>完全退出 OBS Studio</b><span>解压下载的插件安装包。</span></li>
+                        <li><b>右键点击 Install Split Recorder.command</b><span>选择“打开”。如果 macOS 阻止脚本启动，请进入“系统设置 → 隐私与安全性”，在安全提示处选择允许或“仍要打开”，然后再次启动脚本。</span></li>
+                        <li><b>等待终端显示安装完成</b><span>脚本会自动复制插件并执行必要的临时签名。</span></li>
+                        <li><b>重新启动 OBS Studio</b><span>在顶部菜单进入“停靠窗口 → Split Recorder”。</span></li>
+                    </ol>
+                    <div class="security-permission-card"><i class="fas fa-lock-open"></i><div><strong>脚本被 macOS 拦截时</strong><span>打开“系统设置 → 隐私与安全性”，向下找到对 <b>Install Split Recorder.command</b> 的安全提示，允许启动或点击“仍要打开”。完成后再右键脚本并选择“打开”。</span></div></div>
+                    <div class="path-card"><span>默认安装位置</span><code>~/Library/Application Support/obs-studio/plugins</code></div>
+                    <details class="help-details"><summary>如果系统提示脚本没有执行权限</summary><p>打开“终端”，输入 <code>chmod +x </code>（末尾保留一个空格），将 <code>Install Split Recorder.command</code> 拖入终端后按回车。之后再次右键脚本并选择“打开”。</p></details>
+                </div>
+                <aside class="quick-start-card">
+                    <span class="quick-label">FIRST RECORDING</span>
+                    <h2>第一次使用</h2>
+                    <ul>
+                        <li><i class="fas fa-toggle-on"></i><span>开启插件总开关</span></li>
+                        <li><i class="fas fa-microphone"></i><span>选择要单独录制的麦克风</span></li>
+                        <li><i class="fas fa-music"></i><span>选择 WAV、M4A 或 MP3</span></li>
+                        <li><i class="fas fa-folder-open"></i><span>选择音频保存位置</span></li>
+                        <li><i class="fas fa-link"></i><span>保持“跟随 OBS 原生录制按钮”开启</span></li>
+                        <li><i class="fas fa-wand-magic-sparkles"></i><span>建议开启“自动解决麦克风冲突”</span></li>
+                    </ul>
+                    <div class="filename-example"><small>OBS 保存</small><code>Game_Record_2026-07-17.mkv</code><i class="fas fa-arrow-down"></i><small>插件自动生成</small><code>Game_Record_2026-07-17_Mic.mp3</code></div>
+                </aside>
+            </div>
+        </section>
+
+        <section class="product-section product-details-section">
+            <div class="container detail-grid">
+                <article><span>MIC CONFLICT</span><h2>麦克风冲突处理</h2><p>开启“自动解决麦克风冲突”后，插件会保存麦克风原来的静音与音轨状态，录制时临时将它移出 OBS 主录像音轨，停止后再恢复原设置。桌面声音、游戏声音与其他音频来源仍由 OBS 音轨设置控制。</p></article>
+                <article><span>MP3 OUTPUT</span><h2>MP3 输出</h2><p>插件优先使用安装包内置的 LAME MP3 编码器，通常无需额外安装。若内置编码器无法使用，可执行 <code>brew install lame</code>。只有确认 MP3 转换成功后，临时 WAV 才会被删除。</p></article>
+                <article><span>UNINSTALL</span><h2>卸载方法</h2><p>完全退出 OBS，右键安装包内的 <code>Uninstall-Split-Recorder.command</code> 并选择“打开”，即可删除已安装的插件。</p></article>
+                <article><span>OPEN SOURCE</span><h2>MIT License</h2><p>OBS Split Recorder 自身编写的源代码采用 MIT License，可自由使用、学习、修改和分发，但需保留原始版权声明与许可文本。OBS Studio、LAME、FFmpeg 等项目仍分别遵循各自协议。</p></article>
+            </div>
+        </section>
+
+        <section class="product-final-cta">
+            <div class="container">
+                <div><span>READY TO RECORD?</span><h2>让画面和声音，从录制开始就各得其所。</h2><p>下载前请再次确认你的 Mac 使用 Apple Silicon / M 系列芯片。</p></div>
+                <a href="downloads/obs-split-recorder-macos-apple-silicon.zip" download class="product-download-btn obs-download-trigger"><i class="fas fa-download"></i> 下载 macOS M 系列版</a>
+            </div>
+        </section>
+    </main>
+
+    <div class="download-modal" id="downloadModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="downloadModalTitle">
+        <div class="download-modal-backdrop" data-close-download></div>
+        <div class="download-modal-card">
+            <button class="download-modal-close" data-close-download aria-label="关闭"><i class="fas fa-times"></i></button>
+            <div class="modal-apple-icon"><i class="fab fa-apple"></i></div>
+            <span class="modal-kicker">COMPATIBILITY CHECK</span>
+            <h2 id="downloadModalTitle">下载前请确认芯片类型</h2>
+            <p>当前文件<strong>仅适用于配备 Apple Silicon / M 系列芯片的 macOS</strong>，支持 M1、M2、M3、M4 及后续型号。</p>
+            <div class="modal-unsupported"><i class="fas fa-circle-xmark"></i> 不支持 Intel Mac 或 Windows，不同系统和处理器架构的插件文件不能混用。</div>
+            <div class="download-modal-actions">
+                <button type="button" class="modal-cancel" data-close-download>返回检查</button>
+                <a href="downloads/obs-split-recorder-macos-apple-silicon.zip" download class="modal-confirm" id="confirmedDownload"><i class="fas fa-download"></i> 我的 Mac 是 M 系列，继续下载</a>
+            </div>
+        </div>
+    </div>
+
+    <footer class="product-footer"><div class="container"><p>© power by WTX. 保留所有权利。</p><a href="https://github.com/Allen-ux-dev/obs-split-recorder" target="_blank" rel="noopener noreferrer">GitHub 项目 <i class="fas fa-arrow-up-right-from-square"></i></a></div></footer>
+
+    <script>
+        (function () {
+            const modal = document.getElementById('downloadModal');
+            const openers = [document.getElementById('obsDownloadButton'), ...document.querySelectorAll('.obs-download-trigger')].filter(Boolean);
+            const closeModal = () => { modal.classList.remove('open'); modal.setAttribute('aria-hidden', 'true'); document.body.classList.remove('modal-open'); };
+            openers.forEach((opener) => opener.addEventListener('click', (event) => { event.preventDefault(); modal.classList.add('open'); modal.setAttribute('aria-hidden', 'false'); document.body.classList.add('modal-open'); modal.querySelector('[data-close-download]').focus(); }));
+            modal.querySelectorAll('[data-close-download]').forEach((item) => item.addEventListener('click', closeModal));
+            document.getElementById('confirmedDownload').addEventListener('click', closeModal);
+            document.addEventListener('keydown', (event) => { if (event.key === 'Escape' && modal.classList.contains('open')) closeModal(); });
+            const menuButton = document.getElementById('productMenuBtn');
+            const mobileLinks = document.getElementById('productMobileLinks');
+            menuButton.addEventListener('click', () => { const open = mobileLinks.classList.toggle('open'); menuButton.setAttribute('aria-expanded', String(open)); });
+        })();
+    </script>
+</body>
+</html>
