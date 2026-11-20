@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>研究 - WTX</title>
-    <meta name="description" content="WTX 的研究笔记：静态分析、链路追踪、参数与开关。不靠感觉，只靠证据。">
+    <meta name="description" content="WTX 的研究笔记：App 静态分析、iOS 系统与越狱、上报链路与权限。不靠感觉，只靠证据。">
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css?v=20260714-works-fix">
@@ -321,8 +321,8 @@
         <section class="research-hero">
             <div class="container">
                 <p class="research-kicker"><span class="dollar">$</span> cat research/index.txt</p>
-                <h1 class="research-title">把黑盒拆开，<br>看清它到底怎么运转。</h1>
-                <p class="research-lead">静态分析、链路追踪、参数与开关。不靠感觉，只靠证据。</p>
+                <h1 class="research-title">拆到底层，<br>看清它怎么运转。</h1>
+                <p class="research-lead">App 静态分析、iOS 系统与越狱、上报链路与权限。不靠感觉，只靠证据。</p>
             </div>
         </section>
 
@@ -333,47 +333,47 @@
                     <a class="research-card" href="research/douyin-39.9.0.html">
                         <div class="research-thumb thumb-a"><span class="research-num">01</span></div>
                         <div class="research-meta">
-                            <span class="research-tag">案例研究</span>
+                            <span class="research-tag">已发布</span>
                             <h2>抖音 iOS 39.9.0</h2>
                             <p>975 MB 二进制里的采集账本、八条上报链路，和一只过于灵敏的摇一摇。</p>
                             <span class="research-more">阅读全文 <i class="fas fa-arrow-right"></i></span>
                         </div>
                     </a>
 
-                    <a class="research-card" href="research/douyin-39.9.0.html#s2">
-                        <div class="research-thumb thumb-b"><span class="research-num">02</span></div>
-                        <div class="research-meta">
-                            <span class="research-tag">数据</span>
-                            <h2>34 项采集清单</h2>
-                            <p>把「调用了哪个系统 API」映射到「采了哪类数据」，再逐条对上开关。</p>
-                            <span class="research-more">查看清单 <i class="fas fa-arrow-right"></i></span>
-                        </div>
-                    </a>
-
-                    <a class="research-card" href="research/douyin-39.9.0.html#s4">
-                        <div class="research-thumb thumb-c"><span class="research-num">03</span></div>
-                        <div class="research-meta">
-                            <span class="research-tag">方法</span>
-                            <h2>启动端点与复现路径</h2>
-                            <p>从一次冷启动开始，它依次打了哪些端点；以及怎么自己复核一遍。</p>
-                            <span class="research-more">查看方法 <i class="fas fa-arrow-right"></i></span>
-                        </div>
-                    </a>
-
                     <div class="research-card is-pending">
-                        <div class="research-thumb thumb-d"><span class="research-num">04</span></div>
+                        <div class="research-thumb thumb-b"><span class="research-num">02</span></div>
                         <div class="research-meta">
                             <span class="research-tag">进行中</span>
                             <h2>微信 8.0.76</h2>
-                            <p>另一个 389 MB 的样本，同样的方法，正在拆。</p>
+                            <p>389 MB 的样本，同一套方法，正在拆。</p>
                             <span class="research-more">即将发布</span>
                         </div>
                     </div>
 
+                    <div class="research-card is-pending">
+                        <div class="research-thumb thumb-c"><span class="research-num">03</span></div>
+                        <div class="research-meta">
+                            <span class="research-tag">计划</span>
+                            <h2>iOS 越狱</h2>
+                            <p>从引导链到 SpringBoard，把越狱链的前提条件一个个验证过去。</p>
+                            <span class="research-more">筹备中</span>
+                        </div>
+                    </div>
+
+                    <a class="research-card" href="research/douyin-39.9.0.html#appendix">
+                        <div class="research-thumb thumb-d"><span class="research-num">04</span></div>
+                        <div class="research-meta">
+                            <span class="research-tag">方法</span>
+                            <h2>读法与工具</h2>
+                            <p>静态分析流程、字符串提取与复现路径，可以照着跑一遍。</p>
+                            <span class="research-more">查看方法 <i class="fas fa-arrow-right"></i></span>
+                        </div>
+                    </a>
+
                 </div>
 
                 <div class="research-note">
-                    <p>所有结论均来自静态分析，未经运行时抓包验证。数字类结论可在正文附录中自行复核。</p>
+                    <p>研究范围：App 静态分析、iOS 系统与越狱、数据链路与权限。所有结论均来自静态分析，未经运行时抓包验证，数字类结论可在正文附录中自行复核。</p>
                 </div>
             </div>
         </section>
