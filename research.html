@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>研究 - WTX</title>
+    <meta name="description" content="WTX 的研究笔记：静态分析、链路追踪、参数与开关。不靠感觉，只靠证据。">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css?v=20260714-works-fix">
+
+    <style>
+        /* ===== Research 页（跟随主题：浅色/深色/青色） ===== */
+        .research-hero, .research-body {
+            --r-ink: #1d1d1f;
+            --r-muted: rgba(0,0,0,0.60);
+            --r-card: rgba(255,255,255,0.70);
+            --r-card-hover: rgba(255,255,255,0.88);
+            --r-border: rgba(0,0,0,0.10);
+            --r-note: rgba(0,0,0,0.045);
+        }
+        body.dark-theme .research-hero, body.dark-theme .research-body {
+            --r-ink: #ffffff;
+            --r-muted: rgba(255,255,255,0.72);
+            --r-card: rgba(255,255,255,0.10);
+            --r-card-hover: rgba(255,255,255,0.16);
+            --r-border: rgba(255,255,255,0.20);
+            --r-note: rgba(255,255,255,0.07);
+        }
+
+        .research-hero { padding: 150px 0 46px; color: var(--r-ink); }
+        .research-hero .container { text-align: left; }
+
+        .research-kicker {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+            font-size: clamp(13px, 1.5vw, 15px);
+            letter-spacing: 0.02em;
+            color: var(--r-muted);
+            margin-bottom: 18px;
+        }
+        .research-kicker .dollar { color: #ff5a45; margin-right: 6px; font-weight: 700; }
+
+        .research-title {
+            font-size: clamp(40px, 7.2vw, 92px);
+            line-height: 1.04;
+            letter-spacing: -0.035em;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--r-ink);
+            text-wrap: balance;
+        }
+
+        .research-lead {
+            font-size: clamp(16px, 1.9vw, 21px);
+            line-height: 1.55;
+            color: var(--r-muted);
+            max-width: 30em;
+        }
+
+        .research-body { padding: 26px 0 90px; }
+
+        .research-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 22px;
+        }
+
+        .research-card {
+            display: flex;
+            flex-direction: column;
+            border-radius: 18px;
+            overflow: hidden;
+            background: var(--r-card);
+            border: 1px solid var(--r-border);
+            -webkit-backdrop-filter: blur(18px) saturate(140%);
+            backdrop-filter: blur(18px) saturate(140%);
+            text-decoration: none;
+            color: var(--r-ink);
+            transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+                        background 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+        }
+        .research-card:hover {
+            transform: translateY(-6px);
+            background: var(--r-card-hover);
+            border-color: var(--r-ink);
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.18);
+        }
+        .research-card.is-pending { opacity: 0.9; }
+        .research-card.is-pending:hover { transform: none; }
+
+        .research-thumb {
+            position: relative;
+            aspect-ratio: 4 / 5;
+            display: flex;
+            align-items: flex-end;
+            justify-content: flex-end;
+            padding: 14px;
+            overflow: hidden;
+        }
+        .research-thumb::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(120% 90% at 20% 15%, rgba(255,255,255,0.26), transparent 60%);
+        }
+        .thumb-a { background: linear-gradient(160deg, #7b5cff 0%, #3f2bd6 45%, #111a4d 100%); }
+        .thumb-b { background: linear-gradient(160deg, #ff9a3d 0%, #ff4d8d 50%, #6a1b4d 100%); }
+        .thumb-c { background: linear-gradient(160deg, #22d3c5 0%, #1583c9 50%, #0a2a4a 100%); }
+        .thumb-d { background: linear-gradient(160deg, #6b7280 0%, #3f4653 55%, #171a21 100%); }
+
+        .research-num {
+            position: relative;
+            z-index: 1;
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+            font-size: clamp(28px, 3.4vw, 42px);
+            font-weight: 700;
+            line-height: 1;
+            color: rgba(255, 255, 255, 0.88);
+            letter-spacing: -0.04em;
+        }
+
+        .research-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding: 18px 18px 20px;
+        }
+        .research-tag {
+            align-self: flex-start;
+            font-size: 12px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--r-muted);
+            border: 1px solid var(--r-border);
+            border-radius: 999px;
+            padding: 3px 10px;
+        }
+        .research-meta h2 {
+            font-size: 19px;
+            line-height: 1.28;
+            letter-spacing: -0.012em;
+            font-weight: 650;
+            color: var(--r-ink);
+        }
+        .research-meta p {
+            font-size: 14px;
+            line-height: 1.55;
+            color: var(--r-muted);
+        }
+        .research-more {
+            margin-top: 4px;
+            font-size: 14px;
+            color: var(--r-ink);
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+        }
+        .research-card:hover .research-more i { transform: translateX(4px); }
+        .research-more i { transition: transform 0.3s ease; font-size: 12px; }
+
+        .research-note {
+            margin-top: 34px;
+            padding: 16px 20px;
+            border-radius: 14px;
+            background: var(--r-note);
+            border: 1px solid var(--r-border);
+        }
+        .research-note p {
+            font-size: 13px;
+            line-height: 1.6;
+            color: var(--r-muted);
+            margin: 0;
+        }
+
+        @media (max-width: 1100px) {
+            .research-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
+        @media (max-width: 640px) {
+            .research-hero { padding: 118px 0 34px; }
+            .research-grid { grid-template-columns: 1fr; gap: 18px; }
+            .research-thumb { aspect-ratio: 16 / 10; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .research-card, .research-more i { transition: none; }
+            .research-card:hover { transform: none; }
+        }
+    </style>
+</head>
+<body data-i18n-title="researchPageTitle">
+    <div class="gradient-blinds-container" id="gradientBlindsBg"></div>
+    <div class="click-spark-container" id="clickSparkContainer"></div>
+
+    <nav>
+        <div class="container nav-container">
+            <a href="index.html" class="logo">WTX</a>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link" data-i18n="home">首页</a>
+                <a href="history.html" class="nav-link" data-i18n="history">历史</a>
+                <a href="events.html" class="nav-link" data-i18n="events">事件</a>
+                <a href="research.html" class="nav-link active" data-i18n="navResearch">研究</a>
+                <a href="index.html#skills" class="nav-link" data-i18n="navSkills">专业技能</a>
+                <a href="index.html#projects" class="nav-link" data-i18n="navProjects">项目经验</a>
+                <a href="index.html#about" class="nav-link" data-i18n="navAbout">关于我</a>
+                <a href="index.html#contact" class="nav-link" data-i18n="navContact">联系方式</a>
+                <div class="user-status" id="userStatus">
+                    <div class="user-avatar" id="userAvatar" style="display: none;"></div>
+                    <span class="user-name" id="userName" style="display: none;"></span>
+                    <button class="login-btn" id="loginBtn" data-i18n="login">登录</button>
+                </div>
+                <div class="language-switcher" id="languageSwitcher">
+                    <span id="currentLanguage">中文</span>
+                    <i class="fas fa-chevron-down"></i>
+                    <div class="language-options" id="languageOptions">
+                        <div class="language-option" data-lang="zh">中文</div>
+                        <div class="language-option" data-lang="en">English</div>
+                        <div class="language-option" data-lang="fr">Français</div>
+                    </div>
+                </div>
+                <button class="settings-btn" id="settingsBtn">
+                    <i class="fas fa-cog"></i>
+                </button>
+            </div>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+    <div class="mobile-menu" id="mobileMenu">
+        <button class="mobile-menu-close" id="mobileMenuClose">
+            <i class="fas fa-times"></i>
+        </button>
+        <div class="mobile-menu-links">
+            <a href="index.html" class="nav-link" data-i18n="home">首页</a>
+            <a href="history.html" class="nav-link" data-i18n="history">历史</a>
+            <a href="events.html" class="nav-link" data-i18n="events">事件</a>
+            <a href="research.html" class="nav-link active" data-i18n="navResearch">研究</a>
+            <a href="index.html#skills" class="nav-link" data-i18n="navSkills">专业技能</a>
+            <a href="index.html#projects" class="nav-link" data-i18n="navProjects">项目经验</a>
+            <a href="index.html#about" class="nav-link" data-i18n="navAbout">关于我</a>
+            <a href="index.html#contact" class="nav-link" data-i18n="navContact">联系方式</a>
+            <div class="user-status" id="mobileUserStatus">
+                <div class="user-avatar" id="mobileUserAvatar" style="display: none;"></div>
+                <span class="user-name" id="mobileUserName" style="display: none;"></span>
+                <a href="#" class="mobile-login-btn" id="mobileLoginBtn" data-i18n="login">登录</a>
+            </div>
+            <div class="language-switcher" id="mobileLanguageSwitcher">
+                <span id="mobileCurrentLanguage">中文</span>
+                <i class="fas fa-chevron-down"></i>
+                <div class="language-options" id="mobileLanguageOptions">
+                    <div class="language-option" data-lang="zh">中文</div>
+                    <div class="language-option" data-lang="en">English</div>
+                    <div class="language-option" data-lang="fr">Français</div>
+                </div>
+            </div>
+            <a href="#" id="mobileSettingsBtn">
+                <i class="fas fa-cog"></i> <span data-i18n="mobileSettings">网站设置</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="settings-overlay" id="settingsOverlay"></div>
+    <div class="settings-panel" id="settingsPanel">
+        <div class="settings-header">
+            <h2 class="settings-title" data-i18n="settings">网站设置</h2>
+            <button class="close-settings" id="closeSettings">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="setting-group">
+            <label class="setting-label" data-i18n="theme">主题</label>
+            <div class="theme-options">
+                <div class="theme-option active" data-theme="light" data-i18n="light">浅色</div>
+                <div class="theme-option" data-theme="dark" data-i18n="dark">深色</div>
+                <div class="theme-option" data-theme="cyan" data-i18n="cyan">青色</div>
+            </div>
+        </div>
+        <div class="setting-group">
+            <label class="setting-label" data-i18n="fontSize">字体大小</label>
+            <div class="font-options">
+                <div class="font-option" data-font="small" data-i18n="small">小</div>
+                <div class="font-option active" data-font="medium" data-i18n="medium">中</div>
+                <div class="font-option" data-font="large" data-i18n="large">大</div>
+            </div>
+        </div>
+        <div class="setting-option">
+            <span class="setting-option-label" data-i18n="animations">动画效果</span>
+            <label class="toggle-switch">
+                <input type="checkbox" id="animationsToggle" checked>
+                <span class="toggle-slider"></span>
+            </label>
+        </div>
+        <div class="setting-option">
+            <span class="setting-option-label" data-i18n="smoothScroll">平滑滚动</span>
+            <label class="toggle-switch">
+                <input type="checkbox" id="smoothScrollToggle" checked>
+                <span class="toggle-slider"></span>
+            </label>
+        </div>
+        <div class="setting-option">
+            <span class="setting-option-label" data-i18n="hoverEffects">悬停效果</span>
+            <label class="toggle-switch">
+                <input type="checkbox" id="hoverEffectsToggle" checked>
+                <span class="toggle-slider"></span>
+            </label>
+        </div>
+        <div class="setting-option">
+            <span class="setting-option-label" data-i18n="clickSpark">点击火花效果</span>
+            <label class="toggle-switch">
+                <input type="checkbox" id="clickSparkToggle" checked>
+                <span class="toggle-slider"></span>
+            </label>
+        </div>
+        <div class="setting-group">
+            <button class="reset-btn" id="resetSettings" data-i18n="reset">重置为默认设置</button>
+        </div>
+    </div>
+
+    <main>
+        <section class="research-hero">
+            <div class="container">
+                <p class="research-kicker"><span class="dollar">$</span> cat research/index.txt</p>
+                <h1 class="research-title">把黑盒拆开，<br>看清它到底怎么运转。</h1>
+                <p class="research-lead">静态分析、链路追踪、参数与开关。不靠感觉，只靠证据。</p>
+            </div>
+        </section>
+
+        <section class="research-body">
+            <div class="container">
+                <div class="research-grid">
+
+                    <a class="research-card" href="research/douyin-39.9.0.html">
+                        <div class="research-thumb thumb-a"><span class="research-num">01</span></div>
+                        <div class="research-meta">
+                            <span class="research-tag">案例研究</span>
+                            <h2>抖音 iOS 39.9.0</h2>
+                            <p>975 MB 二进制里的采集账本、八条上报链路，和一只过于灵敏的摇一摇。</p>
+                            <span class="research-more">阅读全文 <i class="fas fa-arrow-right"></i></span>
+                        </div>
+                    </a>
+
+                    <a class="research-card" href="research/douyin-39.9.0.html#s2">
+                        <div class="research-thumb thumb-b"><span class="research-num">02</span></div>
+                        <div class="research-meta">
+                            <span class="research-tag">数据</span>
+                            <h2>34 项采集清单</h2>
+                            <p>把「调用了哪个系统 API」映射到「采了哪类数据」，再逐条对上开关。</p>
+                            <span class="research-more">查看清单 <i class="fas fa-arrow-right"></i></span>
+                        </div>
+                    </a>
+
+                    <a class="research-card" href="research/douyin-39.9.0.html#s4">
+                        <div class="research-thumb thumb-c"><span class="research-num">03</span></div>
+                        <div class="research-meta">
+                            <span class="research-tag">方法</span>
+                            <h2>启动端点与复现路径</h2>
+                            <p>从一次冷启动开始，它依次打了哪些端点；以及怎么自己复核一遍。</p>
+                            <span class="research-more">查看方法 <i class="fas fa-arrow-right"></i></span>
+                        </div>
+                    </a>
+
+                    <div class="research-card is-pending">
+                        <div class="research-thumb thumb-d"><span class="research-num">04</span></div>
+                        <div class="research-meta">
+                            <span class="research-tag">进行中</span>
+                            <h2>微信 8.0.76</h2>
+                            <p>另一个 389 MB 的样本，同样的方法，正在拆。</p>
+                            <span class="research-more">即将发布</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="research-note">
+                    <p>所有结论均来自静态分析，未经运行时抓包验证。数字类结论可在正文附录中自行复核。</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>WTX</h3>
+                    <p data-i18n="footerTagline">苹果风格个人网页 · 模块化版本</p>
+                </div>
+                <div class="footer-column">
+                    <h3 data-i18n="pages">页面</h3>
+                    <ul>
+                        <li><a href="events.html" data-i18n="events">事件</a></li>
+                        <li><a href="history.html" data-i18n="history">历史</a></li>
+                        <li><a href="research.html" data-i18n="navResearch">研究</a></li>
+                        <li><a href="admin-event-history.html" data-i18n="adminShort">管理</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">© 2026 WTX. Modular Apple Style Site.</div>
+        </div>
+    </footer>
+    <script defer src="js/common.js?v=20261120-research"></script>
+</body>
+</html>
