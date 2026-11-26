@@ -1,0 +1,176 @@
+{
+  "schemaVersion": 1,
+  "checkedAt": "2026-11-26",
+  "device": {
+    "name": "iPhone 11",
+    "models": [
+      "iPhone12,1",
+      "iPhone12,2",
+      "iPhone12,3",
+      "iPhone12,4"
+    ],
+    "soc": "A13",
+    "ios": "26.6",
+    "note": "A13 到 iOS 27 才切 SPTM，26.x 上仍是 PPL；越狱要等覆盖 26.6 的内核漏洞。"
+  },
+  "curatedNote": "「覆盖」列取自各项目 README / Release 原文；「在你的机器上」是人工按 26.6 · A13 判定的结论，不是自动解析。latest 字段由 GitHub Actions 每天刷新。",
+  "tools": [
+    {
+      "id": "sidestore",
+      "name": "SideStore",
+      "kind": "sideload",
+      "kindLabel": "侧载",
+      "repo": "SideStore/SideStore",
+      "homepage": "https://sidestore.io",
+      "coverage": "iOS 12.2 及以上",
+      "verdict": "yes",
+      "verdictText": "可用",
+      "note": "7 天用配对设备续签一次，26.6 上最稳的日常方案。",
+      "latest": {
+        "tag": "0.7.0-alpha",
+        "date": "2026-09-15"
+      }
+    },
+    {
+      "id": "altstore",
+      "name": "AltStore",
+      "kind": "sideload",
+      "kindLabel": "侧载",
+      "repo": "altstoreio/AltStore",
+      "homepage": "https://altstore.io",
+      "coverage": "iOS 12.2 及以上",
+      "verdict": "yes",
+      "verdictText": "可用",
+      "note": "需要电脑端 AltServer；同样 7 天续签。",
+      "latest": {
+        "tag": "v2.3",
+        "date": "2026-09-30",
+        "url": "https://github.com/altstoreio/AltStore/releases/tag/v2.3"
+      }
+    },
+    {
+      "id": "livecontainer",
+      "name": "LiveContainer",
+      "kind": "tool",
+      "kindLabel": "免签运行",
+      "repo": "LiveContainer/LiveContainer",
+      "coverage": "iOS 14 及以上",
+      "verdict": "yes",
+      "verdictText": "可用",
+      "note": "一个壳里装多个 ipa，不占 3 个 App 配额，配合 SideStore 用。",
+      "latest": {
+        "tag": "3.8.0",
+        "date": "2026-07-17"
+      }
+    },
+    {
+      "id": "stikdebug",
+      "name": "StikDebug",
+      "kind": "tool",
+      "kindLabel": "JIT",
+      "repo": "jkcoxson/StikDebug",
+      "coverage": "iOS 17 及以上（需配对设备）",
+      "verdict": "yes",
+      "verdictText": "可用",
+      "note": "接电脑或配对设备后开 JIT，模拟器一类能跑起来。",
+      "latest": {
+        "tag": "Nightly",
+        "date": "2026-03-08",
+        "url": "https://github.com/jkcoxson/StikDebug/releases"
+      }
+    },
+    {
+      "id": "clipwire",
+      "name": "clipwire",
+      "kind": "research",
+      "kindLabel": "内核研究",
+      "repo": "olaffx/clipwire",
+      "coverage": "iOS 26.1（iPhone 11 系列 / A13）",
+      "verdict": "partial",
+      "verdictText": "研究样本",
+      "note": "两个 xnu bug 在 26.6 已修，harness 本身面向 26.1；能读机理、对偏移，不是成品越狱。",
+      "latest": {
+        "tag": "",
+        "date": "2026-08-15"
+      }
+    },
+    {
+      "id": "dopamine",
+      "name": "Dopamine",
+      "kind": "jailbreak",
+      "kindLabel": "越狱",
+      "repo": "opa334/Dopamine",
+      "coverage": "15.0–18.7.1（arm64/arm64e）；26.0–26.0.1（仅 A12/A13）",
+      "verdict": "no",
+      "verdictText": "不覆盖 26.6",
+      "note": "26.x 只开到 26.0.1，且仅 A12/A13。停在 26.0.1 的 A13 现在就能用。",
+      "latest": {
+        "tag": "3.0.13",
+        "date": "2026-11-03"
+      }
+    },
+    {
+      "id": "relaxin",
+      "name": "Relaxin",
+      "kind": "jailbreak",
+      "kindLabel": "越狱（RootHide）",
+      "repo": "owngoal-dev/Relaxin",
+      "coverage": "16.5.1–17.3.1",
+      "verdict": "no",
+      "verdictText": "不覆盖 26.6",
+      "note": "开源仓库是快照，只声明到 17.3.1；本地留了 0.5.5 的 ipa。",
+      "latest": {
+        "tag": "",
+        "date": "2026-08-17"
+      }
+    },
+    {
+      "id": "misaka26",
+      "name": "misaka26",
+      "kind": "tool",
+      "kindLabel": "免越狱定制",
+      "repo": "straight-tamago/misaka26",
+      "coverage": "iOS / iPadOS 16.0–26.1",
+      "verdict": "no",
+      "verdictText": "不覆盖 26.6",
+      "note": "改图标、状态栏、系统外观，不需要越狱；26.6 在声明的上界之外，可自测。",
+      "latest": {
+        "tag": "26.1.6",
+        "date": "2025-11-19"
+      }
+    },
+    {
+      "id": "trollstore",
+      "name": "TrollStore",
+      "kind": "tool",
+      "kindLabel": "永久签名",
+      "repo": "opa334/TrollStore",
+      "coverage": "依赖 CoreTrust 漏洞（14.0–17.0 一档）",
+      "verdict": "no",
+      "verdictText": "26.x 已补",
+      "note": "26.x 的 CoreTrust 补过，装不上；替代是 SideStore 的 7 天续签。",
+      "latest": {
+        "tag": "2.1.1",
+        "date": "2026-04-01"
+      }
+    }
+  ],
+  "watch": [
+    {
+      "label": "opa334",
+      "url": "https://github.com/opa334"
+    },
+    {
+      "label": "staturnzz",
+      "url": "https://github.com/staturnzz"
+    },
+    {
+      "label": "olaffx（clipwire 分支）",
+      "url": "https://github.com/olaffx"
+    },
+    {
+      "label": "Apple Wiki · iOS 26",
+      "url": "https://theapplewiki.com/wiki/IOS_26"
+    }
+  ]
+}

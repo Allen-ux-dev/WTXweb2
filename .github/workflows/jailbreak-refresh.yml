@@ -1,0 +1,33 @@
+name: jailbreak-refresh
+
+on:
+  schedule:
+    - cron: '17 1 * * *'   # 每天 01:17 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Refresh latest versions
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node scripts/refresh-jailbreak.mjs
+      - name: Commit if changed
+        run: |
+          if [ -n "$(git status --porcelain data/jailbreak.json)" ]; then
+            git config user.name "jailbreak-bot"
+            git config user.email "jailbreak-bot@users.noreply.github.com"
+            git add data/jailbreak.json
+            git commit -m "chore(jailbreak): refresh latest versions"
+            git push
+          else
+            echo "no change"
+          fi

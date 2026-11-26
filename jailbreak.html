@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>越狱进度 - WTX</title>
+    <meta name="description" content="iOS 越狱与侧载进度看板：以 iPhone 11 / A13 / iOS 26.6 为准，逐项列出现在能用的工具、覆盖范围和最近版本。">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css?v=20260714-works-fix">
+
+
+    <style>
+        /* ===== 越狱进度看板（跟随主题） ===== */
+        .jb-hero, .jb-body {
+            --jb-ink: #1d1d1f;
+            --jb-muted: rgba(0,0,0,0.58);
+            --jb-card: rgba(255,255,255,0.72);
+            --jb-border: rgba(0,0,0,0.10);
+            --jb-note: rgba(0,0,0,0.045);
+            --jb-yes: #0f9d58;
+            --jb-partial: #c27c00;
+            --jb-no: rgba(0,0,0,0.42);
+        }
+        body.dark-theme .jb-hero, body.dark-theme .jb-body {
+            --jb-ink: #ffffff;
+            --jb-muted: rgba(255,255,255,0.70);
+            --jb-card: rgba(255,255,255,0.10);
+            --jb-border: rgba(255,255,255,0.20);
+            --jb-note: rgba(255,255,255,0.07);
+            --jb-yes: #3ddc84;
+            --jb-partial: #ffc061;
+            --jb-no: rgba(255,255,255,0.45);
+        }
+        body.cyan-theme .jb-hero, body.cyan-theme .jb-body {
+            --jb-yes: #22e0c8;
+            --jb-partial: #7ee0ff;
+        }
+
+        .jb-hero { padding: 150px 0 40px; color: var(--jb-ink); }
+        .jb-hero .container { text-align: left; }
+        .jb-kicker {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+            font-size: clamp(13px, 1.5vw, 15px);
+            letter-spacing: 0.02em;
+            color: var(--jb-muted);
+            margin-bottom: 18px;
+            word-break: break-all;
+        }
+        .jb-kicker .dollar { color: #ff5a45; margin-right: 6px; font-weight: 700; }
+        .jb-title {
+            font-size: clamp(38px, 6.6vw, 84px);
+            line-height: 1.04;
+            letter-spacing: -0.035em;
+            font-weight: 700;
+            margin-bottom: 18px;
+            color: var(--jb-ink);
+            text-wrap: balance;
+        }
+        .jb-lead {
+            font-size: clamp(16px, 1.8vw, 20px);
+            line-height: 1.55;
+            color: var(--jb-muted);
+            max-width: 32em;
+        }
+        .jb-hero-meta {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 12px;
+            margin-top: 22px;
+        }
+        .jb-chip {
+            display: inline-flex;
+            align-items: baseline;
+            gap: 2px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            border: 1px solid var(--jb-border);
+            background: var(--jb-card);
+            font-size: 14px;
+            color: var(--jb-ink);
+        }
+        .jb-verdict {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+            font-size: 13px;
+            color: var(--jb-muted);
+        }
+        .jb-device-note {
+            margin-top: 14px;
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--jb-muted);
+            max-width: 40em;
+        }
+
+        .jb-body { padding: 10px 0 90px; color: var(--jb-ink); }
+
+        .jb-stats {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 12px;
+            margin-bottom: 22px;
+        }
+        .jb-stat {
+            border: 1px solid var(--jb-border);
+            background: var(--jb-card);
+            border-radius: 16px;
+            padding: 16px 18px;
+        }
+        .jb-stat-num {
+            display: block;
+            font-size: 30px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+        }
+        .jb-stat-label { font-size: 13px; color: var(--jb-muted); }
+        .jb-stat--yes .jb-stat-num { color: var(--jb-yes); }
+        .jb-stat--partial .jb-stat-num { color: var(--jb-partial); }
+        .jb-stat--no .jb-stat-num { color: var(--jb-no); }
+
+        .jb-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        .jb-filters { display: flex; flex-wrap: wrap; gap: 8px; }
+        .jb-filters button {
+            appearance: none;
+            border: 1px solid var(--jb-border);
+            background: transparent;
+            color: var(--jb-muted);
+            padding: 7px 14px;
+            border-radius: 999px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: color .2s, border-color .2s, background .2s;
+        }
+        .jb-filters button:hover { color: var(--jb-ink); border-color: var(--jb-ink); }
+        .jb-filters button.is-active {
+            background: var(--jb-ink);
+            border-color: var(--jb-ink);
+            color: #fff;
+        }
+        body.dark-theme .jb-filters button.is-active { color: #111; }
+        .jb-refresh {
+            appearance: none;
+            border: 1px solid var(--jb-border);
+            background: var(--jb-card);
+            color: var(--jb-ink);
+            padding: 8px 16px;
+            border-radius: 999px;
+            font-size: 13px;
+            cursor: pointer;
+        }
+        .jb-refresh.is-busy { opacity: .55; cursor: progress; }
+
+        .jb-list { display: flex; flex-direction: column; gap: 10px; }
+        .jb-row {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr);
+            gap: 10px 22px;
+            padding: 18px 20px;
+            border: 1px solid var(--jb-border);
+            border-radius: 16px;
+            background: var(--jb-card);
+        }
+        .jb-cell { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px; }
+        .jb-name {
+            font-size: 18px;
+            font-weight: 650;
+            color: var(--jb-ink);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+        }
+        .jb-name:hover { border-bottom-color: currentColor; }
+        .jb-kind {
+            font-size: 12px;
+            color: var(--jb-muted);
+            border: 1px solid var(--jb-border);
+            border-radius: 999px;
+            padding: 2px 9px;
+        }
+        .jb-k {
+            font-size: 12px;
+            letter-spacing: .04em;
+            color: var(--jb-muted);
+            min-width: 2.2em;
+        }
+        .jb-v { font-size: 14px; color: var(--jb-ink); }
+        .jb-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 13px; }
+        .jb-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 5px 12px;
+            border-radius: 999px;
+            border: 1px solid currentColor;
+        }
+        .jb-pill--yes { color: var(--jb-yes); }
+        .jb-pill--partial { color: var(--jb-partial); }
+        .jb-pill--no { color: var(--jb-no); }
+        .jb-dot {
+            width: 7px; height: 7px; border-radius: 50%;
+            background: currentColor; display: inline-block;
+        }
+        .jb-note {
+            margin-top: 2px;
+            font-size: 13.5px;
+            line-height: 1.6;
+            color: var(--jb-muted);
+        }
+        .jb-empty { color: var(--jb-muted); font-size: 14px; padding: 12px 2px; }
+
+        @media (min-width: 900px) {
+            .jb-row {
+                grid-template-columns: minmax(150px, 1.1fr) minmax(0, 1.5fr) auto minmax(120px, .7fr);
+                align-items: center;
+            }
+            .jb-cell--status, .jb-cell--latest { justify-content: flex-end; }
+            .jb-note { grid-column: 1 / -1; margin-top: 0; }
+        }
+
+        .jb-foot {
+            margin-top: 26px;
+            padding-top: 20px;
+            border-top: 1px solid var(--jb-border);
+            font-size: 13px;
+            line-height: 1.7;
+            color: var(--jb-muted);
+        }
+        .jb-foot code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+        .jb-watch { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+        .jb-watch-link {
+            font-size: 13px;
+            color: var(--jb-ink);
+            text-decoration: none;
+            border: 1px solid var(--jb-border);
+            border-radius: 999px;
+            padding: 5px 12px;
+            background: var(--jb-note);
+        }
+        .jb-watch-link:hover { border-color: var(--jb-ink); }
+
+        @media (max-width: 640px) {
+            .jb-hero { padding-top: 120px; }
+            .jb-stats { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+            .jb-stat { padding: 12px 12px; border-radius: 13px; }
+            .jb-stat-num { font-size: 22px; }
+            .jb-stat-label { font-size: 11px; }
+            .jb-row { padding: 16px; }
+        }
+
+    </style>
+</head>
+<body data-i18n-title="jailbreakPageTitle">
+    <div class="gradient-blinds-container" id="gradientBlindsBg"></div>
+    <div class="click-spark-container" id="clickSparkContainer"></div>
+
+    <nav>
+        <div class="container nav-container">
+            <a href="index.html" class="logo">WTX</a>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link" data-i18n="home">首页</a>
+                <a href="history.html" class="nav-link" data-i18n="history">历史</a>
+                <a href="events.html" class="nav-link" data-i18n="events">事件</a>
+                <a href="research.html" class="nav-link" data-i18n="navResearch">研究</a>
+                <a href="jailbreak.html" class="nav-link active" data-i18n="navJailbreak">越狱</a>
+                <a href="index.html#skills" class="nav-link" data-i18n="navSkills">专业技能</a>
+                <a href="index.html#projects" class="nav-link" data-i18n="navProjects">项目经验</a>
+                <a href="index.html#about" class="nav-link" data-i18n="navAbout">关于我</a>
+                <a href="index.html#contact" class="nav-link" data-i18n="navContact">联系方式</a>
+                <div class="user-status" id="userStatus">
+                    <div class="user-avatar" id="userAvatar" style="display: none;"></div>
+                    <span class="user-name" id="userName" style="display: none;"></span>
+                    <button class="login-btn" id="loginBtn" data-i18n="login">登录</button>
+                </div>
+                <div class="language-switcher" id="languageSwitcher">
+                    <span id="currentLanguage">中文</span>
+                    <i class="fas fa-chevron-down"></i>
+                    <div class="language-options" id="languageOptions">
+                        <div class="language-option" data-lang="zh">中文</div>
+                        <div class="language-option" data-lang="en">English</div>
+                        <div class="language-option" data-lang="fr">Français</div>
+                    </div>
+                </div>
+                <button class="settings-btn" id="settingsBtn">
+                    <i class="fas fa-cog"></i>
+                </button>
+            </div>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+    <div class="mobile-menu" id="mobileMenu">
+        <button class="mobile-menu-close" id="mobileMenuClose">
+            <i class="fas fa-times"></i>
+        </button>
+        <div class="mobile-menu-links">
+            <a href="index.html" class="nav-link" data-i18n="home">首页</a>
+            <a href="history.html" class="nav-link" data-i18n="history">历史</a>
+            <a href="events.html" class="nav-link" data-i18n="events">事件</a>
+            <a href="research.html" class="nav-link" data-i18n="navResearch">研究</a>
+                <a href="jailbreak.html" class="nav-link active" data-i18n="navJailbreak">越狱</a>
+            <a href="index.html#skills" class="nav-link" data-i18n="navSkills">专业技能</a>
+            <a href="index.html#projects" class="nav-link" data-i18n="navProjects">项目经验</a>
+            <a href="index.html#about" class="nav-link" data-i18n="navAbout">关于我</a>
+            <a href="index.html#contact" class="nav-link" data-i18n="navContact">联系方式</a>
+            <div class="user-status" id="mobileUserStatus">
+                <div class="user-avatar" id="mobileUserAvatar" style="display: none;"></div>
+                <span class="user-name" id="mobileUserName" style="display: none;"></span>
+                <a href="#" class="mobile-login-btn" id="mobileLoginBtn" data-i18n="login">登录</a>
+            </div>
+            <div class="language-switcher" id="mobileLanguageSwitcher">
+                <span id="mobileCurrentLanguage">中文</span>
+                <i class="fas fa-chevron-down"></i>
+                <div class="language-options" id="mobileLanguageOptions">
+                    <div class="language-option" data-lang="zh">中文</div>
+                    <div class="language-option" data-lang="en">English</div>
+                    <div class="language-option" data-lang="fr">Français</div>
+                </div>
+            </div>
+            <a href="#" id="mobileSettingsBtn">
+                <i class="fas fa-cog"></i> <span data-i18n="mobileSettings">网站设置</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="settings-overlay" id="settingsOverlay"></div>
+    <div class="settings-panel" id="settingsPanel">
+        <div class="settings-header">
+            <h2 class="settings-title" data-i18n="settings">网站设置</h2>
+            <button class="close-settings" id="closeSettings">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="setting-group">
+            <label class="setting-label" data-i18n="theme">主题</label>
+            <div class="theme-options">
+                <div class="theme-option active" data-theme="light" data-i18n="light">浅色</div>
+                <div class="theme-option" data-theme="dark" data-i18n="dark">深色</div>
+                <div class="theme-option" data-theme="cyan" data-i18n="cyan">青色</div>
+            </div>
+        </div>
+        <div class="setting-group">
+            <label class="setting-label" data-i18n="fontSize">字体大小</label>
+            <div class="font-options">
+                <div class="font-option" data-font="small" data-i18n="small">小</div>
+                <div class="font-option active" data-font="medium" data-i18n="medium">中</div>
+                <div class="font-option" data-font="large" data-i18n="large">大</div>
+            </div>
+        </div>
+        <div class="setting-option">
+            <span class="setting-option-label" data-i18n="animations">动画效果</span>
+            <label class="toggle-switch">
+                <input type="checkbox" id="animationsToggle" checked>
+                <span class="toggle-slider"></span>
+            </label>
+        </div>
+        <div class="setting-option">
+            <span class="setting-option-label" data-i18n="smoothScroll">平滑滚动</span>
+            <label class="toggle-switch">
+                <input type="checkbox" id="smoothScrollToggle" checked>
+                <span class="toggle-slider"></span>
+            </label>
+        </div>
+        <div class="setting-option">
+            <span class="setting-option-label" data-i18n="hoverEffects">悬停效果</span>
+            <label class="toggle-switch">
+                <input type="checkbox" id="hoverEffectsToggle" checked>
+                <span class="toggle-slider"></span>
+            </label>
+        </div>
+        <div class="setting-option">
+            <span class="setting-option-label" data-i18n="clickSpark">点击火花效果</span>
+            <label class="toggle-switch">
+                <input type="checkbox" id="clickSparkToggle" checked>
+                <span class="toggle-slider"></span>
+            </label>
+        </div>
+        <div class="setting-group">
+            <button class="reset-btn" id="resetSettings" data-i18n="reset">重置为默认设置</button>
+        </div>
+    </div>
+
+    <main>
+        <section class="jb-hero">
+            <div class="container">
+                <p class="jb-kicker"><span class="dollar">$</span> ios-check --device iPhone12,1 --ios 26.6</p>
+                <h1 class="jb-title">这台机器，<br>现在能跑到哪一步。</h1>
+                <p class="jb-lead">越狱、半越狱、侧载、JIT，逐项对照 26.6 的实际支持情况。结论只认项目原文和 Release，不认传言。</p>
+                <div class="jb-hero-meta" id="jbHeroMeta"></div>
+                <p class="jb-device-note" id="jbDeviceNote"></p>
+            </div>
+        </section>
+
+        <section class="jb-body">
+            <div class="container">
+                <div class="jb-stats" id="jbStats"></div>
+
+                <div class="jb-toolbar">
+                    <div class="jb-filters" id="jbFilters">
+                        <button class="is-active" data-filter="all">全部</button>
+                        <button data-filter="yes">现在能用</button>
+                        <button data-filter="jailbreak">越狱相关</button>
+                        <button data-filter="tool">侧载与工具</button>
+                    </div>
+                    <button class="jb-refresh" id="jbRefresh">重新读取数据</button>
+                </div>
+
+                <div class="jb-list" id="jbList"></div>
+
+                <div class="jb-foot">
+                    <p>数据核对到 <code id="jbUpdated">—</code>。<span id="jbCuratedNote"></span></p>
+                    <p>最近版本由 GitHub Actions 每天读取仓库 Release / 提交时间自动刷新；「覆盖」和结论是人工按 26.6 · A13 判定的，不自动解析 release note。</p>
+                    <div class="jb-watch" id="jbWatch"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>WTX</h3>
+                    <p data-i18n="footerTagline">苹果风格个人网页 · 模块化版本</p>
+                </div>
+                <div class="footer-column">
+                    <h3 data-i18n="pages">页面</h3>
+                    <ul>
+                        <li><a href="events.html" data-i18n="events">事件</a></li>
+                        <li><a href="history.html" data-i18n="history">历史</a></li>
+                        <li><a href="research.html" data-i18n="navResearch">研究</a></li>
+                        <li><a href="jailbreak.html" data-i18n="navJailbreak">越狱</a></li>
+                        <li><a href="admin-event-history.html" data-i18n="adminShort">管理</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">© 2026 WTX. Modular Apple Style Site.</div>
+        </div>
+    </footer>
+    <script defer src="js/common.js?v=20261120-research"></script>
+    <script defer src="js/jailbreak.js?v=20261126-jailbreak"></script>
+</body>
+</html>
